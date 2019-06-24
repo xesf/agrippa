@@ -1,7 +1,7 @@
 # agrippa
 Agrippa - X-Files The Game Reimplementation for the Web
 
-The aim of this project is to provide a full reimplementation for the WEb of the X-Files The Game created by HyperBole Studios and Fox Interactive.
+The aim of this project is to provide a full reimplementation for the Web of the X-Files The Game created by HyperBole Studios and Fox Interactive.
 
 ![X-Files The Game](xfiles.jpg)
 
