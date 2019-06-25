@@ -1,11 +1,50 @@
 {
-  "name": "root",
+  "name": "agrippa",
+  "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    "packages/*",
-    "projects/*"
-  ],
+  "main": "src/electron/index.js",
+  "homepage": "./",
+  "dependencies": {
+    "@types/jest": "24.0.14",
+    "@types/node": "12.0.8",
+    "@types/react": "16.8.20",
+    "@types/react-dom": "16.8.4",
+    "cross-env": "^5.2.0",
+    "electron-is-dev": "^1.1.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "3.0.1",
+    "typescript": "3.5.2"
+  },
+  "scripts": {
+    "start": "concurrently \"cross-env BROWSER=none yarn react:start\" \"wait-on http://localhost:3240 && electron .\"",
+    "build": "yarn react-build && yarn electron-build",
+    "electron-build": "electron-builder",
+    "release": "yarn react-build && electron-builder --publish=always",
+    "react:start": "cross-env PORT=3240 react-scripts start",
+    "react:build": "react-scripts build",
+    "react:test": "react-scripts test",
+    "react:eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "devDependencies": {
-    "lerna": "^3.13.1"
+    "concurrently": "^4.1.0",
+    "electron": "^5.0.5",
+    "electron-builder": "^20.44.4",
+    "wait-on": "^3.2.0"
   }
 }
