@@ -1,12 +1,16 @@
-import fs from 'fs'
-import express from 'express'
-import morgan from 'morgan'
+import fs from 'fs';
+import express from 'express';
+import morgan from 'morgan';
+import cors from 'cors';
 
 const logStream = fs.createWriteStream(__dirname + '/streaming-log.txt', { flags: 'a'});
 
 const app = express();
+
 app.listen(process.env.port || 2349, process.env.host || '0.0.0.0');
+
 app.use(morgan('combined',{ stream: logStream}));
+app.use(cors())
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -20,7 +24,7 @@ app.get('/', function (req, res) {
 
 // DASH
 app.get('/dash/:name', function(req, res) {
-    const path = `public/data/${req.params.name}/manifest.mpd`;
+    const path = `public/data/XV/dash/${req.params.name}/manifest.mpd`;
     const fileSize = fs.statSync(path).size;
 
     const head = {
@@ -46,7 +50,7 @@ app.get('/hls/:name', function(req, res) {
 
 
 app.get('/dash/:name/:video/:folder/:segment/:file', function(req, res) {
-    const path = `public/data/${req.params.name}/${req.params.video}/${req.params.folder}/${req.params.segment}/${req.params.file}`;
+    const path = `public/data/XV/dash/${req.params.name}/${req.params.video}/${req.params.folder}/${req.params.segment}/${req.params.file}`;
     const fileSize = fs.statSync(path).size;
 
     if (req.headers.range) {

@@ -25,8 +25,8 @@ class MediaCanvas extends React.Component {
             //     <video ref={this.state.videoRef} src='data/XV/56003.mp4' autoPlay />
             //     <canvas ref={this.state.canvasRef} width="640" height="480" />
             // </div>
-            <div>
-                <Canvas width="640" height="480">
+            <div className="canvas-container">
+                <Canvas width="2700" height="1920">
                     <Video hidden />
                 </Canvas>
             </div>

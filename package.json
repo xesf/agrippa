@@ -5,33 +5,34 @@
   "main": "src/electron/index.js",
   "homepage": "./",
   "dependencies": {
-    "@types/jest": "24.0.14",
-    "@types/node": "12.0.8",
-    "@types/react": "16.8.20",
-    "@types/react-dom": "16.8.4",
     "@babel/cli": "7.2.3",
     "@babel/core": "7.3.4",
     "@babel/node": "7.2.2",
     "@babel/preset-env": "7.3.4",
+    "@types/jest": "24.0.14",
+    "@types/node": "12.0.8",
+    "@types/react": "16.8.20",
+    "@types/react-dom": "16.8.4",
+    "cors": "^2.8.5",
     "cross-env": "^5.2.0",
     "electron-is-dev": "^1.1.0",
     "express": "^4.17.1",
+    "lodash": "^4.17.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
-    "typescript": "3.5.2",
-    "lodash": "^4.17.4"
+    "typescript": "3.5.2"
   },
   "devDependencies": {
     "concurrently": "^4.1.0",
     "electron": "^5.0.5",
     "electron-builder": "^20.44.4",
     "morgan": "^1.9.1",
-    "wait-on": "^3.2.0",
-    "nodemon": "1.18.10"
+    "nodemon": "1.18.10",
+    "wait-on": "^3.2.0"
   },
   "scripts": {
-    "start": "concurrently \"cross-env BROWSER=none yarn react:start\" \"wait-on http://localhost:3240 && electron .\"",
+    "start": "concurrently \"yarn streaming:start\" \"cross-env BROWSER=none yarn react:start\" \"wait-on http://localhost:3240 && electron .\"",
     "build": "yarn react-build && yarn electron-build",
     "electron-build": "electron-builder",
     "release": "yarn react-build && electron-builder --publish=always",

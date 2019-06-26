@@ -7,7 +7,8 @@ const BrowserWindow = electron.BrowserWindow;
 
 let mainWindow = null;
 function createWindow() {
-    mainWindow = new BrowserWindow({ width: 900, height: 680 });
+    mainWindow = new BrowserWindow({ width: 900, height: 680, maxWidth: 2700, maxHeight: 1920 });
+    // mainWindow.webContents.openDevTools()
     mainWindow.loadURL(
         isDev
             ? "http://localhost:3240"
