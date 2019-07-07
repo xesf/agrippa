@@ -3,15 +3,15 @@ html, body {
 }
   
 body {
-    background: black;
     margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    background-color: rgb(1, 22, 39);
 }
 
-.App {
+.Game {
     background: black;
     margin: 0;
     display: flex;
@@ -32,10 +32,27 @@ body {
     overflow: hidden;
 }
 
+.canvas-container-scroll {
+    max-width: 2700px;
+    max-height: 1920px;
+    width: 100%;
+    height: 100%;
+}
+
 canvas {
+    background: black;
     max-width: 100%;
     max-height: 100%;
     width: auto;
     height: auto;
     overflow: hidden;
+}
+
+.ui.grid {
+    height: 100%;
+}
+
+.content-column {
+    padding-right: 1em;
+    padding-bottom: 1em;
 }
