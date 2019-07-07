@@ -11,7 +11,9 @@ class Editor extends React.Component {
             <React.Fragment>
                 <Tab alwaysRendered>
                     <TabItem label="Editor">
+                        <div className="canvas-container-scroll">
 
+                        </div>
                     </TabItem>
                     <TabItem label="Game">
                         <div className="canvas-container-scroll">

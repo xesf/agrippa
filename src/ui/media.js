@@ -8,9 +8,11 @@ const state = {
     canvas: null,
     context: null,
     video: null,
+    player: null,
     videoWidth: 0,
     videoHeight: 0,
     videoReady: false,
+    currentTime: 0, 
 };
 
 let currentNode = -1;
@@ -62,28 +64,33 @@ export const init = (canvas, video, { width, height }) => {
     }
 
     const nextNode = () => {
+        let src = '';
         currentNode += 1;
-        state.video.type = 'application/dash+xml';
         switch (currentNode) {
             case 0:
-                state.video.src = 'http://localhost:2349/dash/56003/';
+                src = 'http://localhost:2349/dash/56003/';
                 break;
             case 1:
-                state.video.src = 'http://localhost:2349/dash/56002/';
+                src = 'http://localhost:2349/dash/56002/';
                 break;
             case 2:
-                state.video.src = 'http://localhost:2349/dash/19668/';
+                src = 'http://localhost:2349/dash/19668/';
                 break;
             case 3:
-                state.video.src = 'http://localhost:2349/dash/56001/';
+                src = 'http://localhost:2349/dash/56001/';
+                break;
+            case 4:
+                currentNode = -1;
                 break;
             default:
-                state.video.src = '';
+                src = '';
                 break;
         }
+        state.videoReady = false;
+        state.video.autoplay = true;
         state.context.fillRect(0, 0, state.canvas.width, state.canvas.height);
-        if (currentNode < 4) {
-            state.video.play();
+        if (currentNode >= 0 && currentNode < 4) {
+            state.player.load(src, state.currentTime);
         }
     };
 
@@ -108,55 +115,20 @@ export const init = (canvas, video, { width, height }) => {
     state.video.preload = 'auto';
     state.video.loop = false;
     state.video.muted = false;
-    state.video.autoplay = true;
-    // nextNode();
-    initApp(state.video);
+    state.video.autoplay = false;
+
+    shaka.polyfill.installAll(); // eslint-disable-line
+    state.player = new shaka.Player(state.video); // eslint-disable-line
+
+    state.player.addEventListener('error', onErrorEvent);
+
     mainloop();
 };
 
-
-function initApp(video) {
-    // Install built-in polyfills to patch browser incompatibilities.
-    shaka.polyfill.installAll(); // eslint-disable-line
-
-    // Check to see if the browser supports the basic APIs Shaka needs.
-    if (shaka.Player.isBrowserSupported()) { // eslint-disable-line
-        // Everything looks good!
-        initPlayer(video);
-    } else {
-        // This browser does not have the minimum set of APIs we need.
-        console.error('Browser not supported!');
-    }
-}
-
-function initPlayer(video) {
-    // Create a Player instance.
-    // var video = document.getElementsByTagName('video')[0];
-    var player = new shaka.Player(video); // eslint-disable-line
-
-    // Attach player to the window to make it easy to access in the JS console.
-    window.player = player;
-
-    // Listen for error events.
-    player.addEventListener('error', onErrorEvent);
-
-    // Try to load a manifest.
-    // This is an asynchronous process.
-    player.load('http://localhost:2349/dash/19668/').then(function() {
-        // This runs if the asynchronous load is successful.
-        console.log('The video has now been loaded!');
-    }).catch(onError);  // onError is executed if the asynchronous load fails.
-    // player.play();
-}
-
 function onErrorEvent(event) {
-    // Extract the shaka.util.Error object from the event.
     onError(event.detail);
 }
 
 function onError(error) {
-    // Log the error.
     console.error('Error code', error.code, 'object', error);
 }
-
-// document.addEventListener('DOMContentLoaded', initApp);

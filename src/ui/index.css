@@ -20,7 +20,6 @@ body {
     margin: auto;
     width: auto;
     height: auto;
-    cursor: cell;
     overflow: hidden;
 }
 
@@ -46,6 +45,7 @@ canvas {
     width: auto;
     height: auto;
     overflow: hidden;
+    cursor: cell;
 }
 
 .ui.grid {
