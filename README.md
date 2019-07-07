@@ -21,18 +21,18 @@ The aim of this project is to provide a full reimplementation for the Web of the
 
 ## Enhancements
 
-List of new features to add to the experience:
-* Multi-language support
-* Bitrate streaming quality
-* Play Full Story Sequence like an episode
+* Multi-language support (subtitles)
+* Adaptive streaming (bitrate streaming quality) - Video upscale to standard resolutions
+* Play Full Story Sequence like a TV Show episode
+* Time-based actions
 * Number of full complete stories played worldwide
 * Total hours worldwide played
-* Player's choise statistics while playing
+* Player's choice statistics while playing
     * Amount of Artificial Intuition used
     * Stats per Emotion types used
     * Stats per Action types used
-    * Number of times going Forward, Backwards, Left, Right during a game (global per player)
-
+    * Stats per Game over
+    * Number of times going Forward, Backwards, Left, Right during a gameplay
 
 ## Assets Encoding
 
