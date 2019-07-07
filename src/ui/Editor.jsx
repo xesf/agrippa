@@ -1,18 +1,26 @@
 import React from 'react';
 
-import Player from './Player';
+import Player from './components/Player';
 
-import Tab from './components/Tab';
-import TabItem from './components/TabItem';
+import Tab from './components/editor/Tab';
+import TabItem from './components/editor/TabItem';
 
 class Editor extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Tab alwaysRendered>
-                    <TabItem label="Editor">
-                        <div className="canvas-container-scroll">
-
+                <Tab selectedTabIndex={1} alwaysRendered>
+                    <TabItem label="agrippa" header />
+                    <TabItem label="Editor" active>
+                        <div className="canvas-container-scroll" style={{ padding: '1em 1em' }}>
+                            <Tab type="left">
+                                <TabItem label="Nodes">
+                                    nodes
+                                </TabItem>
+                                <TabItem label="Assets">
+                                    assets
+                                </TabItem>
+                            </Tab>
                         </div>
                     </TabItem>
                     <TabItem label="Game">

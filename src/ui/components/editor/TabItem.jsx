@@ -11,6 +11,7 @@ const TabItem = ({ children, loading, active, type, alwaysRendered }) => {
                     } tab basic segment${active ? ' active' : ''}${
                         loading ? ' loading' : ''
                     }`}
+                    style={{ height: '100%', margin: '0', padding: '0' }}
                 >
                     {children}
                 </div>
@@ -32,7 +33,7 @@ TabItem.defaultProps = {
 };
 
 TabItem.propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
     loading: PropTypes.bool,
     active: PropTypes.bool,
     alwaysRendered: PropTypes.bool,

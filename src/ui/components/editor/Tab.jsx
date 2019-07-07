@@ -29,6 +29,7 @@ class Tab extends React.Component {
                 label: child.props.label,
                 icon: child.props.icon,
                 flag: child.props.flag,
+                header: child.props.header,
                 alwaysRendered,
                 active,
             });
@@ -49,19 +50,25 @@ class Tab extends React.Component {
                 } secondary menu inverted`}
             >
                 {labels.map((l, i) => (
-                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                    <a
-                        key={l.label}
-                        className={`item${l.active ? ' active' : ''}`}
-                        onClick={() => {
-                            this.setState({ selectedTabIndex: i });
-                        }}
-                        aria-label={`Tab ${l.label}`}
-                    >
-                        {l.flag && <i className={`${l.flag} flag`} />}
-                        {l.icon && <i className={`${l.icon} icon`} />}
-                        {l.label}
-                    </a>
+                    (!l.header) ? (
+                        // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                        <a
+                            key={l.label}
+                            className={`item${l.active ? ' active' : ''}`}
+                            onClick={() => {
+                                this.setState({ selectedTabIndex: i });
+                            }}
+                            aria-label={`Tab ${l.label}`}
+                        >
+                            {l.flag && <i className={`${l.flag} flag`} />}
+                            {l.icon && <i className={`${l.icon} icon`} />}
+                            {l.label}
+                        </a>
+                    ) : (
+                        <div className="header item">
+                            {l.label}
+                        </div>
+                    )
                 ))}
             </div>
         );
