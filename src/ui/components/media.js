@@ -37,8 +37,12 @@ export const init = (canvas, video, { width, height }) => {
     state.video.addEventListener("loadedmetadata", (e) => {
         state.videoWidth = state.video.videoWidth;
         state.videoHeight = state.video.videoHeight;
+        // state.canvas.width = state.videoWidth;
+        // state.canvas.height = state.videoHeight;
         state.videoX = (state.canvas.width - state.videoWidth) / 2;
         state.videoY = (state.canvas.height - state.videoHeight) / 2;
+        console.log('file width/height', state.videoWidth, state.videoHeight);
+        console.log('canvas pos videoX/videoY', state.videoX, state.videoY);
     }, false);
 
     const drawFrame = (tick, elapsed, x, y, width, height) => {

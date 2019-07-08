@@ -12,7 +12,7 @@ class Player extends React.Component {
 
     render() {
         return (
-            <Canvas width="2700" height="1920">
+            <Canvas width="3580" height="1920">
                 <Video hidden />
             </Canvas>
         );

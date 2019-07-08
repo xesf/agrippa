@@ -4,6 +4,7 @@ import Player from './components/Player';
 
 import Tab from './components/editor/Tab';
 import TabItem from './components/editor/TabItem';
+import NodeEditor from './components/editor/NodeEditor';
 
 class Editor extends React.Component {
     render() {
@@ -15,7 +16,7 @@ class Editor extends React.Component {
                         <div className="canvas-container-scroll" style={{ padding: '1em 1em' }}>
                             <Tab type="left">
                                 <TabItem label="Nodes">
-                                    nodes
+                                    <NodeEditor />
                                 </TabItem>
                                 <TabItem label="Assets">
                                     assets
