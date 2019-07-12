@@ -20,7 +20,14 @@ const TabItem = ({ children, loading, active, type, alwaysRendered }) => {
     }
     return (
         (active || alwaysRendered) && (
-            <React.Fragment>{children}</React.Fragment>
+            <div
+                className={`canvas-container-scroll ui ${type} tab ${active ? ' active' : ''}${
+                    loading ? ' loading' : ''
+                }`}
+                style={{ height: '100%', width: '100%', margin: '0', padding: '0' }}
+            >
+                {children}
+            </div>
         )
     );
 };

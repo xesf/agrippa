@@ -14,12 +14,12 @@ class Editor extends React.Component {
                     <TabItem label="agrippa" header />
                     <TabItem label="Editor" active>
                         <div className="canvas-container-scroll" style={{ padding: '1em 1em' }}>
-                            <Tab type="left">
+                            <Tab type="left" alwaysRendered>
                                 <TabItem label="Nodes">
                                     <NodeEditor />
                                 </TabItem>
                                 <TabItem label="Assets">
-                                    assets
+                                    assets area
                                 </TabItem>
                             </Tab>
                         </div>
