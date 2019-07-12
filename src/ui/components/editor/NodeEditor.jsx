@@ -1,57 +1,92 @@
 import React from 'react';
 import * as d3 from 'd3';
 
-const Node = (props) => {
-    const { x, y, type, name, desc } = props;
-    const gStyle = {
-        cursor: 'pointer',
-    };
-    const nodeStyle = {
-        fill: 'white',
-        stroke: 'orange',
-        'strokeWidth': 3,
-        opacity: 1
-    };
-    const baseStyle = {
-        fill: 'rgb(1, 22, 29)',
-        'fontSize': '10',
-        'fontFamily':'Verdana',
-    };
-    const textStyle = {
-        ...baseStyle,
-        'fontSize': '12',
-    };
-    const plusStyle = {
-        ...baseStyle,
-        'fontSize': '14',
-        'fontWeight': 'bold'
-    };
-    const plusCircleStyle = {
-        stroke: 'orange',
-        'strokeWidth': '2',
-        fill: 'rgb(158, 202, 97)',
-    };
-    return (
-        <g style={gStyle}>
-            <rect
-                x={x} y={y}
-                rx="20" ry="20"
-                width="150" height="40"
-                style={nodeStyle}
-            >
-                <title>{desc}</title>
-            </rect>
-            <text x={x+15} y={y+18} style={textStyle}>
-                <title>{desc}</title>
-                {name}
-            </text>
-            <text x={x+15} y={y+30} style={baseStyle}>({type})</text>
-            <circle cx={x+130} cy={y+20} r="20" style={plusCircleStyle}>
-                <title>Link node</title>
-            </circle>
-            <text x={x+125} y={y+25} style={plusStyle}>+</text>
-        </g>
-    );
+const gStyle = {
+    cursor: 'pointer',
+    // 'transform-origin': '75px 20px',
+};
+const nodeStyle = {
+    fill: 'white',
+    stroke: 'orange',
+    'strokeWidth': 3,
+    opacity: 1
+};
+const baseStyle = {
+    fill: 'rgb(1, 22, 29)',
+    'fontSize': '10',
+    'fontFamily':'Verdana',
+};
+const textStyle = {
+    ...baseStyle,
+    'fontSize': '12',
+};
+const plusStyle = {
+    ...baseStyle,
+    'fontSize': '14',
+    'fontWeight': 'bold'
+};
+const plusCircleStyle = {
+    stroke: 'orange',
+    'strokeWidth': '2',
+    fill: 'rgb(158, 202, 97)',
+};
+
+let offset = null;
+
+class Node extends React.Component {
+    constructor(props) {
+        super(props);
+        this.gRef = React.createRef();
+    }
+
+    componentDidMount() {
+        const node = d3.select(this.gRef.current);
+        const drag = d3.drag()
+            .on("start", () => {
+                node.raise().classed("cursor-grabbing", true);
+                offset = {
+                    x: d3.event.x - 75,
+                    y: d3.event.y - 20,
+                };
+            })
+            .on("drag", () => {
+                offset = {
+                    x: offset.x + d3.event.dx,
+                    y: offset.y + d3.event.dy,
+                };
+                node.attr("transform", "translate(" + (offset.x) + "," + (offset.y) + ")");
+              })
+            .on("end", () => {
+                node.classed("cursor-grabbing", false);
+            });
+
+        node.call(drag);
+    }
+
+    render() {
+        const { x, y, type, name, desc } = this.props;
+        return (
+            <g ref={this.gRef} style={{ ...gStyle}} transform={`translate(${x},${y})`}>
+                <rect
+                    x={0} y={0}
+                    rx="20" ry="20"
+                    width="150" height="40"
+                    style={nodeStyle}
+                >
+                    <title>{desc}</title>
+                </rect>
+                <text x={15} y={18} style={textStyle}>
+                    <title>{desc}</title>
+                    {name}
+                </text>
+                <text x={15} y={30} style={baseStyle}>({type})</text>
+                <circle cx={130} cy={20} r="20" style={plusCircleStyle}>
+                    <title>Link node</title>
+                </circle>
+                <text x={125} y={25} style={plusStyle}>+</text>
+            </g>
+        );
+    }
 };
 
 export default class NodeEditor extends React.Component {
@@ -72,20 +107,25 @@ export default class NodeEditor extends React.Component {
 
     componentDidMount() {
         const svg = d3.select(this.svgRef.current);
+        const group = d3.select(this.gRef.current);
         const zoom = d3.zoom()
             .scaleExtent([0.5, 2])
+            .on("start", () => {
+                svg.raise().classed("cursor-grabbing", true);
+            })
             .on("zoom", () => {
-                d3.select(this.gRef.current)
-                    .attr('transform', d3.event.transform)
-                d3.select("#grid")
-                    .attr('patternTransform', d3.event.transform);
+                group.attr('transform', d3.event.transform)
+                d3.select("#grid").attr('patternTransform', d3.event.transform);
+            })
+            .on("end", () => {
+                svg.raise().classed("cursor-grabbing", false);
             });
         svg.call(zoom);
     }
 
     render() {
         return (
-            <svg ref={this.svgRef}>
+            <svg ref={this.svgRef} className="cursor-grab">
                 <defs>
                     <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
                         <path d="M 10 0 L 0 0 0 10" fill="none" stroke="gray" strokeWidth="0.5"/>

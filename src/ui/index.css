@@ -59,5 +59,9 @@ canvas {
 }
 
 .cursor-grab {
-    cursor: grab;
+    cursor: grab !important;
+}
+
+.cursor-grabbing {
+    cursor: grabbing !important;
 }
