@@ -65,7 +65,7 @@ class Tab extends React.Component {
                             {l.label}
                         </a>
                     ) : (
-                        <div className="header item">
+                        <div key={l.label} className="header item">
                             {l.label}
                         </div>
                     )

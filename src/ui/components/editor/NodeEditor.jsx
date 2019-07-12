@@ -1,34 +1,38 @@
 import React from 'react';
+import * as d3 from 'd3';
 
 const Node = (props) => {
     const { x, y, type, name, desc } = props;
+    const gStyle = {
+        cursor: 'pointer',
+    };
     const nodeStyle = {
         fill: 'white',
         stroke: 'orange',
-        'stroke-width': 3,
+        'strokeWidth': 3,
         opacity: 1
     };
     const baseStyle = {
         fill: 'rgb(1, 22, 29)',
-        'font-size': '10',
-        'font-family':'Verdana',
+        'fontSize': '10',
+        'fontFamily':'Verdana',
     };
     const textStyle = {
         ...baseStyle,
-        'font-size': '12',
+        'fontSize': '12',
     };
     const plusStyle = {
         ...baseStyle,
-        'font-size': '14',
-        'font-weight': 'bold'
+        'fontSize': '14',
+        'fontWeight': 'bold'
     };
     const plusCircleStyle = {
         stroke: 'orange',
-        'stroke-width': '2',
+        'strokeWidth': '2',
         fill: 'rgb(158, 202, 97)',
     };
     return (
-        <React.Fragment>
+        <g style={gStyle}>
             <rect
                 x={x} y={y}
                 rx="20" ry="20"
@@ -46,7 +50,7 @@ const Node = (props) => {
                 <title>Link node</title>
             </circle>
             <text x={x+125} y={y+25} style={plusStyle}>+</text>
-        </React.Fragment>
+        </g>
     );
 };
 
@@ -65,11 +69,35 @@ export default class NodeEditor extends React.Component {
             ]
         };
     }
+
+    componentDidMount() {
+        const svg = d3.select(this.svgRef.current);
+        const zoom = d3.zoom()
+            .scaleExtent([0.5, 2])
+            .on("zoom", () => {
+                d3.select(this.gRef.current)
+                    .attr('transform', d3.event.transform)
+                d3.select("#grid")
+                    .attr('patternTransform', d3.event.transform);
+            });
+        svg.call(zoom);
+    }
+
     render() {
         return (
             <svg ref={this.svgRef}>
+                <defs>
+                    <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+                        <path d="M 10 0 L 0 0 0 10" fill="none" stroke="gray" strokeWidth="0.5"/>
+                    </pattern>
+                    <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
+                        <rect width="100" height="100" fill="url(#smallGrid)"/>
+                        <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" strokeWidth="1"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
                 <g ref={this.gRef}>
-                    {this.state.nodes.map(n => <Node {...n} />)}
+                    {this.state.nodes.map(n => <Node key={n.id} {...n} />)}
                 </g>
             </svg>
         );

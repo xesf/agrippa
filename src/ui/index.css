@@ -1,5 +1,6 @@
 html, body {
     height: 100%;
+    background-color: rgb(5, 21, 37)
 }
   
 body {
@@ -55,4 +56,8 @@ canvas {
 .content-column {
     padding-right: 1em;
     padding-bottom: 1em;
+}
+
+.cursor-grab {
+    cursor: grab;
 }
