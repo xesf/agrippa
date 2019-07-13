@@ -85,10 +85,10 @@ class Node extends React.Component {
                     {name}
                 </text>
                 <text x={15} y={30} style={baseStyle}>({type})</text>
-                <circle cx={130} cy={20} r="20" style={plusCircleStyle}>
+                {/* <circle cx={130} cy={20} r="20" style={plusCircleStyle}>
                     <title>Link node</title>
                 </circle>
-                <text x={125} y={25} style={plusStyle}>+</text>
+                <text x={125} y={25} style={plusStyle}>+</text> */}
             </g>
         );
     }

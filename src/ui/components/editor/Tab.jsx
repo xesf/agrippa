@@ -90,20 +90,20 @@ class Tab extends React.Component {
                 );
             case 'left':
                 return (
-                    <div className="ui grid">
-                        <div className="four wide column">{tabHeaders}</div>
-                        <div className="twelve wide stretched column">
+                    <div className="ui grid two">
+                        <div style={{ flex: '0 0 300px', paddingRight: '0.5em' }}>{tabHeaders}</div>
+                        <div style={{ flex: '1', padding: '0px'}}>
                             {children}
                         </div>
                     </div>
                 );
             case 'right':
                 return (
-                    <div className="ui grid">
-                        <div className="twelve wide stretched column">
+                    <div className="ui grid two">
+                        <div style={{ flex: '1', padding: '0px'}}>
                             {children}
                         </div>
-                        <div className="four wide column">{tabHeaders}</div>
+                        <div style={{ flex: '0 0 300px', paddingLeft: '0.5em'}}>{tabHeaders}</div>
                     </div>
                 );
         }

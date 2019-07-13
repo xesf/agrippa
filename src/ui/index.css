@@ -71,3 +71,16 @@ svg {
 .cursor-grabbing {
     cursor: grabbing !important;
 }
+
+.ui.top.attached.menu > .item:first-child {
+    border-radius: .28571429rem;
+}
+
+.layout-border {
+    border: 1px solid rgb(42, 56, 69);
+}
+
+.layout-properties {
+    width: 100%;
+    height: 100%;
+}
