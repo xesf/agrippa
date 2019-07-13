@@ -1,6 +1,8 @@
 import React from 'react';
 import * as d3 from 'd3';
 
+import { nodes } from './nodes.json';
+
 const gStyle = {
     cursor: 'pointer',
 };
@@ -30,46 +32,37 @@ const plusCircleStyle = {
     fill: 'rgb(158, 202, 97)',
 };
 
-const getPosition = (elem) => {
-    const transform = elem.transform.baseVal;
-    var item = transform.getItem(0);
-    if (item.type === SVGTransform.SVG_TRANSFORM_TRANSLATE) {
-        return {
-            x: item.matrix.e,
-            y: item.matrix.f,
-        };
-    }
-    return { x: 0, y: 0 };
-};
-
-let offset = null;
-
 class Node extends React.Component {
     constructor(props) {
         super(props);
         this.gRef = React.createRef();
+        this.offset = null;
     }
 
     componentDidMount() {
+        const that = this;
         // TODO: remove dependency to d3 library
         const node = d3.select(this.gRef.current);
         const drag = d3.drag()
             .on("start", () => {
                 node.raise().classed("cursor-grabbing", true);
-                offset = {
+                that.offset = {
                     x: d3.event.x - 75,
                     y: d3.event.y - 20,
                 };
             })
             .on("drag", () => {
-                offset = {
-                    x: offset.x + d3.event.dx,
-                    y: offset.y + d3.event.dy,
+                that.offset = {
+                    x: that.offset.x + d3.event.dx,
+                    y: that.offset.y + d3.event.dy,
                 };
-                node.attr("transform", "translate(" + (offset.x) + "," + (offset.y) + ")");
+                node.attr("transform", "translate(" + (that.offset.x) + "," + (that.offset.y) + ")");
               })
             .on("end", () => {
                 node.classed("cursor-grabbing", false);
+                if (that.props.onDragEnd) {
+                    that.props.onDragEnd(that.props.id, that.offset);
+                }
             });
 
         node.call(drag);
@@ -107,14 +100,10 @@ export default class NodeEditor extends React.Component {
         this.svgRef = React.createRef();
         this.gRef = React.createRef();
         this.state = {
-            nodes: [
-                { id: '19812', type: 'video', name: 'xv/19812', x: 50, y: 80, desc: 'Willmore Entering Office' },
-                { id: '19814', type: 'video', name: 'xv/19814', x: 250, y: 10, desc: '[Emotion Funny] Willmore Entering Office' },
-                { id: '19816', type: 'video', name: 'xv/19816', x: 250, y: 60, desc: '[Emotion Indifferent] Willmore Entering Office' },
-                { id: '19818', type: 'video', name: 'xv/19818', x: 250, y: 110, desc: '[Emotion Paranoid] Willmore Entering Office' },
-                { id: '19820', type: 'video', name: 'xv/19820', x: 250, y: 160, desc: '[default] Willmore Entering Office' },
-            ]
+            nodes: nodes,
         };
+        this.saveNodes = this.saveNodes.bind(this, null);
+        this.handleNodeOnDragEnd = this.handleNodeOnDragEnd.bind(this, null);
     }
 
     componentWillMount() {
@@ -122,6 +111,12 @@ export default class NodeEditor extends React.Component {
             transform: JSON.parse(window.localStorage.getItem('nodes-transform')),
             transformStr: window.localStorage.getItem('nodes-transform-string'),
         });
+        const nodes = window.localStorage.getItem('nodes');
+        if (nodes) {
+            this.setState({
+                nodes: JSON.parse(window.localStorage.getItem('nodes')),
+            }); 
+        }
     }
 
     componentDidMount() {
@@ -147,6 +142,7 @@ export default class NodeEditor extends React.Component {
             })
             .on("end", () => {
                 svg.raise().classed("cursor-grabbing", false);
+                that.saveNodes();
             });
         svg.call(zoom);
         if (that.state.transform) {
@@ -156,11 +152,25 @@ export default class NodeEditor extends React.Component {
         }
     }
 
-    componentWillUnmount() {
+    saveNodes() {
         if (this.state.transform) {
             window.localStorage.setItem('nodes-transform', JSON.stringify(this.state.transform));
             window.localStorage.setItem('nodes-transform-string', this.state.transformStr);
+            window.localStorage.setItem('nodes', JSON.stringify(this.state.nodes));
         }
+    }
+
+    componentWillUnmount() {
+        this.saveNodes();
+    }
+
+    handleNodeOnDragEnd(e, id, offset) {
+        const node = this.state.nodes.find(n => n.id === id);
+        if (node) {
+            node.x = offset.x;
+            node.y = offset.y;
+        }
+        this.saveNodes();
     }
 
     render() {
@@ -177,7 +187,13 @@ export default class NodeEditor extends React.Component {
                 </defs>
                 <rect width="100%" height="100%" fill="url(#grid)" />
                 <g ref={this.gRef} transform={this.state.transformStr}>
-                    {this.state.nodes.map(n => <Node key={n.id} {...n} />)}
+                    {this.state.nodes.map(n =>
+                        <Node
+                            key={n.id}
+                            {...n}
+                            onDragEnd={this.handleNodeOnDragEnd}
+                        />
+                    )}
                 </g>
             </svg>
         );
