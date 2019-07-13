@@ -21,16 +21,16 @@ const textStyle = {
     ...baseStyle,
     'fontSize': '12',
 };
-const plusStyle = {
-    ...baseStyle,
-    'fontSize': '14',
-    'fontWeight': 'bold'
-};
-const plusCircleStyle = {
-    stroke: 'orange',
-    'strokeWidth': '2',
-    fill: 'rgb(158, 202, 97)',
-};
+// const plusStyle = {
+//     ...baseStyle,
+//     'fontSize': '14',
+//     'fontWeight': 'bold'
+// };
+// const plusCircleStyle = {
+//     stroke: 'orange',
+//     'strokeWidth': '2',
+//     fill: 'rgb(158, 202, 97)',
+// };
 
 class Node extends React.Component {
     constructor(props) {

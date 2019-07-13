@@ -5,6 +5,8 @@ import Player from './components/Player';
 import Tab from './components/editor/Tab';
 import TabItem from './components/editor/TabItem';
 import NodeEditor from './components/editor/NodeEditor';
+import Properties from './components/editor/Properties';
+import Assets from './components/editor/Assets';
 
 class Editor extends React.Component {
     render() {
@@ -18,12 +20,10 @@ class Editor extends React.Component {
                                 <div style={{ flex: '0 0 300px', paddingRight: '0.3em' }}>
                                     <Tab type="top">
                                         <TabItem label="Properties">
-                                            <div className="layout-border layout-properties">
-                                                Properties
-                                            </div>
+                                            <Properties />
                                         </TabItem>
                                         <TabItem label="Assets">
-                                            assets area
+                                            <Assets />
                                         </TabItem>
                                     </Tab>
                                 </div>
