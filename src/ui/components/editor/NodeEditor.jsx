@@ -3,7 +3,6 @@ import * as d3 from 'd3';
 
 const gStyle = {
     cursor: 'pointer',
-    // 'transform-origin': '75px 20px',
 };
 const nodeStyle = {
     fill: 'white',
@@ -31,6 +30,18 @@ const plusCircleStyle = {
     fill: 'rgb(158, 202, 97)',
 };
 
+const getPosition = (elem) => {
+    const transform = elem.transform.baseVal;
+    var item = transform.getItem(0);
+    if (item.type === SVGTransform.SVG_TRANSFORM_TRANSLATE) {
+        return {
+            x: item.matrix.e,
+            y: item.matrix.f,
+        };
+    }
+    return { x: 0, y: 0 };
+};
+
 let offset = null;
 
 class Node extends React.Component {
@@ -40,6 +51,7 @@ class Node extends React.Component {
     }
 
     componentDidMount() {
+        // TODO: remove dependency to d3 library
         const node = d3.select(this.gRef.current);
         const drag = d3.drag()
             .on("start", () => {
@@ -105,22 +117,50 @@ export default class NodeEditor extends React.Component {
         };
     }
 
+    componentWillMount() {
+        this.setState({
+            transform: JSON.parse(window.localStorage.getItem('nodes-transform')),
+            transformStr: window.localStorage.getItem('nodes-transform-string'),
+        });
+    }
+
     componentDidMount() {
+        const that = this;
+        // TODO: remove dependency to d3 library
         const svg = d3.select(this.svgRef.current);
-        const group = d3.select(this.gRef.current);
         const zoom = d3.zoom()
             .scaleExtent([0.5, 2])
             .on("start", () => {
                 svg.raise().classed("cursor-grabbing", true);
             })
             .on("zoom", () => {
-                group.attr('transform', d3.event.transform)
-                d3.select("#grid").attr('patternTransform', d3.event.transform);
+                if (d3.event.transform) {
+                    that.setState({
+                        transform: {
+                            k: d3.event.transform.k,
+                            x: d3.event.transform.x,
+                            y: d3.event.transform.y,
+                        },
+                        transformStr: d3.event.transform,
+                    });
+                }
             })
             .on("end", () => {
                 svg.raise().classed("cursor-grabbing", false);
             });
         svg.call(zoom);
+        if (that.state.transform) {
+            const { k, x, y } = that.state.transform;
+            const t = d3.zoomIdentity.translate(x, y).scale(k);
+            svg.call(zoom.transform, t);
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.state.transform) {
+            window.localStorage.setItem('nodes-transform', JSON.stringify(this.state.transform));
+            window.localStorage.setItem('nodes-transform-string', this.state.transformStr);
+        }
     }
 
     render() {
@@ -130,13 +170,13 @@ export default class NodeEditor extends React.Component {
                     <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
                         <path d="M 10 0 L 0 0 0 10" fill="none" stroke="gray" strokeWidth="0.5"/>
                     </pattern>
-                    <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
+                    <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse" patternTransform={this.state.transformStr}>
                         <rect width="100" height="100" fill="url(#smallGrid)"/>
                         <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" strokeWidth="1"/>
                     </pattern>
                 </defs>
                 <rect width="100%" height="100%" fill="url(#grid)" />
-                <g ref={this.gRef}>
+                <g ref={this.gRef} transform={this.state.transformStr}>
                     {this.state.nodes.map(n => <Node key={n.id} {...n} />)}
                 </g>
             </svg>
