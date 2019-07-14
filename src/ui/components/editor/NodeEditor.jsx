@@ -10,10 +10,12 @@ export default class NodeEditor extends React.Component {
         this.svgRef = React.createRef();
         this.gRef = React.createRef();
         this.state = {
+            selected: null,
             nodes: nodes,
         };
         this.saveNodes = this.saveNodes.bind(this, null);
         this.handleNodeOnDragEnd = this.handleNodeOnDragEnd.bind(this, null);
+        this.handleNodeOnClick = this.handleNodeOnClick.bind(this, null);
     }
 
     componentWillMount() {
@@ -34,6 +36,7 @@ export default class NodeEditor extends React.Component {
         // TODO: remove dependency to d3 library
         const svg = d3.select(this.svgRef.current);
         const zoom = d3.zoom()
+            .clickDistance(4)
             .scaleExtent([0.5, 2])
             .on("start", () => {
                 svg.raise().classed("cursor-grabbing", true);
@@ -55,6 +58,7 @@ export default class NodeEditor extends React.Component {
                 that.saveNodes();
             });
         svg.call(zoom);
+        svg.on("dblclick.zoom", null);
         if (that.state.transform) {
             const { k, x, y } = that.state.transform;
             const t = d3.zoomIdentity.translate(x, y).scale(k);
@@ -83,6 +87,10 @@ export default class NodeEditor extends React.Component {
         this.saveNodes();
     }
 
+    handleNodeOnClick(e, node) {
+        this.setState({ selected: node.id });
+    }
+
     render() {
         return (
             <svg ref={this.svgRef} className="cursor-grab">
@@ -96,12 +104,17 @@ export default class NodeEditor extends React.Component {
                     </pattern>
                 </defs>
                 <rect width="100%" height="100%" fill="url(#grid)" />
-                <g ref={this.gRef} transform={this.state.transformStr}>
+                <g
+                    ref={this.gRef}
+                    transform={this.state.transformStr}
+                >
                     {this.state.nodes.map(n =>
                         <Node
                             key={n.id}
                             {...n}
+                            selected={this.state.selected === n.id}
                             onDragEnd={this.handleNodeOnDragEnd}
+                            onClick={this.handleNodeOnClick}
                         />
                     )}
                 </g>

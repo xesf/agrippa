@@ -85,3 +85,33 @@ svg {
     width: 100%;
     height: 100%;
 }
+
+.node-group {
+    cursor: pointer;
+}
+
+.node {
+    fill: white;
+    stroke: orange;
+    stroke-width: 3;
+    opacity: 1;
+}
+/* 
+.node:hover {
+    fill: rgb(158, 202, 97);
+    opacity: 1;
+} */
+
+.node-group:hover > .node {
+    fill: rgb(158, 202, 97);
+}
+
+.node-group:active > .node {
+    fill: rgb(131, 168, 81);
+}
+.node-group:focus > .node {
+    fill: rgb(131, 168, 81);
+}
+.selected {
+    fill: rgb(131, 168, 81);
+}
