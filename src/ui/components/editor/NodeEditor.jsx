@@ -1,10 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux'
 import * as d3 from 'd3';
 
 import Node from './Node';
 import { nodes } from './nodes.json';
 
-export default class NodeEditor extends React.Component {
+import { setProperties } from '../../redux/editor/properties';
+
+class NodeEditor extends React.Component {
     constructor(props) {
         super(props);
         this.svgRef = React.createRef();
@@ -15,7 +18,6 @@ export default class NodeEditor extends React.Component {
         };
         this.saveNodes = this.saveNodes.bind(this, null);
         this.handleNodeOnDragEnd = this.handleNodeOnDragEnd.bind(this, null);
-        this.handleNodeOnClick = this.handleNodeOnClick.bind(this, null);
     }
 
     componentWillMount() {
@@ -87,11 +89,8 @@ export default class NodeEditor extends React.Component {
         this.saveNodes();
     }
 
-    handleNodeOnClick(e, node) {
-        this.setState({ selected: node.id });
-    }
-
     render() {
+        const { selected, setNodeProperties } = this.props;
         return (
             <svg ref={this.svgRef} className="cursor-grab">
                 <defs>
@@ -112,9 +111,11 @@ export default class NodeEditor extends React.Component {
                         <Node
                             key={n.id}
                             {...n}
-                            selected={this.state.selected === n.id}
+                            selected={selected === n.id}
                             onDragEnd={this.handleNodeOnDragEnd}
-                            onClick={this.handleNodeOnClick}
+                            onClick={(node) => {
+                                setNodeProperties(node);
+                            }}
                         />
                     )}
                 </g>
@@ -122,3 +123,18 @@ export default class NodeEditor extends React.Component {
         );
     }
 }
+
+const mapStateToProps = (state) => ({
+    selected: state.properties.selected || '',
+});
+
+const mapDispatchToProps = dispatch => {
+    return {
+        setNodeProperties: (node) => dispatch(setProperties(node)),
+    };
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(NodeEditor);
