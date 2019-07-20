@@ -9,39 +9,43 @@ const inputStyle = {
     paddingBottom: '0.5em',
 };
 
-const Properties = (props) => {
-    const { node } = props;
-    return (
-        <div className="layout-border layout-properties">
-            {node && Object.keys(node).map((key, i) => {
-                    if (skipKeys.includes(key)) {
-                        return null;
+class Properties extends React.Component {
+    render() {
+        const { node } = this.props;
+        return (
+            <div className="layout-border layout-properties">
+                {node && Object.keys(node).map((key, i) => {
+                        if (skipKeys.includes(key)) {
+                            return null;
+                        }
+                        return (
+                            <Input
+                                key={`${key}${node[key]}`}
+                                size='mini'
+                                label={key}
+                                placeholder={key}
+                                defaultValue={node[key]}
+                                style={inputStyle}
+                            />
+                        )
                     }
-                    return (
-                        <Input
-                            size='mini'
-                            label={key}
-                            placeholder={key}
-                            defaultValue={node[key]}
-                            style={inputStyle} />
-                    )
-                }
-            )}
-        </div>
-    );
+                )}
+            </div>
+        );
+    }
 };
 
 const mapStateToProps = (state) => ({
     node: state.properties.node,
 });
 
-const mapDispatchToProps = dispatch => {
-    return {
-        // setNodeProperties: (node) => dispatch(setProperties(node)),
-    };
-}
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         setNodeProperties: (node) => dispatch(setProperties(node)),
+//     };
+// }
 
 export default connect(
     mapStateToProps,
-    mapDispatchToProps
+    // mapDispatchToProps
 )(Properties);

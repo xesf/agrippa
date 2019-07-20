@@ -3,9 +3,10 @@ import { connect } from 'react-redux'
 import * as d3 from 'd3';
 
 import Node from './Node';
-import { nodes } from './nodes.json';
+import { nodes as nodesSample } from './nodes.json';
 
 import { setProperties } from '../../redux/editor/properties';
+import { setNodes } from '../../redux/editor/nodes';
 
 class NodeEditor extends React.Component {
     constructor(props) {
@@ -14,7 +15,6 @@ class NodeEditor extends React.Component {
         this.gRef = React.createRef();
         this.state = {
             selected: null,
-            nodes: nodes,
         };
         this.saveNodes = this.saveNodes.bind(this, null);
         this.handleNodeOnDragEnd = this.handleNodeOnDragEnd.bind(this, null);
@@ -27,9 +27,12 @@ class NodeEditor extends React.Component {
         });
         const nodes = window.localStorage.getItem('nodes');
         if (nodes) {
-            this.setState({
-                nodes: JSON.parse(window.localStorage.getItem('nodes')),
-            }); 
+            this.props.setNodes(
+                JSON.parse(nodes),
+            );
+            // this.setState({
+            //     nodes: JSON.parse(window.localStorage.getItem('nodes')),
+            // }); 
         }
     }
 
@@ -72,7 +75,7 @@ class NodeEditor extends React.Component {
         if (this.state.transform) {
             window.localStorage.setItem('nodes-transform', JSON.stringify(this.state.transform));
             window.localStorage.setItem('nodes-transform-string', this.state.transformStr);
-            window.localStorage.setItem('nodes', JSON.stringify(this.state.nodes));
+            window.localStorage.setItem('nodes', JSON.stringify(this.props.nodes));
         }
     }
 
@@ -81,7 +84,7 @@ class NodeEditor extends React.Component {
     }
 
     handleNodeOnDragEnd(e, id, offset) {
-        const node = this.state.nodes.find(n => n.id === id);
+        const node = this.props.nodes.find(n => n.id === id);
         if (node) {
             node.x = offset.x;
             node.y = offset.y;
@@ -107,7 +110,7 @@ class NodeEditor extends React.Component {
                     ref={this.gRef}
                     transform={this.state.transformStr}
                 >
-                    {this.state.nodes.map(n =>
+                    {this.props.nodes.map(n =>
                         <Node
                             key={n.id}
                             {...n}
@@ -125,12 +128,14 @@ class NodeEditor extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+    nodes: state.editor.nodes || nodesSample,
     selected: state.properties.selected || '',
 });
 
 const mapDispatchToProps = dispatch => {
     return {
-        setNodeProperties: (node) => dispatch(setProperties(node)),
+        setNodes: (nodes) => dispatch(setNodes(nodes)),
+        setNodeProperties: (selected) => dispatch(setProperties(selected)),
     };
 }
 
