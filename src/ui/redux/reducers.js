@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
 
 import { propertiesReducer } from './editor/properties';
-import { nodesReducer } from './editor/nodes';
+import { nodeEditorReducer } from './editor/nodeeditor';
 
 export default combineReducers({
-    editor: nodesReducer,
+    editor: nodeEditorReducer,
     properties: propertiesReducer,
 });

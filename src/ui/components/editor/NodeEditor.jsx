@@ -6,7 +6,7 @@ import Node from './Node';
 import { nodes as nodesSample } from './nodes.json';
 
 import { setProperties } from '../../redux/editor/properties';
-import { setNodes } from '../../redux/editor/nodes';
+import { saveChanges } from '../../redux/editor/nodeeditor';
 
 class NodeEditor extends React.Component {
     constructor(props) {
@@ -18,22 +18,6 @@ class NodeEditor extends React.Component {
         };
         this.saveNodes = this.saveNodes.bind(this, null);
         this.handleNodeOnDragEnd = this.handleNodeOnDragEnd.bind(this, null);
-    }
-
-    componentWillMount() {
-        this.setState({
-            transform: JSON.parse(window.localStorage.getItem('nodes-transform')),
-            transformStr: window.localStorage.getItem('nodes-transform-string'),
-        });
-        const nodes = window.localStorage.getItem('nodes');
-        if (nodes) {
-            this.props.setNodes(
-                JSON.parse(nodes),
-            );
-            // this.setState({
-            //     nodes: JSON.parse(window.localStorage.getItem('nodes')),
-            // }); 
-        }
     }
 
     componentDidMount() {
@@ -48,7 +32,7 @@ class NodeEditor extends React.Component {
             })
             .on("zoom", () => {
                 if (d3.event.transform) {
-                    that.setState({
+                    that.props.saveChanges({
                         transform: {
                             k: d3.event.transform.k,
                             x: d3.event.transform.x,
@@ -64,17 +48,17 @@ class NodeEditor extends React.Component {
             });
         svg.call(zoom);
         svg.on("dblclick.zoom", null);
-        if (that.state.transform) {
-            const { k, x, y } = that.state.transform;
+        if (that.props.transform) {
+            const { k, x, y } = that.props.transform;
             const t = d3.zoomIdentity.translate(x, y).scale(k);
             svg.call(zoom.transform, t);
         }
     }
 
     saveNodes() {
-        if (this.state.transform) {
-            window.localStorage.setItem('nodes-transform', JSON.stringify(this.state.transform));
-            window.localStorage.setItem('nodes-transform-string', this.state.transformStr);
+        if (this.props.transform) {
+            window.localStorage.setItem('nodes-transform', JSON.stringify(this.props.transform));
+            window.localStorage.setItem('nodes-transform-string', this.props.transformStr);
             window.localStorage.setItem('nodes', JSON.stringify(this.props.nodes));
         }
     }
@@ -93,14 +77,14 @@ class NodeEditor extends React.Component {
     }
 
     render() {
-        const { selected, setNodeProperties } = this.props;
+        const { selected, setNodeProperties, transformStr, nodes } = this.props;
         return (
             <svg ref={this.svgRef} className="cursor-grab">
                 <defs>
                     <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
                         <path d="M 10 0 L 0 0 0 10" fill="none" stroke="gray" strokeWidth="0.5"/>
                     </pattern>
-                    <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse" patternTransform={this.state.transformStr}>
+                    <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse" patternTransform={transformStr}>
                         <rect width="100" height="100" fill="url(#smallGrid)"/>
                         <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" strokeWidth="1"/>
                     </pattern>
@@ -108,9 +92,9 @@ class NodeEditor extends React.Component {
                 <rect width="100%" height="100%" fill="url(#grid)" />
                 <g
                     ref={this.gRef}
-                    transform={this.state.transformStr}
+                    transform={transformStr}
                 >
-                    {this.props.nodes.map(n =>
+                    {nodes && nodes.map(n =>
                         <Node
                             key={n.id}
                             {...n}
@@ -129,12 +113,14 @@ class NodeEditor extends React.Component {
 
 const mapStateToProps = (state) => ({
     nodes: state.editor.nodes || nodesSample,
+    transform: state.editor.transform,
+    transformStr: state.editor.transformStr,
     selected: state.properties.selected || '',
 });
 
 const mapDispatchToProps = dispatch => {
     return {
-        setNodes: (nodes) => dispatch(setNodes(nodes)),
+        saveChanges: (changes) => dispatch(saveChanges(changes)),
         setNodeProperties: (selected) => dispatch(setProperties(selected)),
     };
 }
