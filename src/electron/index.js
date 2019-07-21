@@ -1,6 +1,7 @@
 const electron = require("electron");
 const path = require("path");
 const isDev = require("electron-is-dev");
+// const ECx = require('electron-chrome-extension');
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -17,7 +18,18 @@ function createWindow() {
     mainWindow.on("closed", () => (mainWindow = null));
 }
 
-app.on("ready", createWindow);
+app.on("ready", async () => {
+    createWindow();
+    // setup chrome extensions
+    // if (isDev) {
+    //     await ECx.load('fmkadmapgofadopljbjfkapdkoienihi');
+    //     await ECx.load('lmhkpmbekcpmknklioeibfkpmmfibljd');
+    // }
+});
+
+// if (isDev) {
+//     app.on('session-created', session => session.setPreloads([path.join(__dirname, '../../node_modules/electron-chrome-extension/preload')]))
+// }
 
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
