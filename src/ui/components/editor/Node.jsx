@@ -75,7 +75,7 @@ export default class Node extends React.Component {
     }
 
     render() {
-        const { x, y, type, name, desc, selected } = this.props;
+        const { x, y, type, path, desc, selected } = this.props;
         return (
             <g
                 ref={this.gRef}
@@ -85,14 +85,14 @@ export default class Node extends React.Component {
                 <rect
                     x={0} y={0}
                     rx="20" ry="20"
-                    width="150" height="40"
-                    className={`node${selected ? ' selected' : ''}`}
+                    
+                    className={`node ${type} ${selected ? 'selected' : ''}`}
                 >
                     <title>{desc}</title>
                 </rect>
                 <text x={15} y={18} style={textStyle}>
                     <title>{desc}</title>
-                    {name}
+                    {path}
                 </text>
                 <text x={15} y={30} style={baseStyle}>({type})</text>
                 {/* <circle cx={130} cy={20} r="20" style={plusCircleStyle}>

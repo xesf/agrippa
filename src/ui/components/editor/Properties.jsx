@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { Input, Label } from 'semantic-ui-react';
-import Player from '../Player';
+import { Input } from 'semantic-ui-react';
 
-const skipKeys = ['selected'];
+const skipKeys = ['selected', 'items'];
 
 const inputStyle = {
     width: '100%',
@@ -32,8 +31,23 @@ class Properties extends React.Component {
                                 />
                             );
                         })}
-                        {node['type'] === 'video' &&
-                            <video controls src={`http://localhost:2349/mp4/${node['id']}`} />
+                        <video controls src={`http://localhost:2349/mp4/${node['path']}`} />
+                        {node['type'] === 'decision' &&
+                            (
+                                node.items.map((d, i) => {
+                                    return (<div>
+                                        <Input
+                                            key={`${d.id}${d.type}`}
+                                            size='mini'
+                                            label={d.type}
+                                            placeholder={d.type}
+                                            defaultValue={d.desc}
+                                            style={inputStyle}
+                                        />
+                                        <video controls src={`http://localhost:2349/mp4/${d['path']}`} />
+                                    </div>);
+                                })
+                            )
                         }
                     </React.Fragment>
                 }
@@ -43,7 +57,7 @@ class Properties extends React.Component {
 };
 
 const mapStateToProps = (state) => ({
-    node: state.properties.node,
+    node: state.editor.node,
 });
 
 // const mapDispatchToProps = dispatch => {

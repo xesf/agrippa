@@ -1,27 +1,57 @@
 
-const nodes = window.localStorage.getItem('nodes');
-const initialState = {
-    transform: JSON.parse(window.localStorage.getItem('nodes-transform')),
-    transformStr: window.localStorage.getItem('nodes-transform-string'),
-    nodes: (nodes) ? JSON.parse(nodes) : [],
-};
-
 const NodeEditorActionType = {
-    SAVE_CHANGES: 'ui/editor/save-changes',
+    INIT_STORE: 'ui/editor/init-store',
+    SAVE_TRANSFORM: 'ui/editor/save-transform',
+    SAVE_ALL: 'ui/editor/save-all',
+    SELECT: 'ui/editor/select',
 };
 
-export const saveChanges = (changes) => ({
-    type: NodeEditorActionType.SAVE_CHANGES,
+export const initStore = (state) => ({
+    type: NodeEditorActionType.INIT_STORE,
+    payload: state,
+});
+
+export const saveTransform = (changes) => ({
+    type: NodeEditorActionType.SAVE_TRANSFORM,
     payload: changes,
 });
 
-export const nodeEditorReducer = (state = initialState, action) => {
+export const saveAll = (changes) => ({
+    type: NodeEditorActionType.SAVE_ALL,
+    payload: changes,
+});
+
+export const setSelection = node => ({
+    type: NodeEditorActionType.SELECT,
+    payload: { node },
+});
+
+export const nodeEditorReducer = (state = { ready: false }, action) => {
     switch (action.type) {
-        case NodeEditorActionType.SAVE_CHANGES:
+        case NodeEditorActionType.INIT_STORE:
+            return {
+                ...state,
+                ready: true,
+                ...action.payload,
+            };
+        case NodeEditorActionType.SAVE_TRANSFORM:
             return {
                 ...state,
                 transform: action.payload.transform,
                 transformStr: action.payload.transformStr,
+            };
+        case NodeEditorActionType.SAVE_ALL:
+            return {
+                ...state,
+                transform: action.payload.transform,
+                transformStr: action.payload.transformStr,
+                nodes: action.payload.nodes,
+            };
+        case NodeEditorActionType.SELECT:
+            return {
+                ...state,
+                node: action.payload.node,
+                selected: action.payload.node.id,
             };
         default:
             return state;

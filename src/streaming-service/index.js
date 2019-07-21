@@ -18,13 +18,26 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/', function (req, res) {
-    res.send('Hello World from Express')
+app.get('/metadata', function (req, res) {
+    const path = `metadata/nodes.json`;
+    const fileSize = fs.statSync(path).size;
+    const head = {
+        'Content-Length': fileSize,
+        'Content-Type': 'application/json',
+    };
+    res.writeHead(200, head);
+    fs.createReadStream(path).pipe(res);
+});
+
+app.post('/metadata', function (req, res) {
+    const path = `metadata/nodes.json`;
+    req.pipe(fs.createWriteStream(path, { flags: 'w+' }));
+    res.writeHead(200);
 });
 
 // DASH
-app.get('/dash/:name', function(req, res) {
-    const path = `public/data/XV/dash/${req.params.name}/manifest.mpd`;
+app.get('/dash/:path/:name', function(req, res) {
+    const path = `data/${req.params.path}/dash/${req.params.name}/manifest.mpd`;
     const fileSize = fs.statSync(path).size;
 
     const head = {
@@ -36,8 +49,8 @@ app.get('/dash/:name', function(req, res) {
 });
 
 // MP4
-app.get('/hls/:name', function(req, res) {
-    const path = `public/data/${req.params.name}/${req.params.name}.m3u8`;
+app.get('/hls/:path/:name', function(req, res) {
+    const path = `data/${req.params.path}/${req.params.name}/${req.params.name}.m3u8`;
     const fileSize = fs.statSync(path).size;
 
     const head = {
@@ -49,8 +62,8 @@ app.get('/hls/:name', function(req, res) {
 });
 
 
-app.get('/dash/:name/:video/:folder/:segment/:file', function(req, res) {
-    const path = `public/data/XV/dash/${req.params.name}/${req.params.video}/${req.params.folder}/${req.params.segment}/${req.params.file}`;
+app.get('/dash/:path/:name/:video/:folder/:segment/:file', function(req, res) {
+    const path = `data/${req.params.path}/dash/${req.params.name}/${req.params.video}/${req.params.folder}/${req.params.segment}/${req.params.file}`;
     const fileSize = fs.statSync(path).size;
 
     if (req.headers.range) {
@@ -80,8 +93,8 @@ app.get('/dash/:name/:video/:folder/:segment/:file', function(req, res) {
 });
 
 // MP4
-app.get('/mp4/:name', function(req, res) {
-    const path = `public/data/XV/${req.params.name}.mp4`;
+app.get('/mp4/:path/:name', function(req, res) {
+    const path = `data/${req.params.path}/${req.params.name}.mp4`;
     const fileSize = fs.statSync(path).size;
 
     if (req.headers.range) {

@@ -3,10 +3,8 @@ import { connect } from 'react-redux'
 import * as d3 from 'd3';
 
 import Node from './Node';
-import { nodes as nodesSample } from './nodes.json';
 
-import { setProperties } from '../../redux/editor/properties';
-import { saveChanges } from '../../redux/editor/nodeeditor';
+import { saveTransform, saveAll, setSelection } from '../../redux/editor/nodeeditor';
 
 class NodeEditor extends React.Component {
     constructor(props) {
@@ -32,13 +30,13 @@ class NodeEditor extends React.Component {
             })
             .on("zoom", () => {
                 if (d3.event.transform) {
-                    that.props.saveChanges({
+                    that.props.saveTransform({
                         transform: {
                             k: d3.event.transform.k,
                             x: d3.event.transform.x,
                             y: d3.event.transform.y,
                         },
-                        transformStr: d3.event.transform,
+                        transformStr: d3.event.transform.toString(),
                     });
                 }
             })
@@ -56,11 +54,11 @@ class NodeEditor extends React.Component {
     }
 
     saveNodes() {
-        if (this.props.transform) {
-            window.localStorage.setItem('nodes-transform', JSON.stringify(this.props.transform));
-            window.localStorage.setItem('nodes-transform-string', this.props.transformStr);
-            window.localStorage.setItem('nodes', JSON.stringify(this.props.nodes));
-        }
+        this.props.saveAll({
+            transform: this.props.transform,
+            transformStr: this.props.transformStr,
+            nodes: this.props.nodes,
+        });
     }
 
     componentWillUnmount() {
@@ -112,16 +110,17 @@ class NodeEditor extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    nodes: state.editor.nodes || nodesSample,
+    nodes: state.editor.nodes,
     transform: state.editor.transform,
     transformStr: state.editor.transformStr,
-    selected: state.properties.selected || '',
+    selected: state.editor.selected || '',
 });
 
 const mapDispatchToProps = dispatch => {
     return {
-        saveChanges: (changes) => dispatch(saveChanges(changes)),
-        setNodeProperties: (selected) => dispatch(setProperties(selected)),
+        saveTransform: (changes) => dispatch(saveTransform(changes)),
+        saveAll: (changes) => dispatch(saveAll(changes)),
+        setNodeProperties: (selected) => dispatch(setSelection(selected)),
     };
 }
 

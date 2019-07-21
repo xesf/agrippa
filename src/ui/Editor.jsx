@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Player from './components/Player';
 
@@ -17,7 +18,7 @@ class Editor extends React.Component {
                     <TabItem label="Editor" active>
                         <div className="canvas-container-scroll" style={{ margin: '1.5em 0.5em' }}>
                             <div className="ui grid two">
-                                <div style={{ flex: '0 0 300px', paddingRight: '0.3em' }}>
+                                <div style={{ flex: '0 0 300px', paddingRight: '0.3em', height: '100%' }}>
                                     <Tab type="top">
                                         <TabItem label="Properties">
                                             <Properties />
@@ -28,7 +29,7 @@ class Editor extends React.Component {
                                     </Tab>
                                 </div>
                                 <div className="layout-border" style={{ flex: '1', padding: '0px'}}>
-                                    <NodeEditor />
+                                    {this.props.ready && <NodeEditor />}
                                 </div>
                             </div>
                             
@@ -45,4 +46,10 @@ class Editor extends React.Component {
     }
 }
 
-export default Editor;
+const mapStateToProps = (state) => ({
+    ready: state.editor.ready,
+});
+
+export default connect(
+    mapStateToProps
+)(Editor);
