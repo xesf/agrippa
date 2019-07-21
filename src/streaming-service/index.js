@@ -80,8 +80,8 @@ app.get('/dash/:name/:video/:folder/:segment/:file', function(req, res) {
 });
 
 // MP4
-app.get('/movie/:name', function(req, res) {
-    const path = `public/data/${req.params.name}`;
+app.get('/mp4/:name', function(req, res) {
+    const path = `public/data/XV/${req.params.name}.mp4`;
     const fileSize = fs.statSync(path).size;
 
     if (req.headers.range) {

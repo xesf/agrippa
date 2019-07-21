@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { Input } from 'semantic-ui-react';
+import { Input, Label } from 'semantic-ui-react';
+import Player from '../Player';
 
 const skipKeys = ['selected'];
 
@@ -14,22 +15,28 @@ class Properties extends React.Component {
         const { node } = this.props;
         return (
             <div className="layout-border layout-properties">
-                {node && Object.keys(node).map((key, i) => {
-                        if (skipKeys.includes(key)) {
-                            return null;
+                {node &&
+                    <React.Fragment>
+                        {Object.keys(node).map((key, i) => {
+                            if (skipKeys.includes(key)) {
+                                return null;
+                            }
+                            return (
+                                <Input
+                                    key={`${key}${node[key]}`}
+                                    size='mini'
+                                    label={key}
+                                    placeholder={key}
+                                    defaultValue={node[key]}
+                                    style={inputStyle}
+                                />
+                            );
+                        })}
+                        {node['type'] === 'video' &&
+                            <video controls src={`http://localhost:2349/mp4/${node['id']}`} />
                         }
-                        return (
-                            <Input
-                                key={`${key}${node[key]}`}
-                                size='mini'
-                                label={key}
-                                placeholder={key}
-                                defaultValue={node[key]}
-                                style={inputStyle}
-                            />
-                        )
-                    }
-                )}
+                    </React.Fragment>
+                }
             </div>
         );
     }

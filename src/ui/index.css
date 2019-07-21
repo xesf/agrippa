@@ -49,6 +49,15 @@ canvas {
     cursor: cell;
 }
 
+video {
+    background: black;
+    width: 265px;
+    height: 190px;
+    overflow: hidden;
+    border: 0px;
+    outline: none;
+}
+
 svg {
     width: 100%;
     height: 100%;

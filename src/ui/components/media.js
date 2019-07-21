@@ -120,6 +120,7 @@ export const init = (canvas, video, { width, height }) => {
     state.video.loop = false;
     state.video.muted = false;
     state.video.autoplay = false;
+    state.video.controls = true;
 
     shaka.polyfill.installAll(); // eslint-disable-line
     state.player = new shaka.Player(state.video); // eslint-disable-line
@@ -127,6 +128,8 @@ export const init = (canvas, video, { width, height }) => {
     state.player.addEventListener('error', onErrorEvent);
 
     mainloop();
+
+    return state;
 };
 
 function onErrorEvent(event) {
