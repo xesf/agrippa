@@ -40,15 +40,15 @@
   },
   "scripts": {
     "start": "concurrently \"yarn streaming:start\" \"cross-env BROWSER=none yarn react:start\" \"wait-on http://localhost:3240 && electron .\"",
-    "build": "yarn react-build && yarn electron-build",
-    "electron-build": "electron-builder",
-    "release": "yarn react-build && electron-builder --publish=always",
+    "build": "yarn react:build && yarn electron:build",
+    "electron:build": "electron-builder",
+    "release": "yarn react:build && electron-builder --publish=always",
     "react:start": "cross-env PORT=3240 react-scripts start",
     "react:build": "react-scripts build",
     "react:test": "react-scripts test",
     "react:eject": "react-scripts eject",
     "streaming:build": "babel src/streaming-service -d dist",
-    "streaming:start": "cross-env NODE_ENV=development nodemon ./src/streaming-service/index.js --exec babel-node -- --ignore ./node_modules"
+    "streaming:start": "cross-env NODE_ENV=development nodemon ./src/streaming-service/index.js --exec babel-node -w ./src/streaming-sercice/"
   },
   "eslintConfig": {
     "extends": "react-app"
