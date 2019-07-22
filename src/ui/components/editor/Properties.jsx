@@ -35,17 +35,18 @@ class Properties extends React.Component {
                         {node['type'] === 'decision' &&
                             (
                                 node.items.map((d, i) => {
-                                    return (<div>
-                                        <Input
-                                            key={`${d.id}${d.type}`}
-                                            size='mini'
-                                            label={d.type}
-                                            placeholder={d.type}
-                                            defaultValue={d.desc}
-                                            style={inputStyle}
-                                        />
-                                        <video controls src={`http://localhost:2349/mp4/${d['path']}`} />
-                                    </div>);
+                                    return (
+                                        <div key={`${d.id}${d.type}`}>
+                                            <Input
+                                                size='mini'
+                                                label={d.type}
+                                                placeholder={d.type}
+                                                defaultValue={d.desc}
+                                                style={inputStyle}
+                                            />
+                                            <video controls src={`http://localhost:2349/mp4/${d['path']}`} />
+                                        </div>
+                                    );
                                 })
                             )
                         }
