@@ -60,7 +60,7 @@
     "webpack-cli": "^3.3.6"
   },
   "scripts": {
-    "start": "concurrently \"yarn streaming:start\" \"wait-on http://localhost:8080 && electron .\"",
+    "start": "concurrently \"yarn server\" \"wait-on http://localhost:8080 && electron .\"",
     "server": "cross-env NODE_ENV=development nodemon ./src/server.js --exec babel-node -w ./src/server.js",
     "lint": "eslint ./src --ext .js,.jsx -c .eslintrc.yml",
     "build": "yarn build:server && yarn build:electron",

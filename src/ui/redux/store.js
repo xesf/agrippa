@@ -16,7 +16,7 @@ export const createStore = () => {
     // send changes back to server
     store.subscribe((() => {
         const state = store.getState();
-        if (state.editor) {
+        if (state.editor.ready) {
             if (subscribeTimer) {
                 clearTimeout(subscribeTimer);
             }
@@ -26,7 +26,8 @@ export const createStore = () => {
                     transformStr: state.editor.transformStr,
                     nodes: state.editor.nodes,
                     selected: state.editor.selected,
-                });
+                }
+                );
             }, 500);
         }
     }));
