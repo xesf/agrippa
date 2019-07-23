@@ -1,4 +1,4 @@
-import { createStore as reduxCreateStore } from 'redux';
+import { createStore as ReduxCreateStore } from 'redux';
 import axios from 'axios';
 
 import rootReducer from './reducers';
@@ -7,11 +7,11 @@ import { initStore } from './editor/nodeeditor';
 let subscribeTimer = null;
 
 export const createStore = () => {
-    const store = new reduxCreateStore(rootReducer);
+    const store = new ReduxCreateStore(rootReducer);
 
     // get initial state from server
-    axios.get('http://localhost:2349/metadata')
-        .then((res) => store.dispatch(initStore(res.data)));
+    axios.get('http://localhost:8080/metadata')
+        .then(res => store.dispatch(initStore(res.data)));
 
     // send changes back to server
     store.subscribe((() => {
@@ -21,7 +21,7 @@ export const createStore = () => {
                 clearTimeout(subscribeTimer);
             }
             subscribeTimer = setTimeout(() => {
-                axios.post('http://localhost:2349/metadata', {
+                axios.post('http://localhost:8080/metadata', {
                     transform: state.editor.transform,
                     transformStr: state.editor.transformStr,
                     nodes: state.editor.nodes,

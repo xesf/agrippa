@@ -12,29 +12,31 @@ const state = {
     videoWidth: 0,
     videoHeight: 0,
     videoReady: false,
-    currentTime: 0, 
+    currentTime: 0,
 };
 
 let currentNode = -1;
 
 window.requestAnimationFrame = window.requestAnimationFrame
-    // @ts-ignore    
+    // @ts-ignore
     || window.mozRequestAnimationFrame
     || window.webkitRequestAnimationFrame
     // @ts-ignore
     || window.msRequestAnimationFrame
-    || ((f) => setTimeout(f, 1000/60));
+    || (f => setTimeout(f, 1000 / 60));
 
 export const init = (canvas, video, { width, height }) => {
     state.canvas = canvas;
+    console.log(width, height);
     // state.canvas.width = width;
     // state.canvas.height = height;
-    
-    state.context = state.canvas.getContext("2d");
+
+    state.context = state.canvas.getContext('2d');
     // state.video = document.createElement("video");
     state.video = video;
-    
-    state.video.addEventListener("loadedmetadata", (e) => {
+
+    state.video.addEventListener('loadedmetadata', (e) => {
+        console.log(e);
         state.videoWidth = state.video.videoWidth;
         state.videoHeight = state.video.videoHeight;
         // state.canvas.width = state.videoWidth;
@@ -50,38 +52,41 @@ export const init = (canvas, video, { width, height }) => {
             state.context.drawImage(state.video, x, y, width, height);
         }
         return false;
-    }
-    
+    };
+
     const mainloop = () => {
         state.frameId = requestAnimationFrame(mainloop);
-    
+
         tick = Date.now();
         elapsed = tick - prevTick;
-    
+
         if (elapsed > fps) {
             prevTick = tick - (elapsed % fps);
         }
-    
-        if (drawFrame(tick, elapsed, state.videoX, state.videoY, state.videoWidth, state.videoHeight)) {
+
+        if (drawFrame(tick, elapsed,
+            state.videoX, state.videoY,
+            state.videoWidth, state.videoHeight)
+        ) {
             cancelAnimationFrame(state.frameId);
         }
-    }
+    };
 
     const nextNode = () => {
         let src = '';
         currentNode += 1;
         switch (currentNode) {
             case 0:
-                src = 'http://localhost:2349/dash/56003/';
+                src = 'http://localhost:8080/dash/56003/';
                 break;
             case 1:
-                src = 'http://localhost:2349/dash/56002/';
+                src = 'http://localhost:8080/dash/56002/';
                 break;
             case 2:
-                src = 'http://localhost:2349/dash/19668/';
+                src = 'http://localhost:8080/dash/19668/';
                 break;
             case 3:
-                src = 'http://localhost:2349/dash/56001/';
+                src = 'http://localhost:8080/dash/56001/';
                 break;
             case 4:
                 currentNode = -1;
@@ -98,20 +103,23 @@ export const init = (canvas, video, { width, height }) => {
         }
     };
 
-    state.video.addEventListener("ended", (e) => {
+    state.video.addEventListener('ended', (e) => {
+        console.log(e);
         state.videoReady = false;
         nextNode();
     }, false);
 
-    state.video.addEventListener("canplaythrough", (e) => {
+    state.video.addEventListener('canplaythrough', (e) => {
+        console.log(e);
         state.videoReady = true;
     }, false);
 
-    state.video.addEventListener("error", (e) => {
+    state.video.addEventListener('error', (e) => {
         console.log(e);
     }, false);
 
-    state.canvas.addEventListener("click", (e) => {
+    state.canvas.addEventListener('click', (e) => {
+        console.log(e);
         state.video.pause();
         nextNode();
     }, false);

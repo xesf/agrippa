@@ -1,6 +1,6 @@
-const electron = require("electron");
-const path = require("path");
-const isDev = require("electron-is-dev");
+const electron = require('electron'); // eslint-disable-line
+const path = require('path');
+const isDev = require('electron-is-dev');
 // const ECx = require('electron-chrome-extension');
 
 const app = electron.app;
@@ -11,14 +11,14 @@ function createWindow() {
     mainWindow = new BrowserWindow({ width: 900, height: 680, maxWidth: 2700, maxHeight: 1920 });
     mainWindow.loadURL(
         isDev
-            ? "http://localhost:3240"
-            : `file://${path.join(__dirname, "../build/index.html")}`
+            ? 'http://localhost:8080'
+            : `file://${path.join(__dirname, '../build/index.html')}`
     );
     mainWindow.webContents.once('dom-ready', () => mainWindow.webContents.openDevTools());
-    mainWindow.on("closed", () => (mainWindow = null));
+    mainWindow.on('closed', () => { mainWindow = null; });
 }
 
-app.on("ready", async () => {
+app.on('ready', async () => {
     createWindow();
     // setup chrome extensions
     // if (isDev) {
@@ -28,16 +28,18 @@ app.on("ready", async () => {
 });
 
 // if (isDev) {
-//     app.on('session-created', session => session.setPreloads([path.join(__dirname, '../../node_modules/electron-chrome-extension/preload')]))
+//     app.on('session-created', session =>
+// session.setPreloads([path.join(__dirname,
+// '../../node_modules/electron-chrome-extension/preload')]))
 // }
 
-app.on("window-all-closed", () => {
-    if (process.platform !== "darwin") {
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
         app.quit();
     }
 });
 
-app.on("activate", () => {
+app.on('activate', () => {
     if (mainWindow === null) {
         createWindow();
     }

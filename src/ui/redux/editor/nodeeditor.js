@@ -6,17 +6,17 @@ const NodeEditorActionType = {
     SELECT: 'ui/editor/select',
 };
 
-export const initStore = (state) => ({
+export const initStore = state => ({
     type: NodeEditorActionType.INIT_STORE,
     payload: state,
 });
 
-export const saveTransform = (changes) => ({
+export const saveTransform = changes => ({
     type: NodeEditorActionType.SAVE_TRANSFORM,
     payload: changes,
 });
 
-export const saveAll = (changes) => ({
+export const saveAll = changes => ({
     type: NodeEditorActionType.SAVE_ALL,
     payload: changes,
 });

@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
 import { loadParams } from './params';
-import Game from "./Game";
-import Editor from "./Editor";
+import Game from './Game';
+import Editor from './Editor';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -21,4 +21,4 @@ export default class App extends React.Component {
             </React.Fragment>
         );
     }
-};
+}

@@ -3,12 +3,12 @@ import * as d3 from 'd3';
 
 const baseStyle = {
     fill: 'rgb(1, 22, 29)',
-    'fontSize': '10',
-    'fontFamily':'Verdana',
+    fontSize: '10',
+    fontFamily: 'Verdana',
 };
 const textStyle = {
     ...baseStyle,
-    'fontSize': '12',
+    fontSize: '12',
 };
 // const plusStyle = {
 //     ...baseStyle,
@@ -38,34 +38,34 @@ export default class Node extends React.Component {
         node.on('click', this.handleClick);
         const drag = d3.drag()
             .clickDistance(16)
-            .on("start", () => {
-                node.raise().classed("cursor-grabbing", true);
+            .on('start', () => {
+                node.raise().classed('cursor-grabbing', true);
                 that.offset = {
                     x: d3.event.x - 75,
                     y: d3.event.y - 20,
                     drag: false,
                 };
                 d3.event
-                .on("drag", () => {
-                    that.offset = {
-                        x: that.offset.x + d3.event.dx,
-                        y: that.offset.y + d3.event.dy,
-                        drag: true,
-                    };
-                    node.attr("transform", "translate(" + (that.offset.x) + "," + (that.offset.y) + ")");
-                  })
-                .on("end", () => {
-                    node.classed("cursor-grabbing", false);
-                    if (that.offset.drag && that.props.onDragEnd) {
-                        that.props.onDragEnd(that.props.id, that.offset);
-                    }
-                })
+                    .on('drag', () => {
+                        that.offset = {
+                            x: that.offset.x + d3.event.dx,
+                            y: that.offset.y + d3.event.dy,
+                            drag: true,
+                        };
+                        node.attr('transform', `translate(${that.offset.x},${that.offset.y})`);
+                    })
+                    .on('end', () => {
+                        node.classed('cursor-grabbing', false);
+                        if (that.offset.drag && that.props.onDragEnd) {
+                            that.props.onDragEnd(that.props.id, that.offset);
+                        }
+                    });
             });
 
         node.call(drag);
     }
 
-    handleClick(e) {
+    handleClick() {
         const { onClick, onDragEnd, ...rest } = this.props;
         if (onClick) {
             onClick({
@@ -83,9 +83,11 @@ export default class Node extends React.Component {
                 transform={`translate(${x},${y})`}
             >
                 <rect
-                    x={0} y={0}
-                    rx="20" ry="20"
-                    
+                    x={0}
+                    y={0}
+                    rx="20"
+                    ry="20"
+
                     className={`node ${type} ${selected ? 'selected' : ''}`}
                 >
                     <title>{desc}</title>
@@ -102,4 +104,4 @@ export default class Node extends React.Component {
             </g>
         );
     }
-};
+}

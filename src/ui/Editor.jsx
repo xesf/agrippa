@@ -9,44 +9,40 @@ import NodeEditor from './components/editor/NodeEditor';
 import Properties from './components/editor/Properties';
 import Assets from './components/editor/Assets';
 
-class Editor extends React.Component {
-    render() {
-        return (
-            <React.Fragment>
-                <Tab selectedTabIndex={1} alwaysRendered>
-                    <TabItem label="agrippa" header />
-                    <TabItem label="Editor" active>
-                        <div className="canvas-container-scroll" style={{ margin: '1.5em 0.5em' }}>
-                            <div className="ui grid two">
-                                <div style={{ flex: '0 0 300px', paddingRight: '0.3em', height: '100%' }}>
-                                    <Tab type="top">
-                                        <TabItem label="Properties">
-                                            <Properties />
-                                        </TabItem>
-                                        <TabItem label="Assets">
-                                            <Assets />
-                                        </TabItem>
-                                    </Tab>
-                                </div>
-                                <div className="layout-border" style={{ flex: '1', padding: '0px'}}>
-                                    {this.props.ready && <NodeEditor />}
-                                </div>
+const Editor = ({ ready }) =>
+    (
+        <React.Fragment>
+            <Tab selectedTabIndex={1} alwaysRendered>
+                <TabItem label="agrippa" header />
+                <TabItem label="Editor" active>
+                    <div className="canvas-container-scroll" style={{ margin: '1.5em 0.5em' }}>
+                        <div className="ui grid two">
+                            <div style={{ flex: '0 0 300px', paddingRight: '0.3em', height: '100%' }}>
+                                <Tab type="top">
+                                    <TabItem label="Properties">
+                                        <Properties />
+                                    </TabItem>
+                                    <TabItem label="Assets">
+                                        <Assets />
+                                    </TabItem>
+                                </Tab>
                             </div>
-                            
+                            <div className="layout-border" style={{ flex: '1', padding: '0px'}}>
+                                {ready && <NodeEditor />}
+                            </div>
                         </div>
-                    </TabItem>
-                    <TabItem label="Game">
-                        <div className="canvas-container-scroll">
-                            <Player />
-                        </div>
-                    </TabItem>
-                </Tab>
-            </React.Fragment>
-        );
-    }
-}
+                    </div>
+                </TabItem>
+                <TabItem label="Game">
+                    <div className="canvas-container-scroll">
+                        <Player />
+                    </div>
+                </TabItem>
+            </Tab>
+        </React.Fragment>
+    );
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     ready: state.editor.ready,
 });
 

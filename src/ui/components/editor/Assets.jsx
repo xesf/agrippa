@@ -1,11 +1,9 @@
 import React from 'react';
 
-const Assets = (props) => {
-    return (
-        <div className="layout-border layout-properties">
+const Assets = () => (
+    <div className="layout-border layout-properties">
             Assets
-        </div>
-    );
-};
+    </div>
+);
 
 export default Assets;

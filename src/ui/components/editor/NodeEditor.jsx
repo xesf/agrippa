@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import * as d3 from 'd3';
 
 import Node from './Node';
@@ -11,9 +11,6 @@ class NodeEditor extends React.Component {
         super(props);
         this.svgRef = React.createRef();
         this.gRef = React.createRef();
-        this.state = {
-            selected: null,
-        };
         this.saveNodes = this.saveNodes.bind(this, null);
         this.handleNodeOnDragEnd = this.handleNodeOnDragEnd.bind(this, null);
     }
@@ -25,10 +22,10 @@ class NodeEditor extends React.Component {
         const zoom = d3.zoom()
             .clickDistance(4)
             .scaleExtent([0.5, 2])
-            .on("start", () => {
-                svg.raise().classed("cursor-grabbing", true);
+            .on('start', () => {
+                svg.raise().classed('cursor-grabbing', true);
             })
-            .on("zoom", () => {
+            .on('zoom', () => {
                 if (d3.event.transform) {
                     that.props.saveTransform({
                         transform: {
@@ -40,12 +37,12 @@ class NodeEditor extends React.Component {
                     });
                 }
             })
-            .on("end", () => {
-                svg.raise().classed("cursor-grabbing", false);
+            .on('end', () => {
+                svg.raise().classed('cursor-grabbing', false);
                 that.saveNodes();
             });
         svg.call(zoom);
-        svg.on("dblclick.zoom", null);
+        svg.on('dblclick.zoom', null);
         if (that.props.transform) {
             const { k, x, y } = that.props.transform;
             const t = d3.zoomIdentity.translate(x, y).scale(k);
@@ -109,20 +106,18 @@ class NodeEditor extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     nodes: state.editor.nodes,
     transform: state.editor.transform,
     transformStr: state.editor.transformStr,
     selected: state.editor.selected || '',
 });
 
-const mapDispatchToProps = dispatch => {
-    return {
-        saveTransform: (changes) => dispatch(saveTransform(changes)),
-        saveAll: (changes) => dispatch(saveAll(changes)),
-        setNodeProperties: (selected) => dispatch(setSelection(selected)),
-    };
-}
+const mapDispatchToProps = dispatch => ({
+    saveTransform: changes => dispatch(saveTransform(changes)),
+    saveAll: changes => dispatch(saveAll(changes)),
+    setNodeProperties: selected => dispatch(setSelection(selected)),
+});
 
 export default connect(
     mapStateToProps,
