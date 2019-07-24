@@ -58,6 +58,34 @@ video {
     outline: none;
 }
 
+.video-preview {
+    background: black;
+    border: 1px solid rgb(42, 56, 69);
+    outline: none;
+    cursor: cell;
+    width: 100%;
+    height: 100%;
+}
+
+.video-preview-container {
+    background: black;
+    max-width: 640px;
+    max-height: 480px;
+    overflow: hidden;
+    border: 0px;
+}
+
+.screen-container {
+    background: black;
+    max-width: 640px;
+    max-height: 480px;
+    overflow: hidden;
+    border: 0px;
+    text-align: center;
+    width: 100%;
+    margin: 0 auto;
+}
+
 svg {
     width: 100%;
     height: 100%;
@@ -151,4 +179,10 @@ svg {
 h4.ui.header {
     color: rgb(158, 202, 97);
     font-size: .78571429em;
+}
+
+.decision-item {
+    position: static;
+    bottom: 20px;
+
 }

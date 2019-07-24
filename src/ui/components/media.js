@@ -27,50 +27,10 @@ window.requestAnimationFrame = window.requestAnimationFrame
 
 export const init = (canvas, video, { width, height }) => {
     state.canvas = canvas;
+    state.video = video;
     console.log(width, height);
     // state.canvas.width = width;
     // state.canvas.height = height;
-
-    state.context = state.canvas.getContext('2d');
-    // state.video = document.createElement("video");
-    state.video = video;
-
-    state.video.addEventListener('loadedmetadata', (e) => {
-        console.log(e);
-        state.videoWidth = state.video.videoWidth;
-        state.videoHeight = state.video.videoHeight;
-        // state.canvas.width = state.videoWidth;
-        // state.canvas.height = state.videoHeight;
-        state.videoX = (state.canvas.width - state.videoWidth) / 2;
-        state.videoY = (state.canvas.height - state.videoHeight) / 2;
-        console.log('file width/height', state.videoWidth, state.videoHeight);
-        console.log('canvas pos videoX/videoY', state.videoX, state.videoY);
-    }, false);
-
-    const drawFrame = (tick, elapsed, x, y, width, height) => {
-        if (state.videoReady) {
-            state.context.drawImage(state.video, x, y, width, height);
-        }
-        return false;
-    };
-
-    const mainloop = () => {
-        state.frameId = requestAnimationFrame(mainloop);
-
-        tick = Date.now();
-        elapsed = tick - prevTick;
-
-        if (elapsed > fps) {
-            prevTick = tick - (elapsed % fps);
-        }
-
-        if (drawFrame(tick, elapsed,
-            state.videoX, state.videoY,
-            state.videoWidth, state.videoHeight)
-        ) {
-            cancelAnimationFrame(state.frameId);
-        }
-    };
 
     const nextNode = () => {
         let src = '';
@@ -97,9 +57,11 @@ export const init = (canvas, video, { width, height }) => {
         }
         state.videoReady = false;
         state.video.autoplay = true;
-        state.context.fillRect(0, 0, state.canvas.width, state.canvas.height);
-        if (currentNode >= 0 && currentNode < 4) {
-            state.player.load(src, state.currentTime);
+        if (canvas) {
+            state.context.fillRect(0, 0, state.canvas.width, state.canvas.height);
+            if (currentNode >= 0 && currentNode < 4) {
+                state.player.load(src, state.currentTime);
+            }
         }
     };
 
@@ -118,24 +80,65 @@ export const init = (canvas, video, { width, height }) => {
         console.log(e);
     }, false);
 
-    state.canvas.addEventListener('click', (e) => {
-        console.log(e);
-        state.video.pause();
-        nextNode();
-    }, false);
-
     state.video.preload = 'auto';
     state.video.loop = false;
     state.video.muted = false;
     state.video.autoplay = false;
-    state.video.controls = true;
+    state.video.controls = false;
 
     shaka.polyfill.installAll(); // eslint-disable-line
     state.player = new shaka.Player(state.video); // eslint-disable-line
 
     state.player.addEventListener('error', onErrorEvent);
 
-    mainloop();
+    if (canvas) {
+        state.context = state.canvas.getContext('2d');    
+
+        state.video.addEventListener('loadedmetadata', (e) => {
+            console.log(e);
+            state.videoWidth = state.video.videoWidth;
+            state.videoHeight = state.video.videoHeight;
+            // state.canvas.width = state.videoWidth;
+            // state.canvas.height = state.videoHeight;
+            state.videoX = (state.canvas.width - state.videoWidth) / 2;
+            state.videoY = (state.canvas.height - state.videoHeight) / 2;
+            console.log('file width/height', state.videoWidth, state.videoHeight);
+            console.log('canvas pos videoX/videoY', state.videoX, state.videoY);
+        }, false);
+
+        const drawFrame = (tick, elapsed, x, y, width, height) => {
+            if (state.videoReady) {
+                state.context.drawImage(state.video, x, y, width, height);
+            }
+            return false;
+        };
+
+        const mainloop = () => {
+            state.frameId = requestAnimationFrame(mainloop);
+
+            tick = Date.now();
+            elapsed = tick - prevTick;
+
+            if (elapsed > fps) {
+                prevTick = tick - (elapsed % fps);
+            }
+
+            if (drawFrame(tick, elapsed,
+                state.videoX, state.videoY,
+                state.videoWidth, state.videoHeight)
+            ) {
+                cancelAnimationFrame(state.frameId);
+            }
+        };
+
+        state.canvas.addEventListener('click', (e) => {
+            console.log(e);
+            state.video.pause();
+            nextNode();
+        }, false);
+
+        mainloop();
+    }
 
     return state;
 };

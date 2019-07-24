@@ -1,6 +1,7 @@
 import React from 'react';
 
 const player = document.createElement('video');
+player.className = 'video-preview';
 
 export default class Video extends React.Component {
     constructor(props) {
@@ -16,7 +17,7 @@ export default class Video extends React.Component {
 
     render() {
         return (
-            <div ref={this.containerRef} />
+            <div ref={this.containerRef} className="video-preview-container" />
         );
     }
 }

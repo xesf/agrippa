@@ -8,6 +8,7 @@ import TabItem from './components/editor/TabItem';
 import NodeEditor from './components/editor/NodeEditor';
 import Properties from './components/editor/Properties';
 import Assets from './components/editor/Assets';
+import NodePreview from './components/editor/NodePreview';
 
 const Editor = ({ ready }) =>
     (
@@ -28,7 +29,12 @@ const Editor = ({ ready }) =>
                                 </Tab>
                             </div>
                             <div className="layout-border" style={{ flex: '1', padding: '0px'}}>
-                                {ready && <NodeEditor />}
+                                {ready && (
+                                    <React.Fragment>
+                                        <NodePreview />
+                                        <NodeEditor />
+                                    </React.Fragment>
+                                )}
                             </div>
                         </div>
                     </div>
