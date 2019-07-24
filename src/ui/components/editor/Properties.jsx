@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Input } from 'semantic-ui-react';
 
+import PropertiesDecision from './PropertiesDecision';
+
 const skipKeys = ['selected', 'items'];
 
 const inputStyle = {
@@ -37,22 +39,7 @@ class Properties extends React.Component {
                             );
                         })}
                         <video controls src={`http://localhost:8080/mp4/${node.path}`} />
-                        {node.type === 'decision' &&
-                            (
-                                node.items.map(d => (
-                                    <div key={`${d.id}${d.type}`}>
-                                        <Input
-                                            size="mini"
-                                            label={d.type}
-                                            placeholder={d.type}
-                                            defaultValue={d.desc}
-                                            style={inputStyle}
-                                        />
-                                        <video controls src={`http://localhost:8080/mp4/${d.path}`} />
-                                    </div>
-                                ))
-                            )
-                        }
+                        <PropertiesDecision node={node} />
                     </React.Fragment>
                 }
             </div>
