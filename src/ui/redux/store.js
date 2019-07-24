@@ -24,10 +24,10 @@ export const createStore = () => {
                 axios.post('http://localhost:8080/metadata', {
                     transform: state.editor.transform,
                     transformStr: state.editor.transformStr,
-                    nodes: state.editor.nodes,
                     selected: state.editor.selected,
-                }
-                );
+                    node: state.editor.node,
+                    nodes: state.editor.nodes,
+                });
             }, 500);
         }
     }));

@@ -3,7 +3,6 @@ import path from 'path';
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import webpack from 'webpack';
@@ -25,11 +24,6 @@ webpackConfig.devtool = process.env.SRCMAP === 'true' ? 'source-map' : undefined
 const compiler = webpack(webpackConfig);
 app.use(webpackDevServer(compiler));
 
-app.use(bodyParser.json());
-app.use(bodyParser.raw({
-    limit: '2mb'
-}));
-
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -37,6 +31,8 @@ app.use((req, res, next) => {
 });
 
 app.use('/', express.static('../public'));
+app.use('/metadata', express.static('../metadata'));
+app.use('/data', express.static('../data'));
 
 const indexBody = renderToStaticMarkup(React.createElement(App));
 
@@ -59,6 +55,7 @@ app.post('/metadata', (req, res) => {
     const filepath = 'metadata/nodes.json';
     req.pipe(fs.createWriteStream(filepath, { flags: 'w+' }));
     res.writeHead(200);
+    res.send();
 });
 
 // DASH
