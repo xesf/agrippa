@@ -34,10 +34,17 @@ class PropertiesDecision extends React.Component {
                                 <div key={`${d.id}${d.type}`}>
                                     <Input
                                         size="mini"
-                                        label={d.type}
+                                        label="type"
                                         placeholder={d.type}
-                                        defaultValue={d.desc}
+                                        defaultValue={d.type}
                                         style={inputStyle}
+                                    />
+                                    <Input
+                                        size="mini"
+                                        label="desc"
+                                        placeholder={d.desc}
+                                        defaultValue={d.desc}
+                                        style={inputStyleLast}
                                     />
                                     <Input
                                         size="mini"
