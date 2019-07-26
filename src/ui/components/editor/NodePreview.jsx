@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Player from '../Player';
-
 class NodePreview extends React.Component {
     constructor(props) {
         super(props);
@@ -13,14 +11,36 @@ class NodePreview extends React.Component {
         const { node } = this.props;
         return (
             <div className="screen-container">
-                <video autoPlay loop src={`http://localhost:8080/mp4/${node.path}`} />
-                {node.type === 'decision' &&
-                    node.items.map(d => (
-                        <div key={`${d.id}${d.type}`} className="decision-item">
-                            <video loop src={`http://localhost:8080/mp4/${d.path}`} />
-                        </div>
-                    ))
-                }
+                <div>
+                    <video autoPlay loop src={`http://localhost:8080/mp4/${node.path}`} className="screen-video" />
+                    <div className="ui grid container equal width decision-container">
+                        <div className="column decision-item-container" />
+                        <div className="column decision-item-container" />
+                        {node.type === 'decision' &&
+                            node.items.map(d => (
+                                <div
+                                    id="decision-container"
+                                    key={`${d.id}${d.type}`}
+                                    className="column decision-item-container"
+                                    onMouseOver={() => { document.getElementById(d.type).play(); }}
+                                    onMouseOut={() => document.getElementById(d.type).pause()}
+                                    onFocus={() => {}}
+                                    onBlur={() => {}}
+                                >
+                                    <video
+                                        id={d.type}
+                                        loop
+                                        src={`http://localhost:8080/mp4/${d.path}`}
+                                        className="decision-video"
+                                    />
+                                    <p className="decision-item">{d.desc}</p>
+                                </div>
+                            ))
+                        }
+                        <div className="column decision-item-container" />
+                        <div className="column decision-item-container" />
+                    </div>
+                </div>
             </div>
         );
     }
