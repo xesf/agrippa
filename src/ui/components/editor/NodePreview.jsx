@@ -1,10 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { setSelection } from '../../redux/editor/nodeeditor';
+
 class NodePreview extends React.Component {
     constructor(props) {
         super(props);
         this.state = { };
+    }
+
+    handleOnClick(d) {
+        const node = this.props.nodes.find(n => n.id === d.option);
+        this.props.setNodeProperties(node);
     }
 
     render() {
@@ -28,6 +35,7 @@ class NodePreview extends React.Component {
                                     id="decision-container"
                                     key={`${d.id}${d.type}`}
                                     className="column decision-item-container"
+                                    onClick={() => this.handleOnClick(d)}
                                     onMouseOver={() => { document.getElementById(d.type).play(); }}
                                     onMouseOut={() => document.getElementById(d.type).pause()}
                                     onFocus={() => {}}
@@ -54,8 +62,14 @@ class NodePreview extends React.Component {
 
 const mapStateToProps = state => ({
     node: state.editor.node,
+    nodes: state.editor.nodes,
+});
+
+const mapDispatchToProps = dispatch => ({
+    setNodeProperties: node => dispatch(setSelection(node)),
 });
 
 export default connect(
     mapStateToProps,
+    mapDispatchToProps
 )(NodePreview);

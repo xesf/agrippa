@@ -116,7 +116,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     saveTransform: changes => dispatch(saveTransform(changes)),
     saveAll: changes => dispatch(saveAll(changes)),
-    setNodeProperties: selected => dispatch(setSelection(selected)),
+    setNodeProperties: node => dispatch(setSelection(node)),
 });
 
 export default connect(
