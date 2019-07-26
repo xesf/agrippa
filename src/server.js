@@ -145,3 +145,14 @@ app.get('/mp4/:path/:name', (req, res) => {
         fs.createReadStream(filepath).pipe(res);
     }
 });
+
+app.get('/vtt/:path/:name', (req, res) => {
+    const filepath = `data/${req.params.path}/${req.params.name}.vtt`;
+    const fileSize = fs.statSync(filepath).size;
+    const head = {
+        'Content-Length': fileSize,
+        'Content-Type': 'text/vtt',
+    };
+    res.writeHead(200, head);
+    fs.createReadStream(filepath).pipe(res);
+});

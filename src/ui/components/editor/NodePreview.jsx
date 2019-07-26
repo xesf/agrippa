@@ -25,12 +25,20 @@ class NodePreview extends React.Component {
                         controls={this.props.editor}
                         src={`http://localhost:8080/mp4/${node.path}`}
                         className="screen-video"
-                    />
-                    <div className="ui grid container equal width decision-container">
-                        <div className="column decision-item-container" />
-                        <div className="column decision-item-container" />
-                        {node.type === 'decision' &&
-                            node.items.map(d => (
+                    >
+                        <track
+                            label="English"
+                            kind="subtitles"
+                            srcLang="en"
+                            src={`http://localhost:8080/vtt/${node.path}`}
+                            default
+                        />
+                    </video>
+                    {node.type === 'decision' &&
+                        <div className="ui grid container equal width decision-container">
+                            <div className="column decision-item-container" />
+                            <div className="column decision-item-container" />
+                            {node.items.map(d => (
                                 <div
                                     id="decision-container"
                                     key={`${d.id}${d.type}`}
@@ -49,11 +57,11 @@ class NodePreview extends React.Component {
                                     />
                                     <p className="decision-item">{d.desc}</p>
                                 </div>
-                            ))
-                        }
-                        <div className="column decision-item-container" />
-                        <div className="column decision-item-container" />
-                    </div>
+                            ))}
+                            <div className="column decision-item-container" />
+                            <div className="column decision-item-container" />
+                        </div>
+                    }
                 </div>
             </div>
         );
