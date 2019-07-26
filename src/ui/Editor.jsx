@@ -31,7 +31,7 @@ const Editor = ({ ready }) =>
                             <div className="layout-border" style={{ flex: '1', padding: '0px'}}>
                                 {ready && (
                                     <React.Fragment>
-                                        <NodePreview />
+                                        <NodePreview editor />
                                         <NodeEditor />
                                     </React.Fragment>
                                 )}

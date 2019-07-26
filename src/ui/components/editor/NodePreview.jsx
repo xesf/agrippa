@@ -12,7 +12,13 @@ class NodePreview extends React.Component {
         return (
             <div className="screen-container">
                 <div>
-                    <video autoPlay loop src={`http://localhost:8080/mp4/${node.path}`} className="screen-video" />
+                    <video
+                        autoPlay
+                        loop={(node.type === 'decision')}
+                        controls={this.props.editor}
+                        src={`http://localhost:8080/mp4/${node.path}`}
+                        className="screen-video"
+                    />
                     <div className="ui grid container equal width decision-container">
                         <div className="column decision-item-container" />
                         <div className="column decision-item-container" />
