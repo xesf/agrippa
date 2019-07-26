@@ -8,6 +8,11 @@ const inputStyle = {
     paddingBottom: '0.5em',
 };
 
+const inputStyleLast = {
+    width: '100%',
+    paddingBottom: '0.5em',
+};
+
 class PropertiesDecision extends React.Component {
     constructor(props) {
         super(props);
@@ -33,6 +38,13 @@ class PropertiesDecision extends React.Component {
                                         placeholder={d.type}
                                         defaultValue={d.desc}
                                         style={inputStyle}
+                                    />
+                                    <Input
+                                        size="mini"
+                                        label="option"
+                                        placeholder={d.option}
+                                        defaultValue={d.option}
+                                        style={inputStyleLast}
                                     />
                                     <video controls src={`http://localhost:8080/mp4/${d.path}`} />
                                 </div>
