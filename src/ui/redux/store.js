@@ -26,6 +26,7 @@ export const createStore = () => {
                     transformStr: state.editor.transformStr,
                     selected: state.editor.selected,
                     node: state.editor.node,
+                    links: state.editor.links,
                     nodes: state.editor.nodes,
                 });
             }, 500);
