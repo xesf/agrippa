@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Player, ControlBar } from 'video-react';
 
 import { setSelection } from '../../redux/editor/nodeeditor';
 
@@ -19,13 +20,17 @@ class NodePreview extends React.Component {
         return (
             <div className="screen-container">
                 <div>
-                    <video
+                    <Player
+                        key={`player-${node.id}`}
                         autoPlay
+                        fluid={false}
                         loop={(node.type === 'decision')}
-                        controls={this.props.editor}
-                        src={`http://localhost:8080/mp4/${node.path}`}
                         className="screen-video"
                     >
+                        <ControlBar disableDefaultControls disableCompletely />
+                        <source
+                            src={`http://localhost:8080/mp4/${node.path}`}
+                        />
                         <track
                             label="English"
                             kind="subtitles"
@@ -33,7 +38,7 @@ class NodePreview extends React.Component {
                             src={`http://localhost:8080/vtt/${node.path}`}
                             default
                         />
-                    </video>
+                    </Player>
                     {node.type === 'decision' &&
                         <div className="ui grid container equal width decision-container">
                             <div className="column decision-item-container" />
