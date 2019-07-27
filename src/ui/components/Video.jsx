@@ -1,25 +1,21 @@
 import React from 'react';
 
-const player = document.createElement('video');
-player.className = 'video-preview';
-
 export default class Video extends React.Component {
     constructor(props) {
         super(props);
-        this.containerRef = React.createRef();
-    }
-
-    componentDidMount() {
-        if (!this.props.hidden) {
-            this.containerRef.current.appendChild(player);
-        }
+        this.state = {};
     }
 
     render() {
+        const { children, ...rest } = this.props;
         return (
-            <div ref={this.containerRef} className="video-preview-container" />
+            <div className="video-preview-container">
+                <video
+                    {...rest}
+                >
+                    {children}
+                </video>
+            </div>
         );
     }
 }
-
-export { player };

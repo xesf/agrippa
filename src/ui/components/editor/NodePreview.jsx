@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Player, ControlBar } from 'video-react';
+// import { Player, ControlBar } from 'video-react';
 
 import { setSelection } from '../../redux/editor/nodeeditor';
+import Video from '../Video';
 
 class NodePreview extends React.Component {
     constructor(props) {
@@ -11,23 +12,23 @@ class NodePreview extends React.Component {
         this.player = null;
     }
 
-    componentDidMount() {
-        this.player.subscribeToStateChange(this.handleStateChange.bind(this));
-    }
+    // componentDidMount() {
+    //     this.player.subscribeToStateChange(this.handleStateChange.bind(this));
+    // }
 
-    handleStateChange(state) {
-        // copy player state to this component's state
-        this.setState({
-            ended: state.ended
-        }, () => {
-            const { links, node, nodes, setNodeProperties } = this.props;
-            if (this.state.ended) {
-                const link = links.find(l => l.source === node.id);
-                const targetNode = nodes.find(n => n.id === link.target);
-                setNodeProperties(targetNode);
-            }
-        });
-    }
+    // handleStateChange(state) {
+    //     // copy player state to this component's state
+    //     this.setState({
+    //         ended: state.ended
+    //     }, () => {
+    //         const { links, node, nodes, setNodeProperties } = this.props;
+    //         if (this.state.ended) {
+    //             const link = links.find(l => l.source === node.id);
+    //             const targetNode = nodes.find(n => n.id === link.target);
+    //             setNodeProperties(targetNode);
+    //         }
+    //     });
+    // }
 
     handleOnClick(d) {
         const node = this.props.nodes.find(n => n.id === d.option);
@@ -39,15 +40,13 @@ class NodePreview extends React.Component {
         return (
             <div className="screen-container">
                 <div>
-                    <Player
+                    <Video
                         ref={(player) => { this.player = player; }}
                         key={`player-${node.id}`}
                         autoPlay
-                        fluid={false}
                         loop={(node.type === 'decision')}
                         className="screen-video"
                     >
-                        <ControlBar disableDefaultControls disableCompletely />
                         <source
                             src={`http://localhost:8080/mp4/${node.path}`}
                         />
@@ -58,7 +57,7 @@ class NodePreview extends React.Component {
                             src={`http://localhost:8080/vtt/${node.path}`}
                             default
                         />
-                    </Player>
+                    </Video>
                     {node.annotations &&
                         <div className="location-description location-typing">
                             <pre>{node.annotations.locationDesc}</pre>
