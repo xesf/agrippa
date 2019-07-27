@@ -3,7 +3,7 @@ import React from 'react';
 import { init } from './media';
 
 // import Canvas, { canvas } from './Canvas';
-import Video, { player } from './Video';
+import Video, { player } from './Video2';
 
 class Player extends React.Component {
     constructor(props) {

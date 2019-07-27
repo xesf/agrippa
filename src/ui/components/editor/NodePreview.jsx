@@ -8,6 +8,25 @@ class NodePreview extends React.Component {
     constructor(props) {
         super(props);
         this.state = { };
+        this.player = null;
+    }
+
+    componentDidMount() {
+        this.player.subscribeToStateChange(this.handleStateChange.bind(this));
+    }
+
+    handleStateChange(state) {
+        // copy player state to this component's state
+        this.setState({
+            ended: state.ended
+        }, () => {
+            const { links, node, nodes, setNodeProperties } = this.props;
+            if (this.state.ended) {
+                const link = links.find(l => l.source === node.id);
+                const targetNode = nodes.find(n => n.id === link.target);
+                setNodeProperties(targetNode);
+            }
+        });
     }
 
     handleOnClick(d) {
@@ -21,6 +40,7 @@ class NodePreview extends React.Component {
             <div className="screen-container">
                 <div>
                     <Player
+                        ref={(player) => { this.player = player; }}
                         key={`player-${node.id}`}
                         autoPlay
                         fluid={false}
@@ -81,6 +101,7 @@ class NodePreview extends React.Component {
 const mapStateToProps = state => ({
     node: state.editor.node,
     nodes: state.editor.nodes,
+    links: state.editor.links,
 });
 
 const mapDispatchToProps = dispatch => ({
