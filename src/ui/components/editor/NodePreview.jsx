@@ -39,6 +39,11 @@ class NodePreview extends React.Component {
                             default
                         />
                     </Player>
+                    {node.annotations &&
+                        <div className="location-description location-typing">
+                            <pre>{node.annotations.locationDesc}</pre>
+                        </div>
+                    }
                     {node.type === 'decision' &&
                         <div className="ui grid container equal width decision-container">
                             <div className="column decision-item-container" />

@@ -202,6 +202,25 @@ h4.ui.header {
     display: none !important;
 }
 
+.location-description {
+    position: relative;
+    left: 1em;
+    bottom: 15em;
+    color: rgb(232, 238, 241);
+    text-align: left;
+    text-shadow: 1px 1px #000;
+    white-space: nowrap;
+}
+
+/* @keyframes typing {
+    from{ width: 0 }
+    to { width: 100% }
+}
+
+.location-typing pre {
+    animation: typing 3.5s steps(30, end);
+} */
+
 .decision-container {
     position: relative;
     bottom: 8.5em;
