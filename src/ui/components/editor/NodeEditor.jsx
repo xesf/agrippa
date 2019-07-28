@@ -93,11 +93,14 @@ class NodeEditor extends React.Component {
                         <Node
                             key={n.id}
                             {...n}
+                            id={n.id}
                             selected={selected === n.id}
                             onDragEnd={this.handleNodeOnDragEnd}
                             onClick={(node) => {
                                 setNodeProperties(node);
                             }}
+                            linkTarget={this.props.links.find(l => l.source === n.id)}
+                            linkSource={this.props.links.find(l => l.target === n.id)}
                         />
                     )}
                 </g>
@@ -108,6 +111,7 @@ class NodeEditor extends React.Component {
 
 const mapStateToProps = state => ({
     nodes: state.editor.nodes,
+    links: state.editor.links,
     transform: state.editor.transform,
     transformStr: state.editor.transformStr,
     selected: state.editor.selected || '',
