@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import { Player, ControlBar } from 'video-react';
+import classNames from 'classnames';
 
 import { setSelection } from '../../redux/editor/nodeeditor';
 import Video from '../Video';
@@ -40,6 +40,12 @@ class NodePreview extends React.Component {
 
     render() {
         const { node } = this.props;
+        const videoClassName = classNames({
+            'screen-video': !(node.annotations && node.annotations.keepRatio),
+            'screen-video-intro': (node.annotations && node.annotations.keepRatio),
+            'screen-video-ingame': !(node.annotations && node.annotations.isIntro)
+        });
+
         return (
             <div className="screen-container">
                 <Video
@@ -47,7 +53,7 @@ class NodePreview extends React.Component {
                     key={`player-${node.id}`}
                     autoPlay
                     loop={(node.type === 'decision')}
-                    className="screen-video"
+                    className={videoClassName}
                     onEnded={() => this.handleOnEnded()}
                     onClick={() => this.handleOnClick()}
                     onDoubleClick={() => this.handleOnDoubleClick()}

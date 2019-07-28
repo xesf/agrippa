@@ -185,6 +185,13 @@ h4.ui.header {
 .screen-video {
     width: 100%;
     height: 100%;
+}
+
+.screen-video-intro {
+    height: 100%;
+}
+
+.screen-video-ingame {
     position: relative;
     top: -20px;
 }
