@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { Input } from 'semantic-ui-react';
 
 import PropertiesDecision from './PropertiesDecision';
+import PropertiesAnnotation from './PropertiesAnnotation';
 
-const skipKeys = ['selected', 'items'];
+const skipKeys = ['selected', 'items', 'links', 'nodes', 'annotations'];
 
 const inputStyle = {
     width: '100%',
@@ -39,6 +40,12 @@ class Properties extends React.Component {
                             );
                         })}
                         <video controls src={`http://localhost:8080/mp4/${node.path}`} />
+                        {node.annotations &&
+                            <PropertiesAnnotation
+                                annotations={node.annotations}
+                                style={inputStyle}
+                            />
+                        }
                         <PropertiesDecision node={node} />
                     </React.Fragment>
                 }
