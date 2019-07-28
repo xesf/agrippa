@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Player from './components/Player';
+// import Player from './components/Player';
 
 import Tab from './components/editor/Tab';
 import TabItem from './components/editor/TabItem';
@@ -41,7 +41,7 @@ const Editor = ({ ready }) =>
                 </TabItem>
                 <TabItem label="Game">
                     <div className="canvas-container-scroll">
-                        <Player />
+                        {/* <Player /> */}
                     </div>
                 </TabItem>
             </Tab>

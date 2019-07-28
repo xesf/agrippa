@@ -72,7 +72,7 @@ class NodeEditor extends React.Component {
     }
 
     render() {
-        const { selected, setNodeProperties, transformStr, nodes } = this.props;
+        const { selected, setNodeProperties, transformStr, nodes, links } = this.props;
         return (
             <svg ref={this.svgRef} className="cursor-grab">
                 <defs>
@@ -94,13 +94,13 @@ class NodeEditor extends React.Component {
                             key={n.id}
                             {...n}
                             id={n.id}
+                            links={links}
+                            nodes={nodes}
                             selected={selected === n.id}
                             onDragEnd={this.handleNodeOnDragEnd}
                             onClick={(node) => {
                                 setNodeProperties(node);
                             }}
-                            linkTarget={this.props.links.find(l => l.source === n.id)}
-                            linkSource={this.props.links.find(l => l.target === n.id)}
                         />
                     )}
                 </g>

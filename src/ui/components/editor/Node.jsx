@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import * as d3 from 'd3';
 
 const baseStyle = {
@@ -7,10 +6,23 @@ const baseStyle = {
     fontSize: '10',
     fontFamily: 'Verdana',
 };
+
 const textStyle = {
     ...baseStyle,
     fontSize: '12',
 };
+
+const lineStyle = {
+    fill: 'none',
+    stroke: 'white',
+    strokeWidth: '3',
+};
+
+const decisionLineStyle = {
+    ...lineStyle,
+    strokeDasharray: '10',
+};
+
 // const plusStyle = {
 //     ...baseStyle,
 //     'fontSize': '14',
@@ -22,7 +34,7 @@ const textStyle = {
 //     fill: 'rgb(158, 202, 97)',
 // };
 
-class Node extends React.Component {
+export default class Node extends React.Component {
     constructor(props) {
         super(props);
         this.gRef = React.createRef();
@@ -31,20 +43,47 @@ class Node extends React.Component {
             drag: false,
         };
         this.handleClick = this.handleClick.bind(this, null);
-        this.targetNode = null;
-        this.sourceNode = null;
-        if (this.props.linkTarget) {
-            this.targetNode = this.props.nodes.find(n => n.id === this.props.linkTarget.target);
+        this.targetNodes = [];
+        this.sourceNodes = [];
+
+        const linkTarget = this.props.links.filter(l => l.source === this.props.id);
+        const linkSource = this.props.links.filter((l) => {
+            if (Array.isArray(l.target)) {
+                return l.target.includes(this.props.id);
+            }
+            return l.target === this.props.id;
+        });
+
+        if (linkTarget) {
+            linkTarget.forEach((t) => {
+                if (Array.isArray(t.target)) {
+                    t.target.forEach((tt) => {
+                        const tn = this.props.nodes.find(n => n.id === tt);
+                        if (tn) {
+                            this.targetNodes.push(tn);
+                        }
+                    });
+                } else {
+                    const tn = this.props.nodes.find(n => n.id === t.target);
+                    if (tn) {
+                        this.targetNodes.push(tn);
+                    }
+                }
+            });
         }
-        if (this.props.linkSource) {
-            this.sourceNode = this.props.nodes.find(n => n.id === this.props.linkSource.source);
+        if (linkSource) {
+            linkSource.forEach((t) => {
+                const tn = this.props.nodes.find(n => n.id === t.source);
+                if (tn) {
+                    this.sourceNodes.push(tn);
+                }
+            });
         }
     }
 
     componentDidMount() {
         const that = this;
         // TODO: remove dependency to d3 library
-        const linkTarget = d3.select(this.linkRef.current);
         const node = d3.select(this.gRef.current);
         node.on('click', this.handleClick);
         const drag = d3.drag()
@@ -64,16 +103,21 @@ class Node extends React.Component {
                             drag: true,
                         };
                         node.attr('transform', `translate(${that.offset.x},${that.offset.y})`);
-                        if (this.targetNode) {
-                            linkTarget
-                                .attr('x1', d3.event.x)
-                                .attr('y1', d3.event.y);
+                        if (this.targetNodes) {
+                            this.targetNodes.forEach(((n) => {
+                                const svgLineTarget = d3.select(`#node-line-${that.props.id}-${n.id}`);
+                                svgLineTarget
+                                    .attr('x1', d3.event.x + (that.props.type === 'decision' ? -5 : 55))
+                                    .attr('y1', d3.event.y);
+                            }));
                         }
-                        if (this.sourceNode) {
-                            const linkSource = d3.select(`#node-line-${this.props.linkSource.source}`);
-                            linkSource
-                                .attr('x2', d3.event.x)
-                                .attr('y2', d3.event.y);
+                        if (this.sourceNodes) {
+                            this.sourceNodes.forEach(((n) => {
+                                const svgLineSource = d3.select(`#node-line-${n.id}-${that.props.id}`);
+                                svgLineSource
+                                    .attr('x2', d3.event.x - 45)
+                                    .attr('y2', d3.event.y);
+                            }));
                         }
                     })
                     .on('end', () => {
@@ -100,18 +144,17 @@ class Node extends React.Component {
         const { x, y, type, path, desc, selected, id } = this.props;
         return (
             <React.Fragment>
-                {this.targetNode &&
+                {this.targetNodes && this.targetNodes.map(n =>
                     <line
-                        ref={this.linkRef}
-                        id={`node-line-${id}`}
-                        fill="none"
-                        stroke="white"
-                        x1={x + 75}
+                        key={`${id}${n.id}`}
+                        id={`node-line-${id}-${n.id}`}
+                        x1={x + (type === 'decision' ? 70 : 130)}
                         y1={y + 20}
-                        x2={this.targetNode.x + 75}
-                        y2={this.targetNode.y + 20}
+                        x2={n.x + 30}
+                        y2={n.y + 20}
+                        style={type === 'decision' ? decisionLineStyle : lineStyle}
                     />
-                }
+                )}
                 <g
                     ref={this.gRef}
                     className="node-group"
@@ -141,11 +184,3 @@ class Node extends React.Component {
         );
     }
 }
-
-const mapStateToProps = state => ({
-    nodes: state.editor.nodes,
-});
-
-export default connect(
-    mapStateToProps,
-)(Node);

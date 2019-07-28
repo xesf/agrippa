@@ -1,12 +1,12 @@
 import React from 'react';
 
-import Player from './components/Player';
+// import Player from './components/Player';
 
 const Game = () =>
     (
         <div className="App">
             <div className="canvas-container">
-                <Player />
+                {/* <Player /> */}
             </div>
         </div>
     );
