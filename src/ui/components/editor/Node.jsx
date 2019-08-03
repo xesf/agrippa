@@ -132,7 +132,7 @@ export default class Node extends React.Component {
     }
 
     handleClick() {
-        const { onClick, onDragEnd, ...rest } = this.props;
+        const { onClick, onDragEnd, links, nodes, selected, ...rest } = this.props;
         if (onClick) {
             onClick({
                 ...rest,
