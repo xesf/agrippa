@@ -4,6 +4,7 @@ const NodeEditorActionType = {
     SAVE_TRANSFORM: 'ui/editor/save-transform',
     SAVE_ALL: 'ui/editor/save-all',
     SELECT: 'ui/editor/select',
+    ADD_NODE: 'ui/editor/add-node',
 };
 
 export const initStore = state => ({
@@ -23,6 +24,11 @@ export const saveAll = changes => ({
 
 export const setSelection = node => ({
     type: NodeEditorActionType.SELECT,
+    payload: { node },
+});
+
+export const addNode = node => ({
+    type: NodeEditorActionType.ADD_NODE,
     payload: { node },
 });
 
@@ -52,6 +58,12 @@ export const nodeEditorReducer = (state = { ready: false }, action) => {
                 ...state,
                 node: action.payload.node,
                 selected: action.payload.node.id,
+            };
+        case NodeEditorActionType.ADD_NODE:
+            return {
+                ...state,
+                nodes: [...state.nodes, action.payload.node],
+                node: action.payload.node,
             };
         default:
             return state;
