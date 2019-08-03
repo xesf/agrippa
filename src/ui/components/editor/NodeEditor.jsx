@@ -116,7 +116,7 @@ class NodeEditor extends React.Component {
     handleClick(e, x, y) {
         if (this.state.shift) {
             this.props.addNode({
-                id: getRandomInt(99999, 1000000),
+                id: getRandomInt(99999, 1000000).toString(),
                 type: 'video',
                 x: (x - 75),
                 y: (y - 15),
