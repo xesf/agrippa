@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 
 import Node from './Node';
 
-import { saveTransform, saveAll, setSelection, addNode } from '../../redux/editor/nodeeditor';
+import { saveTransform, saveAll, setSelection, addNode, removeNode } from '../../redux/editor/nodeeditor';
 
 const getRandomInt = (min, max) => {
     min = Math.ceil(min);
@@ -15,7 +15,10 @@ const getRandomInt = (min, max) => {
 class NodeEditor extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { shift: false };
+        this.state = {
+            shift: false,
+            backspace: false,
+        };
         this.svgRef = React.createRef();
         this.gRef = React.createRef();
         this.saveNodes = this.saveNodes.bind(this, null);
@@ -30,7 +33,7 @@ class NodeEditor extends React.Component {
         const svg = d3.select(this.svgRef.current);
         const zoom = d3.zoom()
             .clickDistance(4)
-            .scaleExtent([0.5, 2.5])
+            .scaleExtent([0.5, 3])
             .on('start', () => {
                 svg.raise().classed('cursor-grabbing', true);
             })
@@ -93,14 +96,23 @@ class NodeEditor extends React.Component {
     }
 
     handleKeyUp(e) {
+        if (this.state.shift && this.state.backspace) {
+            this.props.removeNode(this.props.selected);
+        }
         if (e.keyCode === 16 || e.key === 'Shift') {
             this.setState({ shift: false });
+        }
+        if (e.keyCode === 8 || e.key === 'Backspace') {
+            this.setState({ backspace: false });
         }
     }
 
     handleKeyDown(e) {
         if (e.keyCode === 16 || e.key === 'Shift') {
             this.setState({ shift: true });
+        }
+        if (e.keyCode === 8 || e.key === 'Backspace') {
+            this.setState({ backspace: true });
         }
     }
 
@@ -110,7 +122,7 @@ class NodeEditor extends React.Component {
             type: 'video',
             x: x - 75,
             y: y - 15,
-            path: 'XV/19812', // temp path
+            path: 'XN/56182', // temp path
             desc: 'New Node'
         });
     }
@@ -172,6 +184,7 @@ const mapDispatchToProps = dispatch => ({
     saveAll: changes => dispatch(saveAll(changes)),
     setNodeProperties: node => dispatch(setSelection(node)),
     addNode: node => dispatch(addNode(node)),
+    removeNode: id => dispatch(removeNode(id)),
 });
 
 export default connect(

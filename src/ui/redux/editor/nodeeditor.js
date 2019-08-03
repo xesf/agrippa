@@ -5,6 +5,7 @@ const NodeEditorActionType = {
     SAVE_ALL: 'ui/editor/save-all',
     SELECT: 'ui/editor/select',
     ADD_NODE: 'ui/editor/add-node',
+    REMOVE_NODE: 'ui/editor/remove-node',
 };
 
 export const initStore = state => ({
@@ -30,6 +31,11 @@ export const setSelection = node => ({
 export const addNode = node => ({
     type: NodeEditorActionType.ADD_NODE,
     payload: { node },
+});
+
+export const removeNode = id => ({
+    type: NodeEditorActionType.REMOVE_NODE,
+    payload: { id },
 });
 
 export const nodeEditorReducer = (state = { ready: false }, action) => {
@@ -65,6 +71,25 @@ export const nodeEditorReducer = (state = { ready: false }, action) => {
                 nodes: [...state.nodes, action.payload.node],
                 node: action.payload.node,
             };
+        case NodeEditorActionType.REMOVE_NODE: {
+            const { id } = action.payload;
+            const newState = {
+                ...state,
+                selected: '',
+                nodes: [...state.nodes.filter(n => n.id !== id)],
+                links: [
+                    ...state.links.filter(n =>
+                        n.source !== id
+                        && n.target !== id
+                    ),
+                    ...state.links.filter(n =>
+                        n.source !== id
+                        && (Array.isArray(n.target) && !n.target.includes(id))
+                    )
+                ],
+            };
+            return newState;
+        }
         default:
             return state;
     }
