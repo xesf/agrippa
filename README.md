@@ -5,7 +5,6 @@ The aim of this project is to provide a full reimplementation for the Web of the
 
 ![X-Files The Game](xfiles.jpg)
 
-
 ## Purpose
 - Re-implementation of the X-Files The Game PC version;
 
@@ -33,6 +32,8 @@ The aim of this project is to provide a full reimplementation for the Web of the
     * Stats per Action types used
     * Stats per Game over
     * Number of times going Forward, Backwards, Left, Right during a gameplay
+
+![Editor Mode](x-files_editor.png)
 
 ## Assets Encoding
 
