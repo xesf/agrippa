@@ -27,7 +27,6 @@ class NodeEditor extends React.Component {
     }
 
     componentDidMount() {
-        const shift = this.state.shift;
         const that = this;
         // TODO: remove dependency to d3 library
         const svg = d3.select(this.svgRef.current);
@@ -55,16 +54,14 @@ class NodeEditor extends React.Component {
             });
         svg.call(zoom);
         svg.on('click', () => {
-            if (shift) {
-                const clip = that.svgRef.current.getBoundingClientRect();
-                const g = d3.select(that.gRef.current);
-                const svgEl = svg.node();
-                let pt = svgEl.createSVGPoint();
-                pt.x = d3.event.x - clip.left;
-                pt.y = d3.event.y - clip.top;
-                pt = pt.matrixTransform(g.node().getCTM().inverse());
-                that.handleClick(pt.x, pt.y);
-            }
+            const clip = that.svgRef.current.getBoundingClientRect();
+            const g = d3.select(that.gRef.current);
+            const svgEl = svg.node();
+            let pt = svgEl.createSVGPoint();
+            pt.x = d3.event.x - clip.left;
+            pt.y = d3.event.y - clip.top;
+            pt = pt.matrixTransform(g.node().getCTM().inverse());
+            that.handleClick(pt.x, pt.y);
         });
         svg.on('dblclick.zoom', null);
         if (that.props.transform) {
@@ -117,14 +114,16 @@ class NodeEditor extends React.Component {
     }
 
     handleClick(e, x, y) {
-        this.props.addNode({
-            id: getRandomInt(99999, 1000000),
-            type: 'video',
-            x: x - 75,
-            y: y - 15,
-            path: 'XN/56182', // temp path
-            desc: 'New Node'
-        });
+        if (this.state.shift) {
+            this.props.addNode({
+                id: getRandomInt(99999, 1000000),
+                type: 'video',
+                x: (x - 75),
+                y: (y - 15),
+                path: 'XN/56182', // temp path
+                desc: 'New Node'
+            });
+        }
     }
 
     render() {
