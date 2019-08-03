@@ -53,7 +53,8 @@ app.get('/metadata', (req, res) => {
 
 app.post('/metadata', (req, res) => {
     const filepath = 'metadata/nodes.json';
-    req.pipe(fs.createWriteStream(filepath, { flags: 'w+' }));
+    const fileStream = fs.createWriteStream(filepath, { flags: 'w+' });
+    req.pipe(fileStream);
     res.writeHead(200);
     res.send();
 });

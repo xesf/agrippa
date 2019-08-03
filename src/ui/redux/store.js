@@ -21,14 +21,15 @@ export const createStore = () => {
                 clearTimeout(subscribeTimer);
             }
             subscribeTimer = setTimeout(() => {
-                axios.post('http://localhost:8080/metadata', {
+                const data = {
                     transform: state.editor.transform,
                     transformStr: state.editor.transformStr,
                     selected: state.editor.selected,
                     node: state.editor.node,
                     links: state.editor.links,
                     nodes: state.editor.nodes,
-                });
+                };
+                axios.post('http://localhost:8080/metadata', data);
             }, 500);
         }
     }));

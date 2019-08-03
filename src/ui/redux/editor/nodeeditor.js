@@ -6,6 +6,7 @@ const NodeEditorActionType = {
     SELECT: 'ui/editor/select',
     ADD_NODE: 'ui/editor/add-node',
     REMOVE_NODE: 'ui/editor/remove-node',
+    UPDATE_NODE: 'ui/editor/update-node',
 };
 
 export const initStore = state => ({
@@ -36,6 +37,11 @@ export const addNode = node => ({
 export const removeNode = id => ({
     type: NodeEditorActionType.REMOVE_NODE,
     payload: { id },
+});
+
+export const updateNode = (id, node) => ({
+    type: NodeEditorActionType.UPDATE_NODE,
+    payload: { id, node },
 });
 
 export const nodeEditorReducer = (state = { ready: false }, action) => {
@@ -71,9 +77,18 @@ export const nodeEditorReducer = (state = { ready: false }, action) => {
                 nodes: [...state.nodes, action.payload.node],
                 node: action.payload.node,
             };
+        case NodeEditorActionType.UPDATE_NODE:
+            return {
+                ...state,
+                nodes: state.nodes.map((n) => {
+                    if (n.id === action.payload.id)
+                        return { ...n, ...action.payload.node };
+                    return n;
+                }),
+            };
         case NodeEditorActionType.REMOVE_NODE: {
             const { id } = action.payload;
-            const newState = {
+            return {
                 ...state,
                 selected: '',
                 nodes: [...state.nodes.filter(n => n.id !== id)],
@@ -88,7 +103,6 @@ export const nodeEditorReducer = (state = { ready: false }, action) => {
                     )
                 ],
             };
-            return newState;
         }
         default:
             return state;
