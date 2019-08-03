@@ -242,7 +242,12 @@ h4.ui.header {
     color: rgb(176, 185, 190);
 }
 
-/* video::cue {
+/*
+::cue {
+    font-size: 1.2em;
+}
+
+video::cue {
     color: papayawhip;
 }
 

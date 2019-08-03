@@ -46,7 +46,12 @@ export default class Node extends React.Component {
         this.targetNodes = [];
         this.sourceNodes = [];
 
-        const linkTarget = this.props.links.filter(l => l.source === this.props.id);
+        const linkTarget = this.props.links.filter((l) => {
+            if (Array.isArray(l.source)) {
+                return l.source.includes(this.props.id);
+            }
+            return l.source === this.props.id;
+        });
         const linkSource = this.props.links.filter((l) => {
             if (Array.isArray(l.target)) {
                 return l.target.includes(this.props.id);
@@ -73,9 +78,18 @@ export default class Node extends React.Component {
         }
         if (linkSource) {
             linkSource.forEach((t) => {
-                const tn = this.props.nodes.find(n => n.id === t.source);
-                if (tn) {
-                    this.sourceNodes.push(tn);
+                if (Array.isArray(t.source)) {
+                    t.source.forEach((tt) => {
+                        const tn = this.props.nodes.find(n => n.id === tt);
+                        if (tn) {
+                            this.sourceNodes.push(tn);
+                        }
+                    });
+                } else {
+                    const tn = this.props.nodes.find(n => n.id === t.source);
+                    if (tn) {
+                        this.sourceNodes.push(tn);
+                    }
                 }
             });
         }
@@ -85,7 +99,7 @@ export default class Node extends React.Component {
         const that = this;
         // TODO: remove dependency to d3 library
         const node = d3.select(this.gRef.current);
-        node.on('click', this.handleClick);
+        node.on('click', this.handleClick); // selection
         const drag = d3.drag()
             .clickDistance(16)
             .on('start', () => {
