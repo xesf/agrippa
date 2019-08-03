@@ -61,13 +61,15 @@ class NodePreview extends React.Component {
                     <source
                         src={`http://localhost:8080/mp4/${node.path}`}
                     />
-                    <track
-                        label="English"
-                        kind="subtitles"
-                        srcLang="en"
-                        src={`http://localhost:8080/vtt/${node.path}`}
-                        default
-                    />
+                    {node.subtitles &&
+                        <track
+                            label="English"
+                            kind="subtitles"
+                            srcLang="en"
+                            src={`http://localhost:8080/vtt/${node.path}`}
+                            default
+                        />
+                    }
                 </Video>
                 {node.annotations &&
                     <div className="location-description location-typing">
