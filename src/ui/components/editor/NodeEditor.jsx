@@ -32,7 +32,7 @@ class NodeEditor extends React.Component {
         const svg = d3.select(this.svgRef.current);
         const zoom = d3.zoom()
             .clickDistance(4)
-            .scaleExtent([0.5, 3])
+            .scaleExtent([0.25, 2.5])
             .on('start', () => {
                 svg.raise().classed('cursor-grabbing', true);
             })
