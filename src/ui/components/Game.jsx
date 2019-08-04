@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 
-import { setSelection } from '../../redux/editor/nodeeditor';
-import Video from '../Video';
+import { setSelection } from '../redux/editor/nodeeditor';
+import Video from './Video';
 
-class NodePreview extends React.Component {
+class Game extends React.Component {
     constructor(props) {
         super(props);
         this.state = { };
@@ -41,13 +41,14 @@ class NodePreview extends React.Component {
     render() {
         const { node } = this.props;
         const videoClassName = classNames({
-            'screen-video': !(node.annotations && node.annotations.keepRatio),
-            'screen-video-intro': (node.annotations && node.annotations.keepRatio),
-            'screen-video-ingame': !(node.annotations && node.annotations.isIntro)
+            'screen-video': !(node && node.annotations && node.annotations.keepRatio),
+            'screen-video-intro': (node && node.annotations && node.annotations.keepRatio),
+            'screen-video-ingame': !(node && node.annotations && node.annotations.isIntro)
         });
 
-        return (
-            <div className="screen-container">
+        return (node
+            ?
+            (<div className="screen-container">
                 <Video
                     ref={(player) => { this.player = player; }}
                     key={`player-${node.id}`}
@@ -61,7 +62,7 @@ class NodePreview extends React.Component {
                     <source
                         src={`http://localhost:8080/mp4/${node.path}`}
                     />
-                    {node.subtitles &&
+                    {node && node.subtitles &&
                         <track
                             label="English"
                             kind="subtitles"
@@ -71,12 +72,12 @@ class NodePreview extends React.Component {
                         />
                     }
                 </Video>
-                {node.annotations &&
+                {node && node.annotations &&
                     <div className="location-description location-typing">
                         <pre>{node.annotations.locationDesc}</pre>
                     </div>
                 }
-                {node.type === 'decision' &&
+                {node && node.type === 'decision' &&
                     <div className="ui grid container equal width decision-container">
                         <div className="column decision-item-container" />
                         <div className="column decision-item-container" />
@@ -104,7 +105,7 @@ class NodePreview extends React.Component {
                         <div className="column decision-item-container" />
                     </div>
                 }
-            </div>
+            </div>) : null
         );
     }
 }
@@ -122,4 +123,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(NodePreview);
+)(Game);

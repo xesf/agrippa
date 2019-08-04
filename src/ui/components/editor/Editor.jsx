@@ -3,17 +3,17 @@ import { connect } from 'react-redux';
 
 // import Player from './components/Player';
 
-import Tab from './components/editor/Tab';
-import TabItem from './components/editor/TabItem';
-import NodeEditor from './components/editor/NodeEditor';
-import Properties from './components/editor/Properties';
-import Assets from './components/editor/Assets';
-import NodePreview from './components/editor/NodePreview';
+import Tab from './Tab';
+import TabItem from './TabItem';
+import NodeEditor from './NodeEditor';
+import Properties from './Properties';
+import Assets from './Assets';
+import Game from '../Game';
 
 const Editor = ({ ready }) =>
     (
         <React.Fragment>
-            <Tab selectedTabIndex={1} alwaysRendered>
+            <Tab selectedTabIndex={1}>
                 <TabItem label="agrippa" header />
                 <TabItem label="Editor" active>
                     <div className="canvas-container-scroll" style={{ margin: '1.5em 0.5em' }}>
@@ -31,7 +31,7 @@ const Editor = ({ ready }) =>
                             <div className="layout-border" style={{ flex: '1', padding: '0px'}}>
                                 {ready && (
                                     <React.Fragment>
-                                        <NodePreview editor />
+                                        <Game editor />
                                         <NodeEditor />
                                     </React.Fragment>
                                 )}
@@ -41,7 +41,7 @@ const Editor = ({ ready }) =>
                 </TabItem>
                 <TabItem label="Game">
                     <div className="canvas-container-scroll">
-                        {/* <Player /> */}
+                        <Game />
                     </div>
                 </TabItem>
             </Tab>

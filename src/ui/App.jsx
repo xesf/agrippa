@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { loadParams } from './params';
-import Game from './Game';
-import Editor from './Editor';
+import Game from './components/Game';
+import Editor from './components/editor/Editor';
 
 export default class App extends React.Component {
     constructor(props) {
