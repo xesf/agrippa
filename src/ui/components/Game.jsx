@@ -14,7 +14,12 @@ class Game extends React.Component {
 
     linkNode() {
         const { links, node, nodes, setNodeProperties } = this.props;
-        const link = links.find(l => l.source === node.id);
+        const link = links.find((l) => {
+            if (Array.isArray(l.source)) {
+                return l.source.includes(node.id);
+            }
+            return l.source === node.id;
+        });
         if (link) {
             const targetNode = nodes.find(n => n.id === link.target);
             setNodeProperties(targetNode);
