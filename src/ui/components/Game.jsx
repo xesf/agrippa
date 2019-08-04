@@ -5,6 +5,9 @@ import classNames from 'classnames';
 import { setSelection } from '../redux/editor/nodeeditor';
 import Video from './Video';
 
+import Decision from './gameplay/Decision';
+import Location from './gameplay/Location';
+
 class Game extends React.Component {
     constructor(props) {
         super(props);
@@ -67,7 +70,7 @@ class Game extends React.Component {
                     <source
                         src={`http://localhost:8080/mp4/${node.path}`}
                     />
-                    {node && node.subtitles &&
+                    {node.subtitles &&
                         <track
                             label="English"
                             kind="subtitles"
@@ -77,39 +80,8 @@ class Game extends React.Component {
                         />
                     }
                 </Video>
-                {node && node.annotations &&
-                    <div className="location-description location-typing">
-                        <pre>{node.annotations.locationDesc}</pre>
-                    </div>
-                }
-                {node && node.type === 'decision' &&
-                    <div className="ui grid container equal width decision-container">
-                        <div className="column decision-item-container" />
-                        <div className="column decision-item-container" />
-                        {node.items.map(d => (
-                            <div
-                                id="decision-container"
-                                key={`${d.id}${d.type}`}
-                                className="column decision-item-container"
-                                onClick={() => this.handleDecisionOnClick(d)}
-                                onMouseOver={() => { document.getElementById(d.type).play(); }}
-                                onMouseOut={() => document.getElementById(d.type).pause()}
-                                onFocus={() => {}}
-                                onBlur={() => {}}
-                            >
-                                <video
-                                    id={d.type}
-                                    loop
-                                    src={`http://localhost:8080/mp4/${d.path}`}
-                                    className="decision-video"
-                                />
-                                <p className="decision-item">{d.desc}</p>
-                            </div>
-                        ))}
-                        <div className="column decision-item-container" />
-                        <div className="column decision-item-container" />
-                    </div>
-                }
+                {node.annotations && <Location node={node} />}
+                {node.type === 'decision' && <Decision node={node} />}
             </div>) : null
         );
     }
