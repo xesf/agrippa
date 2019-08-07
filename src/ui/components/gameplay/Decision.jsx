@@ -1,16 +1,21 @@
 import React from 'react';
 
-const Decision = ({ node }) =>
-    (
+const Decision = ({ items, onClick }) => {
+    const handleOnClick = (d) => {
+        if (onClick) {
+            onClick(d);
+        }
+    };
+    return (
         <div className="ui grid container equal width decision-container">
             <div className="column decision-item-container" />
             <div className="column decision-item-container" />
-            {node.items.map(d => (
+            {items && items.map(d => (
                 <div
                     id="decision-container"
                     key={`${d.id}${d.type}`}
                     className="column decision-item-container"
-                    onClick={() => this.handleDecisionOnClick(d)}
+                    onClick={() => handleOnClick(d)}
                     onMouseOver={() => { document.getElementById(d.type).play(); }}
                     onMouseOut={() => document.getElementById(d.type).pause()}
                     onFocus={() => {}}
@@ -29,5 +34,6 @@ const Decision = ({ node }) =>
             <div className="column decision-item-container" />
         </div>
     );
+};
 
 export default Decision;

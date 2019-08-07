@@ -81,7 +81,7 @@ class Game extends React.Component {
                     }
                 </Video>
                 {node.annotations && <Location node={node} />}
-                {node.type === 'decision' && <Decision node={node} />}
+                {node.type === 'decision' && <Decision items={node.items} onClick={d => this.handleDecisionOnClick(d)} />}
             </div>) : null
         );
     }
