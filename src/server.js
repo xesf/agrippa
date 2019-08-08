@@ -10,6 +10,7 @@ import webpackDevServer from 'webpack-dev-middleware';
 
 import webpackConfig from '../webpack.config';
 import App from './index-ssr';
+import { getHotspots } from './utils';
 
 const logStream = fs.createWriteStream(path.join(__dirname, '/streaming-log.txt'), { flags: 'a' });
 
@@ -42,14 +43,43 @@ app.get('/', (req, res) => {
 
 app.get('/metadata', (req, res) => {
     const filepath = 'metadata/nodes.json';
-    const fileSize = fs.statSync(filepath).size;
-    const head = {
-        'Content-Length': fileSize,
-        'Content-Type': 'application/json',
-    };
-    res.writeHead(200, head);
-    fs.createReadStream(filepath).pipe(res);
+    const data = fs.readFileSync(filepath);
+    if (!data) {
+        return;
+    }
+    const metadata = JSON.parse(data);
+    if (metadata) {
+        metadata.nodes.forEach((n) => {
+            let hotspots = null;
+            try {
+                hotspots = getHotspots(`data/${n.path}.hot`);
+            } catch (e) {
+                console.warn(`No hotspot found for node ${n.path}`);
+            }
+            if (hotspots) {
+                if (!n.annotations) {
+                    n.annotations = { };
+                }
+                if (!n.annotations.hotspots || n.annotations.hotspots === undefined) {
+                    n.annotations.hotspots = hotspots;
+                }
+            }
+        });
+    }
+
+    res.send(metadata);
 });
+
+// app.get('/metadata', (req, res) => {
+//     const filepath = 'metadata/nodes.json';
+//     const fileSize = fs.statSync(filepath).size;
+//     const head = {
+//         'Content-Length': fileSize,
+//         'Content-Type': 'application/json',
+//     };
+//     res.writeHead(200, head);
+//     fs.createReadStream(filepath).pipe(res);
+// });
 
 app.post('/metadata', (req, res) => {
     const filepath = 'metadata/nodes.json';
@@ -156,4 +186,9 @@ app.get('/vtt/:path/:name', (req, res) => {
     };
     res.writeHead(200, head);
     fs.createReadStream(filepath).pipe(res);
+});
+
+app.get('/hot/:path/:name', (req, res) => {
+    const filepath = `data/${req.params.path}/${req.params.name}.hot`;
+    res.send(getHotspots(filepath));
 });

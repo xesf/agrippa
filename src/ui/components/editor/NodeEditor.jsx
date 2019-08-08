@@ -120,7 +120,7 @@ class NodeEditor extends React.Component {
                 type: 'video',
                 x: (x - 75),
                 y: (y - 15),
-                path: 'XN/56182', // temp path
+                path: 'XV/20195', // temp path
                 desc: 'New Node'
             });
         }
