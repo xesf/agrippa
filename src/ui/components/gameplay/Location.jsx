@@ -1,9 +1,9 @@
 import React from 'react';
 
-const Location = ({ node }) =>
+const Location = ({ locationDesc }) =>
     (
         <div className="location-description location-typing">
-            <pre>{node.annotations.locationDesc}</pre>
+            <pre>{locationDesc}</pre>
         </div>
     );
 

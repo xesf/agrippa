@@ -80,7 +80,7 @@ class Game extends React.Component {
                         />
                     }
                 </Video>
-                {node.annotations && <Location node={node} />}
+                {node.annotations && <Location locationDesc={node.annotations.locationDesc} />}
                 {node.type === 'decision' && <Decision items={node.items} onClick={d => this.handleDecisionOnClick(d)} />}
             </div>) : null
         );
