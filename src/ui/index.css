@@ -165,15 +165,16 @@ h4.ui.header {
 
 .video-preview-container {
     background: black;
-    max-width: 640px;
+    max-width: 600px;
     max-height: 480px;
     overflow: hidden;
     border: 0px;
 }
 
 .screen-container {
+    position: relative;
     background: black;
-    max-width: 640px;
+    max-width: 600px;
     max-height: 480px;
     overflow: hidden;
     border: 0px;
@@ -254,3 +255,17 @@ video::cue {
 video::cue(b) {
     color: peachpuff;
 } */
+
+.hotspot-container {
+    
+}
+
+#hotspot-container .hotspot-item {
+    visibility:hidden;
+    cursor: none;
+}
+
+#hotspot-container:hover .hotspot-item {
+    visibility: visible;
+    cursor: pointer;
+}

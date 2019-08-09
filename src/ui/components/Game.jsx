@@ -7,6 +7,7 @@ import Video from './Video';
 
 import Decision from './gameplay/Decision';
 import Location from './gameplay/Location';
+import Hotspots from './gameplay/Hotspots';
 
 class Game extends React.Component {
     constructor(props) {
@@ -34,6 +35,10 @@ class Game extends React.Component {
         this.props.setNodeProperties(node);
     }
 
+    handleHotspotsOnClick(h) {
+        console.log(h);
+    }
+
     handleOnClick() {
         this.player.togglePlay();
     }
@@ -47,7 +52,7 @@ class Game extends React.Component {
     }
 
     render() {
-        const { node } = this.props;
+        const { node, editor } = this.props;
         const videoClassName = classNames({
             'screen-video': !(node && node.annotations && node.annotations.keepRatio),
             'screen-video-intro': (node && node.annotations && node.annotations.keepRatio),
@@ -81,6 +86,14 @@ class Game extends React.Component {
                     }
                 </Video>
                 {node.annotations && <Location locationDesc={node.annotations.locationDesc} />}
+                {node.annotations
+                    && node.annotations.hotspots
+                    && <Hotspots
+                        items={node.annotations.hotspots}
+                        onClick={h => this.handleHotspotsOnClick(h)}
+                        editor={editor}
+                    />
+                }
                 {node.type === 'decision' && <Decision items={node.items} onClick={d => this.handleDecisionOnClick(d)} />}
             </div>) : null
         );
