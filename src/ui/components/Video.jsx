@@ -16,6 +16,10 @@ export default class Video extends React.Component {
         return !this.videoRef.current.paused;
     }
 
+    seek(seconds) {
+        this.videoRef.current.currentTime = seconds;
+    }
+
     render() {
         const { children, ...rest } = this.props;
         return (

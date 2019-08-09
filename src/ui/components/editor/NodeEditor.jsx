@@ -117,11 +117,12 @@ class NodeEditor extends React.Component {
         if (this.state.shift) {
             this.props.addNode({
                 id: getRandomInt(99999, 1000000).toString(),
-                type: 'video',
+                type: 'navigation',
                 x: (x - 75),
                 y: (y - 15),
-                path: 'XV/20195', // temp path
-                desc: 'New Node'
+                path: 'nav1',
+                desc: 'Office Navigation',
+                seek: 0,
             });
         }
     }

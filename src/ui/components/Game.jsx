@@ -16,6 +16,21 @@ class Game extends React.Component {
         this.player = null;
     }
 
+    componentDidMount() {
+        if (this.props.node.type === 'navigation') {
+            this.player.seek(this.props.node.seek);
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (
+            prevProps.node.id !== this.props.node.id
+            && this.props.node.type === 'navigation'
+        ) {
+            this.player.seek(this.props.node.seek);
+        }
+    }
+
     linkNode() {
         const { links, node, nodes, setNodeProperties } = this.props;
         const link = links.find((l) => {
@@ -65,7 +80,7 @@ class Game extends React.Component {
                 <Video
                     ref={(player) => { this.player = player; }}
                     key={`player-${node.id}`}
-                    autoPlay
+                    autoPlay={node.type !== 'navigation'}
                     loop={(node.type === 'decision')}
                     className={videoClassName}
                     onEnded={() => this.handleOnEnded()}

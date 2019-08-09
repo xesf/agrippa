@@ -6,6 +6,7 @@ import PropertiesDecision from './PropertiesDecision';
 import PropertiesAnnotation from './PropertiesAnnotation';
 
 import { updateNode } from '../../redux/editor/nodeeditor';
+import { isNumber } from 'util';
 
 const skipKeys = ['selected', 'items', 'links', 'nodes', 'annotations'];
 
@@ -24,6 +25,10 @@ class Properties extends React.Component {
     onChangeField(key, value) {
         if (this.timer) {
             clearTimeout(this.timer);
+        }
+        const float = parseFloat(value);
+        if (!isNaN(float)) {
+            value = float;
         }
         this.timer = setTimeout(() => {
             const oldId = this.props.node.id;

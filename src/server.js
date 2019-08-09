@@ -146,9 +146,7 @@ app.get('/dash/:path/:name/:video/:folder/:segment/:file', (req, res) => {
     }
 });
 
-// MP4
-app.get('/mp4/:path/:name', (req, res) => {
-    const filepath = `data/${req.params.path}/${req.params.name}.mp4`;
+const getMP4 = (req, res, filepath) => {
     const fileSize = fs.statSync(filepath).size;
 
     if (req.headers.range) {
@@ -175,6 +173,16 @@ app.get('/mp4/:path/:name', (req, res) => {
         res.writeHead(200, head);
         fs.createReadStream(filepath).pipe(res);
     }
+};
+
+// MP4
+app.get('/mp4/:path/:name', (req, res) => {
+    const filepath = `data/${req.params.path}/${req.params.name}.mp4`;
+    getMP4(req, res, filepath);
+});
+app.get('/mp4/:name', (req, res) => {
+    const filepath = `data/${req.params.name}.mp4`;
+    getMP4(req, res, filepath);
 });
 
 app.get('/vtt/:path/:name', (req, res) => {
