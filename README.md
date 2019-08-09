@@ -37,13 +37,23 @@ The aim of this project is to provide a full reimplementation for the Web of the
 
 ## Assets Encoding
 
-This project dumps the original game files into modern enconding formats.
-Use the dump scripts (not provided yet) to extract the contents of the game.
+The game assets need to be converted using the following tools:
+- ffmpeg/ffprobe: brew install libvpx ffmpeg
+- str-vtt: https://github.com/nwoltman/srt-to-vtt-cl
 
-You will need your game original files in order to convert to new formats.
+In the root folder, there is a file called dumpdata.
+Copy this file to the main X-Files folder directory and set permissions to execute. The folder should contain the full installation which includes all 7 CDs.
 
-Note, the scripting files will be provided at a later stage.
+> chmod +x dumpdata
 
+Run as
+
+> ./dumpdata
+
+Note, this process can take few minutes to convert all the data from the game and the cpu usage will be high.
+
+When complete, copy the new created data folder in to the root of this app.
+The subtitles will need some extra effort to bundle multiple subtitles into a single file. The game uses multiple streams but there are some duplicate data as well.
 
 ## Usage
 
@@ -55,17 +65,5 @@ Install:
 
 Run this commands in the root folder:
 
-> yarn global add lerna
-
-> lerna bootstrap
-
-
-### X-Files Project Folder
-
-This application allows you to play the game.
-
-You will need to add into public/data folder the dumped files.
-
-> cd projects/x-files
-
+> yarn install
 > yarn start

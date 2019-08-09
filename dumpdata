@@ -1,0 +1,53 @@
+rm -R data
+
+mkdir data
+mkdir data/XG
+mkdir data/XN
+mkdir data/XV
+mkdir data/XT
+mkdir data/XS
+
+for f in *.nmv; do
+  ffmpeg -i $f -c:v libx264 -crf 22 -pix_fmt yuv420p data/${f%%.*}.mp4;
+done
+
+for f in XG/*.xmv; do
+  ffmpeg -i $f -c:v libx264 -crf 22 -pix_fmt yuv420p data/${f%%.*}.mp4;
+done
+for f in XN/*.xmv; do
+  ffmpeg -i $f -c:v libx264 -crf 22 -pix_fmt yuv420p data/${f%%.*}.mp4;
+done
+for f in XV/*.xmv; do
+  ffmpeg -i $f -c:v libx264 -crf 22 -pix_fmt yuv420p data/${f%%.*}.mp4;
+done
+
+for f in XS/*.amv; do
+  ffmpeg -i $f -c:a aac data/${f%%.*}.m4a;
+done
+for f in XS/*.dmv; do
+  ffmpeg -i $f -c:a aac data/${f%%.*}.m4a;
+done
+for f in XS/*.mus; do
+  ffmpeg -i $f -c:a aac data/${f%%.*}.m4a;
+done
+
+for f in XV/*.xmv; do
+  ffprobe -show_entries stream=index,codec_type:stream_tags=language -of compact $f 2>&1 | { while read line; do if $(echo "$line" | grep -q -i "stream #"); then echo "$line"; fi; done; while read -d $'\x0D' line; do if $(echo "$line" | grep -q "time="); then echo "$line" | awk '{ printf "%s\r", $8 }'; fi; done; } | grep Subtitle | cut -c 11-11 | { while read s; do ffmpeg -i ${f} -map 0:s:1 data/${f%%.*}_1.srt; ffmpeg -i ${f} -map 0:s:2 data/${f%%.*}.srt; done; }
+done
+
+./srt-vtt -r data/XV
+
+for f in XG/*.pff; do
+  cp $f data/$f;
+done
+for f in *.pff; do
+  cp $f data/$f;
+done
+
+for f in XV/*.hot; do
+  cp $f data/$f;
+done
+
+for f in XT/*.*; do
+  cp $f data/$f;
+done
