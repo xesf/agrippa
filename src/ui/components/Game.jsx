@@ -3,11 +3,24 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 
 import { setSelection } from '../redux/editor/nodeeditor';
-import Video from './Video';
+import VideoCanvas from './VideoCanvas';
 
 import Decision from './gameplay/Decision';
 import Location from './gameplay/Location';
 import Hotspots from './gameplay/Hotspots';
+
+let tick = null;
+let prevTick = Date.now();
+let elapsed = null;
+const fps = 1000 / 60;
+
+window.requestAnimationFrame = window.requestAnimationFrame
+    // @ts-ignore
+    || window.mozRequestAnimationFrame
+    || window.webkitRequestAnimationFrame
+    // @ts-ignore
+    || window.msRequestAnimationFrame
+    || (f => setTimeout(f, 1000 / 60));
 
 class Game extends React.Component {
     constructor(props) {
@@ -17,6 +30,22 @@ class Game extends React.Component {
     }
 
     componentDidMount() {
+        const mainloop = () => {
+            this.frameId = requestAnimationFrame(mainloop);
+
+            tick = Date.now();
+            elapsed = tick - prevTick;
+
+            if (elapsed > fps) {
+                prevTick = tick - (elapsed % fps);
+            }
+
+            if (this.drawVideoFrame(tick, elapsed)) {
+                cancelAnimationFrame(this.frameId);
+            }
+        };
+        mainloop();
+
         if (this.props.node.type === 'navigation') {
             this.player.seek(this.props.node.seek);
         }
@@ -29,6 +58,10 @@ class Game extends React.Component {
         ) {
             this.player.seek(this.props.node.seek);
         }
+    }
+
+    drawVideoFrame(_tick, _elapsed) {
+        this.player.drawVideoFrame(_tick, _elapsed);
     }
 
     linkNode() {
@@ -77,9 +110,11 @@ class Game extends React.Component {
         return (node
             ?
             (<div className="screen-container">
-                <Video
+                <VideoCanvas
                     ref={(player) => { this.player = player; }}
                     key={`player-${node.id}`}
+                    width="640"
+                    height="480"
                     autoPlay={node.type !== 'navigation'}
                     loop={(node.type === 'decision')}
                     className={videoClassName}
@@ -99,7 +134,7 @@ class Game extends React.Component {
                             default
                         />
                     }
-                </Video>
+                </VideoCanvas>
                 {node.annotations && <Location locationDesc={node.annotations.locationDesc} />}
                 {node.annotations
                     && node.annotations.hotspots

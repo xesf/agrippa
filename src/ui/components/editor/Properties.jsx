@@ -6,7 +6,6 @@ import PropertiesDecision from './PropertiesDecision';
 import PropertiesAnnotation from './PropertiesAnnotation';
 
 import { updateNode } from '../../redux/editor/nodeeditor';
-import { isNumber } from 'util';
 
 const skipKeys = ['selected', 'items', 'links', 'nodes', 'annotations'];
 

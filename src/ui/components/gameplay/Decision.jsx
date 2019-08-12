@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Video from '../Video';
+
 const Decision = ({ items, onClick }) => {
     const handleOnClick = (d) => {
         if (onClick) {
@@ -21,7 +23,7 @@ const Decision = ({ items, onClick }) => {
                     onFocus={() => {}}
                     onBlur={() => {}}
                 >
-                    <video
+                    <Video
                         id={d.type}
                         loop
                         src={`http://localhost:8080/mp4/${d.path}`}
