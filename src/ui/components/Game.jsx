@@ -15,33 +15,44 @@ let elapsed = null;
 const fps = 1000 / 60;
 
 window.requestAnimationFrame = window.requestAnimationFrame
-    // @ts-ignore
     || window.mozRequestAnimationFrame
     || window.webkitRequestAnimationFrame
-    // @ts-ignore
     || window.msRequestAnimationFrame
     || (f => setTimeout(f, 1000 / 60));
+
+window.cancelAnimationFrame = window.cancelAnimationFrame
+    || window.mozCancelAnimationFrame
+    || window.webkitCancelAnimationFrame
+    || window.msCancelAnimationFrame
+    || (f => clearTimeout(f));
 
 class Game extends React.Component {
     constructor(props) {
         super(props);
         this.state = { };
         this.player = null;
+
+        this.drawVideoFrame = this.drawVideoFrame.bind(this, null);
     }
 
     componentDidMount() {
         const mainloop = () => {
-            this.frameId = window.requestAnimationFrame(mainloop);
+            try {
+                this.frameId = window.requestAnimationFrame(mainloop);
 
-            tick = Date.now();
-            elapsed = tick - prevTick;
+                tick = Date.now();
+                elapsed = tick - prevTick;
 
-            if (elapsed > fps) {
-                prevTick = tick - (elapsed % fps);
-            }
+                if (elapsed > fps) {
+                    prevTick = tick - (elapsed % fps);
+                }
 
-            if (this.drawVideoFrame(tick, elapsed)) {
+                if (this.drawVideoFrame(tick, elapsed)) {
+                    window.cancelAnimationFrame(this.frameId);
+                }
+            } catch (e) {
                 window.cancelAnimationFrame(this.frameId);
+                // console.error(e);
             }
         };
         mainloop();
@@ -49,6 +60,10 @@ class Game extends React.Component {
         if (this.props.node.type === 'navigation') {
             this.player.seek(this.props.node.seek);
         }
+    }
+
+    componentWillUmount() {
+        window.cancelAnimationFrame(this.frameId);
     }
 
     componentDidUpdate(prevProps) {
