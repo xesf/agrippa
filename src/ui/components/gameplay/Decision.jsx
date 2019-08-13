@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Video from '../Video';
 
-const Decision = ({ items, onClick }) => {
+const Decision = ({ defaultDecision, timeout, items, onClick }) => {
     const handleOnClick = (d) => {
         if (onClick) {
             onClick(d);
         }
     };
+    useEffect(() => {
+        const timer = setTimeout(() => { handleOnClick({ option: defaultDecision }); }, timeout);
+        return () => clearTimeout(timer);
+    });
+
     return (
         <div className="ui grid container equal width decision-container">
             <div className="column decision-item-container" />

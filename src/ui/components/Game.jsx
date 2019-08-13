@@ -147,7 +147,13 @@ class Game extends React.Component {
                         editor={editor}
                     />
                 }
-                {node.type === 'decision' && <Decision items={node.items} onClick={d => this.handleDecisionOnClick(d)} />}
+                {node.type === 'decision'
+                && <Decision
+                    items={node.items}
+                    onClick={d => this.handleDecisionOnClick(d)}
+                    timeout={node.timeout}
+                    defaultDecision={node.default}
+                />}
             </div>) : null
         );
     }
