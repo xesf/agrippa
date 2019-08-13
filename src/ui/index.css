@@ -243,29 +243,6 @@ h4.ui.header {
     color: rgb(176, 185, 190);
 }
 
-/*
-::cue {
-    font-size: 1.2em;
-}
-
-video::cue {
-    color: papayawhip;
-}
-
-video::cue(b) {
-    color: peachpuff;
-} */
-
-.hotspot-container {
-    
-}
-
-#hotspot-container .hotspot-item {
-    visibility:hidden;
-    cursor: none;
-}
-
-#hotspot-container:hover .hotspot-item {
-    visibility: visible;
+.hotspot-item {
     cursor: pointer;
 }
