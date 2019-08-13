@@ -31,7 +31,7 @@ class Game extends React.Component {
 
     componentDidMount() {
         const mainloop = () => {
-            this.frameId = requestAnimationFrame(mainloop);
+            this.frameId = window.requestAnimationFrame(mainloop);
 
             tick = Date.now();
             elapsed = tick - prevTick;
@@ -41,7 +41,7 @@ class Game extends React.Component {
             }
 
             if (this.drawVideoFrame(tick, elapsed)) {
-                cancelAnimationFrame(this.frameId);
+                window.cancelAnimationFrame(this.frameId);
             }
         };
         mainloop();
@@ -61,7 +61,7 @@ class Game extends React.Component {
     }
 
     drawVideoFrame(_tick, _elapsed) {
-        this.player.drawVideoFrame(_tick, _elapsed);
+        return this.player.drawVideoFrame(_tick, _elapsed);
     }
 
     linkNode() {
@@ -113,6 +113,7 @@ class Game extends React.Component {
                 <VideoCanvas
                     ref={(player) => { this.player = player; }}
                     key={`player-${node.id}`}
+                    node={node}
                     width="640"
                     height="480"
                     autoPlay={node.type !== 'navigation'}
@@ -121,20 +122,7 @@ class Game extends React.Component {
                     onEnded={() => this.handleOnEnded()}
                     onClick={() => this.handleOnClick()}
                     onDoubleClick={() => this.handleOnDoubleClick()}
-                >
-                    <source
-                        src={`http://localhost:8080/mp4/${node.path}`}
-                    />
-                    {node.subtitles &&
-                        <track
-                            label="English"
-                            kind="subtitles"
-                            srcLang="en"
-                            src={`http://localhost:8080/vtt/${node.path}`}
-                            default
-                        />
-                    }
-                </VideoCanvas>
+                />
                 {node.annotations && <Location locationDesc={node.annotations.locationDesc} />}
                 {node.annotations
                     && node.annotations.hotspots

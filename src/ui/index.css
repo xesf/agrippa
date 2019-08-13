@@ -165,7 +165,7 @@ h4.ui.header {
 
 .video-preview-container {
     background: black;
-    max-width: 600px;
+    max-width: 640px;
     max-height: 480px;
     overflow: hidden;
     border: 0px;
@@ -174,7 +174,7 @@ h4.ui.header {
 .screen-container {
     position: relative;
     background: black;
-    max-width: 600px;
+    max-width: 640px;
     max-height: 480px;
     overflow: hidden;
     border: 0px;
@@ -201,7 +201,7 @@ h4.ui.header {
 .location-description {
     position: relative;
     left: 2em;
-    bottom: 15em;
+    bottom: 15.5em;
     color: rgb(232, 238, 241);
     text-align: left;
     text-shadow: 1px 1px #000;
