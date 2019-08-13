@@ -6,7 +6,10 @@ export default class VideoCanvas extends React.Component {
         this.state = {};
         this.canvasRef = React.createRef();
         this.videoRef = React.createRef();
+        this.subtitlesRef = React.createRef();
+        this.subtitles = null;
 
+        this.drawVideoFrame = this.drawVideoFrame.bind(this, null);
         // this.handleOnPlaying = this.handleOnPlaying.bind(this, null);
         // this.handleCanPlayThrough = this.handleCanPlayThrough.bind(this, null);
         this.handleOnEnded = this.handleOnEnded.bind(this, null);
@@ -53,7 +56,45 @@ export default class VideoCanvas extends React.Component {
 
     drawVideoFrame() {
         if (this.context) {
-            this.context.drawImage(this.videoRef.current, 20, 100);
+            const video = this.videoRef.current;
+            const { width, height } = this.canvasRef.current;
+
+            // Draw video frame
+            this.context.drawImage(video, 20, 100);
+
+            // Draw subtitles on screen
+            const textTracks = video.textTracks;
+            if (textTracks && textTracks.length > 0) {
+                const activeCues = textTracks[0].activeCues;
+                const clearSubtitlesClipArea = () => {
+                    this.context.fillStyle = '#000';
+                    this.context.fillRect(
+                        0,
+                        (height - 130),
+                        width, 110
+                    );
+                };
+                if (!this.subtitles) {
+                    clearSubtitlesClipArea();
+                }
+                if (activeCues && activeCues.length > 0) {
+                    const text = activeCues[0].text;
+                    if (this.subtitles !== text) {
+                        this.subtitles = text;
+                        clearSubtitlesClipArea();
+                        this.context.textAlign = 'center';
+                        this.context.fillStyle = '#ffff00';
+                        this.context.font = '16px Arial';
+                        this.context.fillText(
+                            text,
+                            (width / 2),
+                            (height - 110)
+                        );
+                    }
+                } else {
+                    this.subtitles = null;
+                }
+            }
         }
         return false;
     }
