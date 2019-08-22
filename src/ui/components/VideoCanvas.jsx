@@ -59,8 +59,15 @@ export default class VideoCanvas extends React.Component {
             const video = this.videoRef.current;
             const { width, height } = this.canvasRef.current;
 
+            let x = 20;
+            let y = 100;
+            if (this.props.node.keepRatio) {
+                x = 0;
+                y = 0;
+            }
+
             // Draw video frame
-            this.context.drawImage(video, 20, 100);
+            this.context.drawImage(video, x, y);
 
             // Draw subtitles on screen
             const textTracks = video.textTracks;
