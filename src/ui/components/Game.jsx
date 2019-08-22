@@ -57,7 +57,8 @@ class Game extends React.Component {
         };
         mainloop();
 
-        if (this.props.node.type === 'navigation') {
+        if (this.props.node.type === 'navigation'
+            && this.props.node.seek !== undefined) {
             this.player.seek(this.props.node.seek);
         }
     }
@@ -70,6 +71,7 @@ class Game extends React.Component {
         if (
             prevProps.node.id !== this.props.node.id
             && this.props.node.type === 'navigation'
+            && this.props.node.seek !== undefined
         ) {
             this.player.seek(this.props.node.seek);
         }
@@ -131,8 +133,8 @@ class Game extends React.Component {
                     node={node}
                     width="640"
                     height="480"
-                    autoPlay={node.type !== 'navigation'}
-                    loop={(node.type === 'decision')}
+                    autoPlay={node.seek === undefined}
+                    loop={(node.type !== 'video')}
                     className={videoClassName}
                     onEnded={() => this.handleOnEnded()}
                     onClick={() => this.handleOnClick()}

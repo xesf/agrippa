@@ -1,4 +1,5 @@
 import React from 'react';
+import { isEqual } from 'lodash';
 import { connect } from 'react-redux';
 import { Input } from 'semantic-ui-react';
 
@@ -17,8 +18,17 @@ const inputStyle = {
 class Properties extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { };
+        this.state = {
+            node: this.props.node,
+        };
         this.timer = null;
+    }
+
+    componentDidUpdate(prevProps) {
+        // Typical usage (don't forget to compare props):
+        if (!isEqual(this.props.node, prevProps.node)) {
+            this.setState({ node: this.props.node }); // eslint-disable-line
+        }
     }
 
     onChangeField(key, value) {
@@ -31,14 +41,15 @@ class Properties extends React.Component {
         }
         this.timer = setTimeout(() => {
             const oldId = this.props.node.id;
-            const node = { ...this.props.node };
+            const node = { ...this.state.node };
             node[key] = value;
+            this.setState({ node });
             this.props.updateNode(oldId, node);
         }, 500);
     }
 
     render() {
-        const { node } = this.props;
+        const { node } = this.state;
         return (
             <div className="layout-border layout-properties">
                 {node &&

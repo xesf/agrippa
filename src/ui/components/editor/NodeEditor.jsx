@@ -120,7 +120,7 @@ class NodeEditor extends React.Component {
                 type: 'navigation',
                 x: (x - 75),
                 y: (y - 15),
-                path: 'nav1',
+                path: 'nav',
                 desc: 'Office Navigation',
                 seek: 0,
             });
