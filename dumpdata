@@ -8,8 +8,9 @@ mkdir data/XT
 mkdir data/XS
 
 for f in *.nmv; do
-  ffmpeg -i $f -c:v libx264 -crf 22 -pix_fmt yuv420p data/${f%%.*}.mp4;
+  ./pff.py $f nav;
 done
+ffmpeg -framerate 1 -i nav-%1d.jpg -r 25 -y -c:v libx264 -crf 22 -pix_fmt yuv420p data/nav.mp4
 
 for f in XG/*.xmv; do
   ffmpeg -i $f -c:v libx264 -crf 22 -pix_fmt yuv420p data/${f%%.*}.mp4;
@@ -38,10 +39,14 @@ done
 ./srt-vtt -r data/XV
 
 for f in XG/*.pff; do
-  cp $f data/$f;
+  mkdir data/XG/${f%%.*};
+  ./pff.py $f data/XG/${f%%.*}/${f%%.*};
+  ffmpeg -framerate 1 -i data/XG/${f%%.*}/${f%%.*}-%1d.jpg -r 25 -y -c:v libx264 -crf 22 -pix_fmt yuv420p data/XG/${f%%.*}/${f%%.*}.mp4
 done
 for f in *.pff; do
-  cp $f data/$f;
+  mkdir data/${f%%.*};
+  ./pff.py $f data/${f%%.*}/${f%%.*};
+  ffmpeg -framerate 1 -i data/${f%%.*}/${f%%.*}-%1d.jpg -r 25 -y -c:v libx264 -crf 22 -pix_fmt yuv420p data/${f%%.*}/${f%%.*}.mp4
 done
 
 for f in XV/*.hot; do
