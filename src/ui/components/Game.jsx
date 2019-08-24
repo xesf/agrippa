@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 
-import { setSelection } from '../redux/editor/nodeeditor';
+import { setSelection, updateNode } from '../redux/editor/nodeeditor';
 import VideoCanvas from './VideoCanvas';
 
 import Decision from './gameplay/Decision';
@@ -116,6 +116,20 @@ class Game extends React.Component {
         this.linkNode();
     }
 
+    handleLoadedData() {
+        // if (this.props.node.thumbnail === undefined) {
+        //     const node = {
+        //         ...this.props.node,
+        //         thumbnail: this.player.getCanvasImage(),
+        //     };
+        //     console.log(node);
+        //     this.props.updateNode(node.id, node);
+        // }
+        // if (this.state.thumbnail === undefined) {
+        //     this.setState({ thumbnail: this.player.getCanvasImage() });
+        // }
+    }
+
     render() {
         const { node, editor } = this.props;
         const videoClassName = classNames({
@@ -139,6 +153,7 @@ class Game extends React.Component {
                     onEnded={() => this.handleOnEnded()}
                     onClick={() => this.handleOnClick()}
                     onDoubleClick={() => this.handleOnDoubleClick()}
+                    onLoadedData={() => this.handleLoadedData()}
                 />
                 {node.annotations && <Location locationDesc={node.annotations.locationDesc} />}
                 {node.annotations
@@ -169,6 +184,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setNodeProperties: node => dispatch(setSelection(node)),
+    updateNode: (id, node) => dispatch(updateNode(id, node)),
 });
 
 export default connect(

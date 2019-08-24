@@ -35,6 +35,28 @@ export default class VideoCanvas extends React.Component {
     // handleCanPlayThrough() {
     // }
 
+    getCanvasImage() {
+        // const { node } = this.props;
+        // const video = document.createElement('video');
+        // video.src = `http://localhost:8080/mp4/${node.path}`;
+        // const video = this.videoRef.current;
+        const canvas = document.createElement('canvas');
+        canvas.width = 600;
+        canvas.height = 240;
+        const context = canvas.getContext('2d');
+        // context.drawImage(video, 0, 0);
+        let x = 20;
+        let y = 100;
+        if (this.props.node.keepRatio) {
+            x = 0;
+            y = 0;
+        }
+        context.drawImage(this.canvasRef.current, x, y, 640, 480, 0, 0, 600, 240);
+        canvas.width = 100;
+        canvas.height = 40;
+        return canvas.toDataURL();
+    }
+
     handleOnEnded() {
         if (this.props.onEnded) {
             this.props.onEnded();

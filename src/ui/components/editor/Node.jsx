@@ -155,7 +155,7 @@ export default class Node extends React.Component {
     }
 
     render() {
-        const { x, y, type, path, desc, selected, id } = this.props;
+        const { x, y, type, path, desc, selected, id /* , thumbnail */ } = this.props;
         return (
             <React.Fragment>
                 {this.targetNodes && this.targetNodes.map(n =>
@@ -189,6 +189,7 @@ export default class Node extends React.Component {
                         {path}
                     </text>
                     <text x={15} y={30} style={baseStyle}>({type})</text>
+                    {/* <image width="100" height="40" href={thumbnail} /> */}
                     {/* <circle cx={130} cy={20} r="20" style={plusCircleStyle}>
                         <title>Link node</title>
                     </circle>
