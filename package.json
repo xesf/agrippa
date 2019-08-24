@@ -4,7 +4,18 @@
   "private": true,
   "main": "src/electron/index.js",
   "homepage": "./",
+  "scripts": {
+    "start": "yarn server",
+    "start:all": "concurrently \"yarn server\" \"wait-on http://localhost:8080 && electron .\"",
+    "server": "cross-env NODE_ENV=development nodemon ./src/server.js --exec babel-node -w ./src/server.js",
+    "lint": "eslint ./src --ext .js,.jsx -c .eslintrc.yml",
+    "build": "yarn build:server && yarn build:electron",
+    "build:electron": "electron-builder",
+    "build:server": "cross-env NODE_ENV=production webpack -p",
+    "release": "yarn build:server && electron-builder --publish=always"
+  },
   "dependencies": {
+    "@monaco-editor/react": "^1.2.1",
     "axios": "^0.19.0",
     "classnames": "^2.2.6",
     "cors": "^2.8.5",
@@ -51,6 +62,7 @@
     "eslint-plugin-react": "^7.13.0",
     "eslint-stats": "^1.0.1",
     "json-loader": "^0.5.7",
+    "monaco-editor": "^0.17.1",
     "node-libs-browser": "^1.1.1",
     "node-sass": "^4.12.0",
     "nodemon": "1.18.10",
@@ -59,15 +71,6 @@
     "style-loader": "^0.23.1",
     "wait-on": "^3.2.0",
     "webpack-cli": "^3.3.6"
-  },
-  "scripts": {
-    "start": "concurrently \"yarn server\" \"wait-on http://localhost:8080 && electron .\"",
-    "server": "cross-env NODE_ENV=development nodemon ./src/server.js --exec babel-node -w ./src/server.js",
-    "lint": "eslint ./src --ext .js,.jsx -c .eslintrc.yml",
-    "build": "yarn build:server && yarn build:electron",
-    "build:electron": "electron-builder",
-    "build:server": "cross-env NODE_ENV=production webpack -p",
-    "release": "yarn build:server && electron-builder --publish=always"
   },
   "browserslist": {
     "production": [

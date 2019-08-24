@@ -9,6 +9,7 @@ import NodeEditor from './NodeEditor';
 import Properties from './Properties';
 import Assets from './Assets';
 import Game from '../Game';
+import Scripting from './Scripting';
 
 const Editor = ({ ready }) =>
     (
@@ -31,7 +32,18 @@ const Editor = ({ ready }) =>
                             <div className="layout-border" style={{ flex: '1', padding: '0px'}}>
                                 {ready && (
                                     <React.Fragment>
-                                        <Game editor />
+                                        <div className="editor-screen-row">
+                                            <div className="editor-screen-column">
+                                                <Game editor />
+                                            </div>
+                                            <div className="editor-screen-column">
+                                                <Tab type="top" selectedTabIndex={0}>
+                                                    <TabItem label="Scripting">
+                                                        <Scripting />
+                                                    </TabItem>
+                                                </Tab>
+                                            </div>
+                                        </div>
                                         <NodeEditor />
                                     </React.Fragment>
                                 )}

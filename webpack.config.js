@@ -56,24 +56,27 @@ module.exports = {
             }]
         }, {
             test: /\.css$/,
+            include: /src/,
             use: [
                 'style-loader',
                 'css-loader',
             ]
         }, {
             test: /\.scss$/,
+            include: /src/,
             use: [
                 'style-loader',
                 'css-loader',
                 'sass-loader'
             ]
-        }]
+        },
+        ]
     },
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: `"${process.env.NODE_ENV}"`
             }
-        })
+        }),
     ]
 };

@@ -98,6 +98,14 @@ svg {
     overflow-y: scroll;
 }
 
+.layout-scripting {
+    color: rgb(176, 185, 190);
+    width: 100%;
+    height: 100%;
+    padding: 0.5em;
+    overflow-y: scroll;
+}
+
 .node-group {
     cursor: pointer;
 }
@@ -196,6 +204,20 @@ h4.ui.header {
 .screen-video-ingame {
     position: relative;
     top: -20px;
+}
+
+.editor-screen-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+  
+.editor-screen-column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
 }
 
 .location-description {
