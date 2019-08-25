@@ -109,7 +109,7 @@ export default class VideoCanvas extends React.Component {
                         width, 110
                     );
                 };
-                if (!this.subtitles) {
+                if (!this.state.subtitles) {
                     clearSubtitlesClipArea();
                 }
                 if (activeCues && activeCues.length > 0) {
