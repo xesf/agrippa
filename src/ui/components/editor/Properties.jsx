@@ -8,7 +8,14 @@ import PropertiesAnnotation from './PropertiesAnnotation';
 
 import { updateNode } from '../../redux/editor/nodeeditor';
 
-const skipKeys = ['selected', 'items', 'links', 'nodes', 'annotations'];
+const skipKeys = [
+    'selected',
+    'items',
+    'links',
+    'nodes',
+    'annotations',
+    'script',
+];
 
 const inputStyle = {
     width: '100%',
