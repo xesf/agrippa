@@ -3,11 +3,14 @@ import React from 'react';
 export default class VideoCanvas extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            context: null,
+            subtitles: null,
+        };
         this.canvasRef = React.createRef();
         this.videoRef = React.createRef();
         this.subtitlesRef = React.createRef();
-        this.subtitles = null;
+        // this.subtitles = null;
 
         this.drawVideoFrame = this.drawVideoFrame.bind(this, null);
         // this.handleOnPlaying = this.handleOnPlaying.bind(this, null);
@@ -18,7 +21,8 @@ export default class VideoCanvas extends React.Component {
 
     componentDidMount() {
         console.log('video canvas mount');
-        this.context = this.canvasRef.current.getContext('2d');
+        // this.context = this.canvasRef.current.getContext('2d');
+        this.setState({ context: this.canvasRef.current.getContext('2d') }); // eslint-disable-line
 
         // this.videoRef.current.addEventListener('playing', this.handleOnPlaying);
         // this.videoRef.current.addEventListener('canplaythrough', this.handleCanPlayThrough);
@@ -79,58 +83,57 @@ export default class VideoCanvas extends React.Component {
     }
 
     drawVideoFrame() {
-        // try {
-        const video = this.videoRef.current;
-        const { width, height } = this.canvasRef.current;
+        if (this.state.context) {
+            const video = this.videoRef.current;
+            const { width, height } = this.canvasRef.current;
 
-        let x = 20;
-        let y = 100;
-        if (this.props.node.keepRatio) {
-            x = 0;
-            y = 0;
-        }
-
-        // Draw video frame
-        this.context.drawImage(video, x, y);
-
-        // Draw subtitles on screen
-        const textTracks = video.textTracks;
-        if (textTracks && textTracks.length > 0) {
-            const activeCues = textTracks[0].activeCues;
-            const clearSubtitlesClipArea = () => {
-                this.context.fillStyle = '#000';
-                this.context.fillRect(
-                    0,
-                    (height - 130),
-                    width, 110
-                );
-            };
-            if (!this.subtitles) {
-                clearSubtitlesClipArea();
+            let x = 20;
+            let y = 100;
+            if (this.props.node.keepRatio) {
+                x = 0;
+                y = 0;
             }
-            if (activeCues && activeCues.length > 0) {
-                const text = activeCues[0].text;
-                if (this.subtitles !== text) {
-                    this.subtitles = text;
-                    clearSubtitlesClipArea();
-                    this.context.textAlign = 'center';
-                    this.context.fillStyle = '#ffff00';
-                    this.context.font = '16px Arial';
-                    this.context.fillText(
-                        text,
-                        (width / 2),
-                        (height - 110)
+
+            // Draw video frame
+            this.state.context.drawImage(video, x, y);
+
+            // Draw subtitles on screen
+            const textTracks = video.textTracks;
+            if (textTracks && textTracks.length > 0) {
+                const activeCues = textTracks[0].activeCues;
+                const clearSubtitlesClipArea = () => {
+                    this.state.context.fillStyle = '#000';
+                    this.state.context.fillRect(
+                        0,
+                        (height - 130),
+                        width, 110
                     );
+                };
+                if (!this.subtitles) {
+                    clearSubtitlesClipArea();
                 }
-            } else {
-                this.subtitles = null;
+                if (activeCues && activeCues.length > 0) {
+                    const text = activeCues[0].text;
+                    if (this.state.subtitles !== text) {
+                        // this.state.subtitles = text;
+                        this.setState({ subtitles: text }); // eslint-disable-line
+                        clearSubtitlesClipArea();
+                        this.state.context.textAlign = 'center';
+                        this.state.context.fillStyle = '#ffff00';
+                        this.state.context.font = '16px Arial';
+                        this.state.context.fillText(
+                            text,
+                            (width / 2),
+                            (height - 110)
+                        );
+                    }
+                } else {
+                    // this.subtitles = null;
+                    this.setState({ subtitles: null }); // eslint-disable-line
+                }
             }
         }
         return false;
-        // } catch (e) {
-        //     console.log('cavnas', e);
-        //     return false;
-        // }
     }
 
     render() {

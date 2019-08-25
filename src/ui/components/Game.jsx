@@ -34,12 +34,9 @@ class Game extends React.Component {
         this.player = null;
 
         this.drawVideoFrame = this.drawVideoFrame.bind(this, null);
-        console.log('game constructor');
     }
 
     componentDidMount() {
-        console.log('game mount');
-        // this.setState({ test: true }); // eslint-disable-line
         const mainloop = () => {
             try {
                 this.frameId = window.requestAnimationFrame(mainloop);
@@ -66,16 +63,12 @@ class Game extends React.Component {
             this.player.seek(this.props.node.seek);
         }
 
-        // if (prevProps.node !== this.props.node) {
-        console.log(this.props.node.script); // eslint-disable-line
         const script = Function('"use strict"; ' + this.props.node.script + '')(); // eslint-disable-line
-        // this.setState({ script }); // eslint-disable-line
-        console.log(script); // eslint-disable-line
-        // }
+        this.setState({ script }); // eslint-disable-line
+
         if (script && script.onMount) {
             const state = { gameflag: {} };
             script.onMount(state);
-            console.log(state); // eslint-disable-line
         }
     }
 
@@ -87,7 +80,6 @@ class Game extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log('game update');
         if (
             prevProps.node.id !== this.props.node.id
             && this.props.node.type === 'navigation'
@@ -162,9 +154,8 @@ class Game extends React.Component {
             'screen-video-ingame': !(node && node.annotations && node.annotations.isIntro)
         });
 
-        return (node
-            ?
-            (<div className="screen-container">
+        return (
+            <div className="screen-container">
                 <VideoCanvas
                     ref={(player) => { this.player = player; }}
                     key={`player-${node.id}`}
@@ -195,7 +186,7 @@ class Game extends React.Component {
                     timeout={node.timeout}
                     defaultDecision={node.default}
                 />}
-            </div>) : null
+            </div>
         );
     }
 }

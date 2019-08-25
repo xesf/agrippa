@@ -37,11 +37,7 @@ const Editor = ({ ready }) =>
                                                 <Game editor />
                                             </div>
                                             <div className="editor-screen-column">
-                                                <Tab type="top" selectedTabIndex={0}>
-                                                    <TabItem label="Scripting">
-                                                        <Scripting />
-                                                    </TabItem>
-                                                </Tab>
+                                                <Scripting />
                                             </div>
                                         </div>
                                         <NodeEditor />

@@ -91,7 +91,7 @@ class Tab extends React.Component {
             case 'left':
                 return (
                     <div className="ui grid two">
-                        <div style={{ flex: '0 0 300px', paddingRight: '0.5em' }}>{tabHeaders}</div>
+                        <div style={{ flex: '0 0 50px', paddingRight: '0.5em', transform: 'rotate(270deg)' }}>{tabHeaders}</div>
                         <div style={{ flex: '1', padding: '0px'}}>
                             {children}
                         </div>
@@ -103,7 +103,7 @@ class Tab extends React.Component {
                         <div style={{ flex: '1', padding: '0px'}}>
                             {children}
                         </div>
-                        <div style={{ flex: '0 0 300px', paddingLeft: '0.5em'}}>{tabHeaders}</div>
+                        <div style={{ flex: '0 0 50px', paddingLeft: '0.5em', transform: 'rotate(-270deg)' }}>{tabHeaders}</div>
                     </div>
                 );
         }
