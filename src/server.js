@@ -37,6 +37,18 @@ app.use('/data', express.static('../data'));
 
 const indexBody = renderToStaticMarkup(React.createElement(App));
 
+const getScript = (id) => {
+    const filepath = `metadata/scripts/${id}.fms`;
+    if (fs.existsSync(filepath)) {
+        const data = fs.readFileSync(filepath, 'utf8');
+        if (!data) {
+            return null;
+        }
+        return data;
+    }
+    return null;
+};
+
 app.get('/', (req, res) => {
     res.end(indexBody);
 });
@@ -64,10 +76,27 @@ app.get('/metadata', (req, res) => {
                     n.annotations.hotspots = hotspots;
                 }
             }
+
+            const s = getScript(n.id);
+            if (s) {
+                n.script = s;
+            }
+            if (metadata.selected === n.id) {
+                metadata.node = n;
+            }
         });
     }
 
     res.send(metadata);
+});
+
+app.get('/script/:id', (req, res) => {
+    const filepath = `metadata/scripts/${req.params.id}.fms`;
+    const data = fs.readFileSync(filepath, 'utf8');
+    if (!data) {
+        return;
+    }
+    res.send(data);
 });
 
 // app.get('/metadata', (req, res) => {

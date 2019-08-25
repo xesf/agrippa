@@ -1,0 +1,27 @@
+return ({
+    a: 'My node script',
+    x: 0,
+    y: 0,
+
+    onMount: ({ gameflag }) => {
+        if (gameflag.isFirstTime || gameflag.isFirstTime === undefined) {
+            gameflag.isFirstTime = false;
+        }
+        console.log('onMount', gameflag, gameflag.isFirstTime);
+        // console.log('onMount', this.a);
+    },
+
+    onUnmount: () => {
+
+    },
+
+    onMouseClick: ({ clientX, clientY }) => {
+        console.log(clientX, clientY);
+    },
+
+    onMouseMove: ({ clientX, clientY }) => {
+        this.x = clientX;
+        this.y = clientY;
+        console.log(this.x, this.y);
+    },
+});

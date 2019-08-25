@@ -16,7 +16,7 @@ export const createStore = () => {
     // send changes back to server
     store.subscribe((() => {
         const state = store.getState();
-        if (state.editor.ready) {
+        if (state.editor.ready && state.editor.nodes && state.editor.nodes.length > 0) {
             if (subscribeTimer) {
                 clearTimeout(subscribeTimer);
             }
@@ -25,7 +25,7 @@ export const createStore = () => {
                     transform: state.editor.transform,
                     transformStr: state.editor.transformStr,
                     selected: state.editor.selected,
-                    node: state.editor.node,
+                    // node: state.editor.node,
                     links: state.editor.links,
                     nodes: state.editor.nodes,
                 };

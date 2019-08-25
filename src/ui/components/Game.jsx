@@ -29,13 +29,17 @@ window.cancelAnimationFrame = window.cancelAnimationFrame
 class Game extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { };
+
+        this.state = { script: null };
         this.player = null;
 
         this.drawVideoFrame = this.drawVideoFrame.bind(this, null);
+        console.log('game constructor');
     }
 
     componentDidMount() {
+        console.log('game mount');
+        // this.setState({ test: true }); // eslint-disable-line
         const mainloop = () => {
             try {
                 this.frameId = window.requestAnimationFrame(mainloop);
@@ -52,7 +56,7 @@ class Game extends React.Component {
                 }
             } catch (e) {
                 window.cancelAnimationFrame(this.frameId);
-                // console.error(e);
+                console.error(e);
             }
         };
         mainloop();
@@ -61,13 +65,29 @@ class Game extends React.Component {
             && this.props.node.seek !== undefined) {
             this.player.seek(this.props.node.seek);
         }
+
+        // if (prevProps.node !== this.props.node) {
+        console.log(this.props.node.script); // eslint-disable-line
+        const script = Function('"use strict"; ' + this.props.node.script + '')(); // eslint-disable-line
+        // this.setState({ script }); // eslint-disable-line
+        console.log(script); // eslint-disable-line
+        // }
+        if (script && script.onMount) {
+            const state = { gameflag: {} };
+            script.onMount(state);
+            console.log(state); // eslint-disable-line
+        }
     }
 
     componentWillUmount() {
+        if (this.state.script && this.state.script.onMount) {
+            this.state.script.onUmount();
+        }
         window.cancelAnimationFrame(this.frameId);
     }
 
     componentDidUpdate(prevProps) {
+        console.log('game update');
         if (
             prevProps.node.id !== this.props.node.id
             && this.props.node.type === 'navigation'
@@ -101,11 +121,13 @@ class Game extends React.Component {
     }
 
     handleHotspotsOnClick(h) {
-        console.log(h);
+        console.log(h); // eslint-disable-line
     }
 
     handleOnClick() {
-        this.player.togglePlay();
+        if (this.props.node.seek === undefined) {
+            this.player.togglePlay();
+        }
     }
 
     handleOnDoubleClick() {
@@ -131,6 +153,8 @@ class Game extends React.Component {
     }
 
     render() {
+        console.log('game render');
+
         const { node, editor } = this.props;
         const videoClassName = classNames({
             'screen-video': !(node && node.annotations && node.annotations.keepRatio),
