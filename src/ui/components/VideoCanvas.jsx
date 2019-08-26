@@ -10,18 +10,14 @@ export default class VideoCanvas extends React.Component {
         this.canvasRef = React.createRef();
         this.videoRef = React.createRef();
         this.subtitlesRef = React.createRef();
-        // this.subtitles = null;
 
         this.drawVideoFrame = this.drawVideoFrame.bind(this, null);
         // this.handleOnPlaying = this.handleOnPlaying.bind(this, null);
         // this.handleCanPlayThrough = this.handleCanPlayThrough.bind(this, null);
         this.handleOnEnded = this.handleOnEnded.bind(this, null);
-        console.log('video canvas constructor');
     }
 
     componentDidMount() {
-        console.log('video canvas mount');
-        // this.context = this.canvasRef.current.getContext('2d');
         this.setState({ context: this.canvasRef.current.getContext('2d') }); // eslint-disable-line
 
         // this.videoRef.current.addEventListener('playing', this.handleOnPlaying);
@@ -137,7 +133,6 @@ export default class VideoCanvas extends React.Component {
     }
 
     render() {
-        console.log('video canvas render');
         const {
             width,
             height,
