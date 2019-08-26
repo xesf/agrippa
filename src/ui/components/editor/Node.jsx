@@ -166,7 +166,7 @@ export default class Node extends React.Component {
                         y1={y + 20}
                         x2={n.x + 30}
                         y2={n.y + 20}
-                        style={type === 'decision' ? decisionLineStyle : lineStyle}
+                        style={this.targetNodes.length > 1 ? decisionLineStyle : lineStyle}
                     />
                 )}
                 <g
