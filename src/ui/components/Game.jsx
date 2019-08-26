@@ -134,6 +134,7 @@ class Game extends React.Component {
 
     handleHotspotsOnClick(h) {
         console.log(h); // eslint-disable-line
+        this.handleDecisionOnClick(h);
     }
 
     handleOnClick() {

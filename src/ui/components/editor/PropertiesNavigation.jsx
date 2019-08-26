@@ -30,7 +30,7 @@ class PropertiesNavigation extends React.Component {
                                 <i className="clone outline icon" />
                                 Navigation
                             </h4>
-                            {node.items.map(d => (
+                            {node.items && node.items.map(d => (
                                 <div key={`${d.type}`}>
                                     <Input
                                         size="mini"

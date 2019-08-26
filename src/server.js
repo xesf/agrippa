@@ -10,7 +10,7 @@ import webpackDevServer from 'webpack-dev-middleware';
 
 import webpackConfig from '../webpack.config';
 import App from './index-ssr';
-import { getHotspots } from './utils';
+import { getHotspots, createHotspot } from './utils';
 
 const logStream = fs.createWriteStream(path.join(__dirname, '/streaming-log.txt'), { flags: 'a' });
 
@@ -69,6 +69,27 @@ app.get('/metadata', (req, res) => {
                 console.warn(`No hotspot found for node ${n.path}`);
             }
             if (hotspots) {
+                if (!n.annotations) {
+                    n.annotations = { };
+                }
+                if (!n.annotations.hotspots || n.annotations.hotspots === undefined) {
+                    n.annotations.hotspots = hotspots;
+                }
+            }
+
+            if (n.type === 'navigation' && n.items && n.items.length > 0) {
+                hotspots = [];
+                n.items.forEach((i) => {
+                    if (i.type === 'left') {
+                        hotspots.push(createHotspot(i.type, i.desc, i.option, 0, 0, 140, 245));
+                    }
+                    if (i.type === 'forward') {
+                        hotspots.push(createHotspot(i.type, i.desc, i.option, 200, 0, 405, 245));
+                    }
+                    if (i.type === 'right') {
+                        hotspots.push(createHotspot(i.type, i.desc, i.option, 460, 0, 600, 245));
+                    }
+                });
                 if (!n.annotations) {
                     n.annotations = { };
                 }

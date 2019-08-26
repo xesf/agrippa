@@ -26,3 +26,16 @@ export const getHotspots = (filepath) => {
     }
     return hotspots;
 };
+
+export const createHotspot = (type, desc, option, x1, y1, x2, y2) => ({
+    type,
+    desc,
+    option,
+    unk1: 0,
+    x1,
+    y1,
+    x2,
+    y2,
+    unk2: 0,
+    unk3: 0,
+});
