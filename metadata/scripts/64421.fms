@@ -1,0 +1,11 @@
+
+return ({
+    onEnded: ({ gameflag, setNode }) => {
+        if (gameflag.isFirstTime || gameflag.isFirstTime === undefined) {
+            gameflag.isFirstTime = false;
+            setNode('19812');
+        } else {
+            setNode('19808');
+        }
+    },
+});

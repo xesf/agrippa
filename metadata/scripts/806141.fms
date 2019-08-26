@@ -1,14 +1,18 @@
+const a = 'My node script';
+let x = 0;
+let y = 0;
+
 return ({
-    a: 'My node script',
-    x: 0,
-    y: 0,
+    a,
+    x,
+    y,
 
     onMount: ({ gameflag }) => {
         if (gameflag.isFirstTime || gameflag.isFirstTime === undefined) {
             gameflag.isFirstTime = false;
         }
         console.log('onMount', gameflag, gameflag.isFirstTime);
-        // console.log('onMount', this.a);
+        console.log('onMount', a);
     },
 
     onUnmount: () => {

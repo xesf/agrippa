@@ -63,12 +63,14 @@ class Game extends React.Component {
             this.player.seek(this.props.node.seek);
         }
 
-        const script = Function('"use strict"; ' + this.props.node.script + '')(); // eslint-disable-line
-        this.setState({ script }); // eslint-disable-line
+        if (this.props.node.script !== undefined) {
+            const script = Function('"use strict"; ' + this.props.node.script + '')(); // eslint-disable-line
+            this.setState({ script }); // eslint-disable-line
 
-        if (script && script.onMount) {
-            const state = { gameflag: {} };
-            script.onMount(state);
+            if (script && script.onMount) {
+                const state = { gameflag: {} };
+                script.onMount(state);
+            }
         }
     }
 
@@ -80,6 +82,19 @@ class Game extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
+        if (prevProps.node.id !== this.props.node.id) {
+            if (this.props.node.script !== undefined) {
+                const script = Function('"use strict"; ' + this.props.node.script + '')(); // eslint-disable-line
+                this.setState({ script }); // eslint-disable-line
+
+                if (script && script.onMount) {
+                    const state = { gameflag: {} };
+                    script.onMount(state);
+                }
+            } else {
+                this.setState({ script: null }); // eslint-disable-line
+            }
+        }
         if (
             prevProps.node.id !== this.props.node.id
             && this.props.node.type === 'navigation'
@@ -103,7 +118,12 @@ class Game extends React.Component {
         });
         if (link) {
             const targetNode = nodes.find(n => n.id === link.target);
-            setNodeProperties(targetNode);
+            if (targetNode) {
+                if (this.state.script && this.state.script.onMount) {
+                    this.state.script.onUmount();
+                }
+                setNodeProperties(targetNode);
+            }
         }
     }
 
@@ -128,6 +148,20 @@ class Game extends React.Component {
 
     handleOnEnded() {
         this.linkNode();
+        if (this.state.script && this.state.script.onEnded) {
+            const state = {
+                gameflag: {
+                    isFirstTime: true,
+                },
+                setNode: (id) => {
+                    const targetNode = this.props.nodes.find(n => n.id === id);
+                    if (targetNode) {
+                        this.props.setNodeProperties(targetNode);
+                    }
+                }
+            };
+            this.state.script.onEnded(state);
+        }
     }
 
     handleLoadedData() {
@@ -145,8 +179,6 @@ class Game extends React.Component {
     }
 
     render() {
-        console.log('game render');
-
         const { node, editor } = this.props;
         const videoClassName = classNames({
             'screen-video': !(node && node.annotations && node.annotations.keepRatio),
