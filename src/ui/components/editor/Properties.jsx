@@ -5,6 +5,7 @@ import { Input } from 'semantic-ui-react';
 
 import PropertiesDecision from './PropertiesDecision';
 import PropertiesAnnotation from './PropertiesAnnotation';
+import PropertiesNavigation from './PropertiesNavigation';
 
 import { updateNode } from '../../redux/editor/nodeeditor';
 
@@ -85,6 +86,7 @@ class Properties extends React.Component {
                             />
                         }
                         <PropertiesDecision node={node} />
+                        <PropertiesNavigation node={node} />
                     </React.Fragment>
                 }
             </div>

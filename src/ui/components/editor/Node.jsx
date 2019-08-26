@@ -186,9 +186,11 @@ export default class Node extends React.Component {
                     </rect>
                     <text x={15} y={18} style={textStyle}>
                         <title>{desc}</title>
-                        {path}
+                        {id}
                     </text>
-                    <text x={15} y={30} style={baseStyle}>({type})</text>
+                    <text x={15} y={30} style={baseStyle}>
+                        ({type}) - {path}
+                    </text>
                     {/* <image width="100" height="40" href={thumbnail} /> */}
                     {/* <circle cx={130} cy={20} r="20" style={plusCircleStyle}>
                         <title>Link node</title>
