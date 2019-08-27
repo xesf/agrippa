@@ -87,12 +87,11 @@ class Game extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.node.id !== this.props.node.id) {
+            this.setState({ script: null }); // eslint-disable-line
             const script = this.setNodeScriptObject();
             if (script && script.onMount) {
                 const state = { gameflag: {} };
                 script.onMount(state);
-            } else {
-                this.setState({ script: null }); // eslint-disable-line
             }
         }
         if (
