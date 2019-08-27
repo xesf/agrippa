@@ -30,6 +30,13 @@ class Scripting extends React.Component {
             //     automaticLayout: false,
             // },
         };
+        this.editorRef = React.createRef();
+    }
+
+    handleEditorDidMount = (_, editor) => {
+        this.editorRef.current = editor;
+        // editor.setSelection(new monaco.Selection(1, 1, 1, 1));
+        // editor.focus();
     }
 
     // handleEditorChange = (ev, value) => {
@@ -49,6 +56,7 @@ class Scripting extends React.Component {
                     width="100%"
                     height="100%"
                     value={this.props.node.script}
+                    editorDidMount={this.handleEditorDidMount}
                     // onChange={handleEditorChange}
                     language="javascript"
                     theme="dark"
