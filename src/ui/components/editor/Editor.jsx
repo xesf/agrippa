@@ -7,7 +7,7 @@ import Tab from './Tab';
 import TabItem from './TabItem';
 import NodeEditor from './NodeEditor';
 import Properties from './Properties';
-import Assets from './Assets';
+// import Assets from './Assets';
 import Game from '../Game';
 import Scripting from './Scripting';
 
@@ -24,9 +24,9 @@ const Editor = ({ ready }) =>
                                     <TabItem label="Properties">
                                         <Properties />
                                     </TabItem>
-                                    <TabItem label="Assets">
+                                    {/* <TabItem label="Assets">
                                         <Assets />
-                                    </TabItem>
+                                    </TabItem> */}
                                 </Tab>
                             </div>
                             <div className="layout-border" style={{ flex: '1', padding: '0px'}}>

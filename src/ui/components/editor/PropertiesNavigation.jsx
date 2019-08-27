@@ -31,7 +31,7 @@ class PropertiesNavigation extends React.Component {
                     (
                         <React.Fragment>
                             <h4 className="ui horizontal divider header">
-                                <i className="clone outline icon" />
+                                <i className="exchange icon" />
                                 Navigation
                             </h4>
                             {node.items && node.items.map(d => (

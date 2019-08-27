@@ -44,7 +44,7 @@ class Properties extends React.Component {
             clearTimeout(this.timer);
         }
         const float = parseFloat(value);
-        if (!isNaN(float)) {
+        if (key !== 'id' && !isNaN(float)) {
             value = float;
         }
         this.timer = setTimeout(() => {
