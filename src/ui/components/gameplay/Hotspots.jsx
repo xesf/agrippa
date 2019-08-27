@@ -18,7 +18,7 @@ const Hotspots = ({ items, onClick, editor }) => {
                 border: (editor) ? '1px dashed gray' : '',
             };
             return (<div
-                key={`${h.unk1}`}
+                key={`${h.type}${h.unk1}`}
                 className="hotspot-item"
                 style={stylePos}
                 onClick={() => handleOnClick(h)}
