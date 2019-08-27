@@ -23,7 +23,11 @@ class PropertiesNavigation extends React.Component {
         const { node } = this.props;
         return (
             <React.Fragment>
-                {node && node.type === 'navigation' &&
+                {node
+                    && node.type === 'navigation'
+                    && node.items
+                    && node.items.length > 0
+                    &&
                     (
                         <React.Fragment>
                             <h4 className="ui horizontal divider header">
@@ -31,7 +35,7 @@ class PropertiesNavigation extends React.Component {
                                 Navigation
                             </h4>
                             {node.items && node.items.map(d => (
-                                <div key={`${d.type}`}>
+                                <div key={`${node.id}${d.type}`}>
                                     <Input
                                         size="mini"
                                         label="type"
