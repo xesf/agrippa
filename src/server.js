@@ -65,8 +65,8 @@ app.get('/metadata', (req, res) => {
             let hotspots = null;
             try {
                 hotspots = getHotspots(`data/${n.path}.hot`);
-            } catch (e) {
-                console.warn(`No hotspot found for node ${n.path}`);
+            } catch {
+                // console.warn(`No hotspot found for node ${n.path}`);
             }
             if (hotspots) {
                 if (!n.annotations) {
