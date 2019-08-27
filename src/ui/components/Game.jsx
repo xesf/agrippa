@@ -36,6 +36,15 @@ class Game extends React.Component {
         this.drawVideoFrame = this.drawVideoFrame.bind(this, null);
     }
 
+    setNodeScriptObject() {
+        let script = null;
+        if (this.props.node.script !== undefined) {
+            script = Function('"use strict"; ' + this.props.node.script + '')(); // eslint-disable-line
+            this.setState({ script }); // eslint-disable-line
+        }
+        return script;
+    }
+
     componentDidMount() {
         const mainloop = () => {
             try {
@@ -53,7 +62,6 @@ class Game extends React.Component {
                 }
             } catch (e) {
                 window.cancelAnimationFrame(this.frameId);
-                console.error(e);
             }
         };
         mainloop();
@@ -63,14 +71,10 @@ class Game extends React.Component {
             this.player.seek(this.props.node.seek);
         }
 
-        if (this.props.node.script !== undefined) {
-            const script = Function('"use strict"; ' + this.props.node.script + '')(); // eslint-disable-line
-            this.setState({ script }); // eslint-disable-line
-
-            if (script && script.onMount) {
-                const state = { gameflag: {} };
-                script.onMount(state);
-            }
+        const script = this.setNodeScriptObject();
+        if (script && script.onMount) {
+            const state = { gameflag: {} };
+            script.onMount(state);
         }
     }
 
@@ -83,14 +87,10 @@ class Game extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.node.id !== this.props.node.id) {
-            if (this.props.node.script !== undefined) {
-                const script = Function('"use strict"; ' + this.props.node.script + '')(); // eslint-disable-line
-                this.setState({ script }); // eslint-disable-line
-
-                if (script && script.onMount) {
-                    const state = { gameflag: {} };
-                    script.onMount(state);
-                }
+            const script = this.setNodeScriptObject();
+            if (script && script.onMount) {
+                const state = { gameflag: {} };
+                script.onMount(state);
             } else {
                 this.setState({ script: null }); // eslint-disable-line
             }
@@ -106,6 +106,15 @@ class Game extends React.Component {
 
     drawVideoFrame(_tick, _elapsed) {
         return this.player.drawVideoFrame(_tick, _elapsed);
+    }
+
+    setNode(id = null) {
+        if (id) {
+            const node = this.props.nodes.find(n => n.id === id);
+            this.props.setNodeProperties(node);
+        } else {
+            this.linkNode();
+        }
     }
 
     linkNode() {
@@ -128,13 +137,11 @@ class Game extends React.Component {
     }
 
     handleDecisionOnClick(d) {
-        const node = this.props.nodes.find(n => n.id === d.option);
-        this.props.setNodeProperties(node);
+        this.setNode(d.option);
     }
 
     handleHotspotsOnClick(h) {
-        console.log(h); // eslint-disable-line
-        this.handleDecisionOnClick(h);
+        this.setNode(h.option);
     }
 
     handleOnClick() {
@@ -144,24 +151,20 @@ class Game extends React.Component {
     }
 
     handleOnDoubleClick() {
-        this.linkNode();
+        this.setNode();
     }
 
     handleOnEnded() {
-        this.linkNode();
         if (this.state.script && this.state.script.onEnded) {
             const state = {
                 gameflag: {
                     isFirstTime: true,
                 },
-                setNode: (id) => {
-                    const targetNode = this.props.nodes.find(n => n.id === id);
-                    if (targetNode) {
-                        this.props.setNodeProperties(targetNode);
-                    }
-                }
+                setNode: id => this.setNode(id),
             };
             this.state.script.onEnded(state);
+        } else {
+            this.setNode();
         }
     }
 
