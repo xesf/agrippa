@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Hotspots = ({ items, onClick, editor }) => {
+const Hotspots = ({ items, onClick, editor, rwh, rhw }) => {
     const handleOnClick = (h) => {
         if (onClick) {
             onClick(h);
@@ -11,10 +11,10 @@ const Hotspots = ({ items, onClick, editor }) => {
             // bars offset
             const stylePos = {
                 position: 'absolute',
-                left: h.x1 + 20,
-                top: h.y1 + 100,
-                width: h.x2 - h.x1,
-                height: (h.y2 - h.y1),
+                left: (h.x1 / rwh) + (20 / rwh),
+                top: (h.y1 / rhw) + (100 / rhw),
+                width: ((h.x2 / rwh) - (h.x1 / rwh)),
+                height: ((h.y2 / rhw) - (h.y1 / rhw)),
                 border: (editor) ? '1px dashed gray' : '',
             };
             return (<div

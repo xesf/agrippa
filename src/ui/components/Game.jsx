@@ -34,6 +34,8 @@ class Game extends React.Component {
             script: null,
             width: 640,
             height: 480,
+            rwh: 1,
+            rhw: 1,
         };
         this.player = null;
 
