@@ -30,7 +30,11 @@ class Game extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = { script: null };
+        this.state = {
+            script: null,
+            width: 640,
+            height: 480,
+        };
         this.player = null;
 
         this.drawVideoFrame = this.drawVideoFrame.bind(this, null);
@@ -46,6 +50,8 @@ class Game extends React.Component {
     }
 
     componentDidMount() {
+        window.addEventListener('resize', this.handleResize);
+
         const mainloop = () => {
             try {
                 this.frameId = window.requestAnimationFrame(mainloop);
@@ -76,6 +82,7 @@ class Game extends React.Component {
             const state = { gameflag: {} };
             script.onMount(state);
         }
+        this.handleResize();
     }
 
     componentWillUmount() {
@@ -83,6 +90,7 @@ class Game extends React.Component {
             this.state.script.onUmount();
         }
         window.cancelAnimationFrame(this.frameId);
+        window.removeEventListener('resize', this.handleResize);
     }
 
     componentDidUpdate(prevProps) {
@@ -101,6 +109,30 @@ class Game extends React.Component {
         ) {
             this.player.seek(this.props.node.seek);
         }
+    }
+
+    handleResize() {
+        if (this.props.editor) {
+            return;
+        }
+        let cw = 0;
+        let ch = 0;
+        const rw = 640;
+        const rh = 480;
+        const wh = window.innerHeight;
+        const ww = window.innerWidth;
+        const rwh = rw / rh;
+        const rhw = rh / rw;
+
+        if (wh * rwh < ww) {
+            ch = wh;
+            cw = wh * rwh;
+        } else {
+            ch = ww * rhw;
+            cw = ww;
+        }
+
+        this.setState({ width: cw, height: ch, rwh: (640 / cw), rhw: (480 / ch), });
     }
 
     drawVideoFrame(_tick, _elapsed) {
@@ -188,15 +220,21 @@ class Game extends React.Component {
             'screen-video-intro': (node && node.annotations && node.annotations.keepRatio),
             'screen-video-ingame': !(node && node.annotations && node.annotations.isIntro)
         });
-
+        const style = {
+            zIndex: '0',
+            width: `${this.state.width}px`,
+            height: `${this.state.height}px`,
+        };
         return (
-            <div className="screen-container">
+            <div className="screen-container" style={style}>
                 <VideoCanvas
                     ref={(player) => { this.player = player; }}
                     key={`player-${node.id}`}
                     node={node}
-                    width="640"
-                    height="480"
+                    width={this.state.width}
+                    height={this.state.height}
+                    rwh={this.state.rwh}
+                    rhw={this.state.rhw}
                     autoPlay={node.seek === undefined}
                     loop={(node.type !== 'video')}
                     className={videoClassName}
@@ -212,6 +250,8 @@ class Game extends React.Component {
                         items={node.annotations.hotspots}
                         onClick={h => this.handleHotspotsOnClick(h)}
                         editor={editor}
+                        rwh={this.state.rwh}
+                        rhw={this.state.rhw}
                     />
                 }
                 {node.type === 'decision'
@@ -220,6 +260,8 @@ class Game extends React.Component {
                     onClick={d => this.handleDecisionOnClick(d)}
                     timeout={node.timeout}
                     defaultDecision={node.default}
+                    rwh={this.state.rwh}
+                    rhw={this.state.rhw}
                 />}
             </div>
         );

@@ -142,14 +142,20 @@ export default class VideoCanvas extends React.Component {
             onDoubleClick,
             ...rest
         } = this.props;
+        const style = {
+            zIndex: '0',
+            width: `${width}px`,
+            height: `${height}px`,
+        };
         return (
             <div className="video-preview-container">
                 <canvas
                     ref={this.canvasRef}
-                    width={width}
-                    height={height}
+                    width="640"
+                    height="480"
                     onClick={onClick}
                     onDoubleClick={onDoubleClick}
+                    style={style}
                 />
                 <video
                     ref={this.videoRef}
