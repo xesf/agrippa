@@ -51,8 +51,6 @@ canvas {
 
 video {
     background: black;
-    width: 265px;
-    height: 190px;
     overflow: hidden;
     border: 0px;
     outline: none;
@@ -173,12 +171,8 @@ h4.ui.header {
 
 .video-preview-container {
     background: black;
-    max-width: 3580px;
-    max-height: 1920px;
     overflow: hidden;
     border: 0px;
-    width: 100%;
-    height: 100%;
 }
 
 .screen-container {
@@ -242,16 +236,15 @@ h4.ui.header {
     animation: typing 3.5s steps(30, end);
 } */
 
-.decision-container {
-    position: relative;
-    bottom: 8.5em;
-    height: auto !important;
-}
+/* .decision-container {
+    position: absolute;
+    top: 360;
+} */
 
-.decision-video {
+/* .decision-video {
     width: auto;
     height: auto;
-}
+} */
 
 .decision-item-container {
     padding: 1em 0 1em 0 !important;

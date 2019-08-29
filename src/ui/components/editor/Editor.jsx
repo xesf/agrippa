@@ -33,7 +33,7 @@ const Editor = ({ ready }) =>
                                 {ready && (
                                     <React.Fragment>
                                         <div className="editor-screen-row">
-                                            <div className="editor-screen-column" style={{ backgroundColor: 'black' }}>
+                                            <div className="layout-border editor-screen-column" style={{ backgroundColor: 'black' }}>
                                                 <Game editor />
                                             </div>
                                             <div className="editor-screen-column">
@@ -48,7 +48,7 @@ const Editor = ({ ready }) =>
                     </div>
                 </TabItem>
                 <TabItem label="Game">
-                    <div className="canvas-container-scroll" style={{ backgroundColor: 'black' }}>
+                    <div className="layout-border canvas-container-scroll" style={{ backgroundColor: 'black' }}>
                         <Game />
                     </div>
                 </TabItem>

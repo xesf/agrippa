@@ -78,7 +78,12 @@ class Properties extends React.Component {
                                 />
                             );
                         })}
-                        <video controls src={`http://localhost:8080/mp4/${node.path}`} />
+                        <video
+                            controls
+                            width="265"
+                            height="190"
+                            src={`http://localhost:8080/mp4/${node.path}`}
+                        />
                         {node.annotations &&
                             <PropertiesAnnotation
                                 annotations={node.annotations}
