@@ -82,12 +82,17 @@ export default class VideoCanvas extends React.Component {
         if (this.state.context) {
             const video = this.videoRef.current;
             const { width, height } = this.canvasRef.current;
+            const { node } = this.props;
 
             let x = 20;
             let y = 100;
-            if (this.props.node.keepRatio) {
+            if (node.annotations && node.annotations.keepRatio) {
                 x = 0;
                 y = 0;
+            }
+            if (node.annotations && node.annotations.isIntro) {
+                x = (width / 2) - (video.videoWidth / 2);
+                y = (height / 2) - (video.videoHeight / 2);
             }
 
             // Draw video frame
