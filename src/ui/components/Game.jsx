@@ -178,7 +178,7 @@ class Game extends React.Component {
     }
 
     handleOnClick() {
-        if (this.props.node.seek === undefined) {
+        if (this.props.editor && this.props.node.seek === undefined) {
             this.player.togglePlay();
         }
     }
