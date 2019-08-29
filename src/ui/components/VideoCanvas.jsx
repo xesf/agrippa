@@ -120,8 +120,9 @@ export default class VideoCanvas extends React.Component {
                         this.setState({ subtitles: text }); // eslint-disable-line
                         clearSubtitlesClipArea();
                         this.state.context.textAlign = 'center';
-                        this.state.context.fillStyle = '#ffff00';
-                        this.state.context.font = '14px Arial';
+                        // this.state.context.fillStyle = '#ffff00';
+                        this.state.context.fillStyle = '#ffffff';
+                        this.state.context.font = '14px monospace';
                         this.state.context.fillText(
                             text,
                             (width / 2),

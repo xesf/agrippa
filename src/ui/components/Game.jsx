@@ -31,6 +31,7 @@ class Game extends React.Component {
         super(props);
 
         this.state = {
+            game: {},
             script: null,
             width: 640,
             height: 480,
@@ -190,9 +191,7 @@ class Game extends React.Component {
     handleOnEnded() {
         if (this.state.script && this.state.script.onEnded) {
             const state = {
-                gameflag: {
-                    isFirstTime: true,
-                },
+                game: this.state.game,
                 setNode: id => this.setNode(id),
             };
             this.state.script.onEnded(state);
