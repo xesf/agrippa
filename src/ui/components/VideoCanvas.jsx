@@ -116,7 +116,7 @@ export default class VideoCanvas extends React.Component {
                         clearSubtitlesClipArea();
                         this.state.context.textAlign = 'center';
                         this.state.context.fillStyle = '#ffff00';
-                        this.state.context.font = '16px Arial';
+                        this.state.context.font = '14px Arial';
                         this.state.context.fillText(
                             text,
                             (width / 2),
