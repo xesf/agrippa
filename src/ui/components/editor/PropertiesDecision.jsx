@@ -53,7 +53,12 @@ class PropertiesDecision extends React.Component {
                                         defaultValue={d.option}
                                         style={inputStyleLast}
                                     />
-                                    <video controls src={`http://localhost:8080/mp4/${d.path}`} />
+                                    <video
+                                        controls
+                                        width="265"
+                                        height="190"
+                                        src={`http://localhost:8080/mp4/${d.path}`}
+                                    />
                                 </div>
                             ))}
                         </React.Fragment>
