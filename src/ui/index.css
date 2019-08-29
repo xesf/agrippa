@@ -218,12 +218,9 @@ h4.ui.header {
 }
 
 .location-description {
-    position: relative;
-    left: 2em;
-    bottom: 15.5em;
     color: rgb(232, 238, 241);
     text-align: left;
-    text-shadow: 1px 1px #000;
+    text-shadow: 2px 2px #000;
     white-space: nowrap;
 }
 

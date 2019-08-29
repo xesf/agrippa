@@ -121,7 +121,7 @@ class Game extends React.Component {
         let ch = 0;
         const rw = 640;
         const rh = 480;
-        const wh = window.innerHeight;
+        const wh = window.innerHeight - 40;
         const ww = window.innerWidth;
         const rwh = rw / rh;
         const rhw = rh / rw;
@@ -245,7 +245,13 @@ class Game extends React.Component {
                     onDoubleClick={() => this.handleOnDoubleClick()}
                     onLoadedData={() => this.handleLoadedData()}
                 />
-                {node.annotations && <Location locationDesc={node.annotations.locationDesc} />}
+                {node.annotations
+                        && <Location
+                            locationDesc={node.annotations.locationDesc}
+                            rwh={this.state.rwh}
+                            rhw={this.state.rhw}
+                        />
+                }
                 {node.annotations
                     && node.annotations.hotspots
                     && <Hotspots
