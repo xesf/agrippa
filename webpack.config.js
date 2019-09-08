@@ -12,6 +12,12 @@ module.exports = {
         filename: 'bundle.js',
         publicPath: path.join(__dirname, './public'),
     },
+    externals: {
+        react: 'React',
+        'react-dom': 'ReactDOM',
+        // redux: 'Redux',
+        // 'react-redux': 'ReactRedux',
+    },
     resolve: {
         extensions: ['.js', '.jsx', '.yaml', '.md']
     },
