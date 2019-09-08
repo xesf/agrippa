@@ -7,7 +7,7 @@
   "scripts": {
     "start": "yarn server",
     "start:all": "concurrently \"yarn server\" \"wait-on http://localhost:8080 && electron .\"",
-    "server": "cross-env NODE_ENV=development nodemon ./src/server.js --exec babel-node -w ./src/server.js",
+    "server": "cross-env NODE_ENV=development nodemon ./src/server/index.js --exec babel-node -w ./src/server/index.js",
     "lint": "eslint ./src --ext .js,.jsx -c .eslintrc.yml",
     "build": "yarn build:server && yarn build:electron",
     "build:electron": "electron-builder",

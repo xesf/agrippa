@@ -1,16 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import Decision from './ui/components/gameplay/Decision';
+import Location from './ui/components/gameplay/Location';
+import Hotspots from './ui/components/gameplay/Hotspots';
 
-import './ui/index.css';
-import App from './ui/App';
-import { createStore } from './ui/redux/store';
+// eslint-disable-next-line
+const render = async () => {
+    // eslint-disable-next-line
+    await import(/* webpackIgnore: true */ './palanca-studio.js');
+    // eslint-disable-next-line
+    let RenderApp = window['palanca-studio'].default;
 
-const store = createStore();
+    RenderApp({
+        Decision,
+        Location,
+        Hotspots,
+    });
+};
 
-ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
-    document.getElementById('root')
-);
+render();

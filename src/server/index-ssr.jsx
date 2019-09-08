@@ -24,6 +24,7 @@ module.exports = () => (
             <noscript>You need to enable JavaScript to run this app.</noscript>
             <div id="root" className="ui canvas-container" />
             <script src="https://ajax.googleapis.com/ajax/libs/shaka-player/2.5.2/shaka-player.compiled.js" />
+            <script type="text/javascript" src="palanca-studio.js "/>
             <script type="text/javascript" src="bundle.js" />
         </body>
     </html>

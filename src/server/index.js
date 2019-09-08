@@ -8,7 +8,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import webpack from 'webpack';
 import webpackDevServer from 'webpack-dev-middleware';
 
-import webpackConfig from '../webpack.config';
+import webpackConfig from '../../webpack.config';
 import App from './index-ssr';
 import { getHotspots, createHotspot } from './utils';
 
@@ -16,7 +16,16 @@ const logStream = fs.createWriteStream(path.join(__dirname, '/streaming-log.txt'
 
 const app = express();
 
-app.listen(process.env.port || 8080, process.env.host || '0.0.0.0');
+const options = {
+    extensions: ['js'],
+};
+  
+app.use(express.static('public', options));
+
+app.use('/metadata', express.static('../metadata'));
+app.use('/data', express.static('../data'));
+
+app.listen(process.env.port || 8181, process.env.host || '0.0.0.0');
 
 app.use(morgan('combined', { stream: logStream}));
 app.use(cors());
@@ -30,10 +39,6 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
 });
-
-app.use('/', express.static('../public'));
-app.use('/metadata', express.static('../metadata'));
-app.use('/data', express.static('../data'));
 
 const indexBody = renderToStaticMarkup(React.createElement(App));
 
@@ -119,17 +124,6 @@ app.get('/script/:id', (req, res) => {
     }
     res.send(data);
 });
-
-// app.get('/metadata', (req, res) => {
-//     const filepath = 'metadata/nodes.json';
-//     const fileSize = fs.statSync(filepath).size;
-//     const head = {
-//         'Content-Length': fileSize,
-//         'Content-Type': 'application/json',
-//     };
-//     res.writeHead(200, head);
-//     fs.createReadStream(filepath).pipe(res);
-// });
 
 app.post('/metadata', (req, res) => {
     const filepath = 'metadata/nodes.json';

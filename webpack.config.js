@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = {
     mode: process.env.NODE_ENV || 'none',
     entry: [
-        '@babel/polyfill',
+        // '@babel/polyfill',
         './src/index.js'
     ],
     output: {
