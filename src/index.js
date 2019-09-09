@@ -10,6 +10,10 @@ const render = async () => {
     let RenderApp = window['palanca-studio'].default;
 
     RenderApp({
+        codename: 'agrippa',
+        title: 'X-Files The Game Remake',
+        width: 640,
+        height: 480,
         Decision,
         Location,
         Hotspots,
