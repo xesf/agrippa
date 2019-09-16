@@ -12,8 +12,9 @@ const render = async () => {
     RenderApp({
         codename: 'agrippa',
         title: 'X-Files The Game Remake',
-        width: 640,
-        height: 480,
+        width: 600,
+        height: 240,
+        keepRatio: true,
         Decision,
         Location,
         Hotspots,
