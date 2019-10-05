@@ -190,43 +190,56 @@ app.get('/dash/:path/:name/:video/:folder/:segment/:file', (req, res) => {
     }
 });
 
-const getMP4 = (req, res, filepath) => {
-    const fileSize = fs.statSync(filepath).size;
+const getMP4 = (req, res, filepath, type) => {
+    try {
+        const fileSize = fs.statSync(filepath).size; 
+        if (req.headers.range) {
+            const range = req.headers.range.replace(/bytes=/, '').split('-');
+            const start = parseInt(range[0], 10);
+            const end = range[1] ? parseInt(range[1], 10) : fileSize - 1;
 
-    if (req.headers.range) {
-        const range = req.headers.range.replace(/bytes=/, '').split('-');
-        const start = parseInt(range[0], 10);
-        const end = range[1] ? parseInt(range[1], 10) : fileSize - 1;
+            const chunksize = (end - start) + 1;
+            const file = fs.createReadStream(filepath, {start, end});
+            const head = {
+                'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+                'Accept-Ranges': 'bytes',
+                'Content-Length': chunksize,
+                'Content-Type': type,
+            };
 
-        const chunksize = (end - start) + 1;
-        const file = fs.createReadStream(filepath, {start, end});
-        const head = {
-            'Content-Range': `bytes ${start}-${end}/${fileSize}`,
-            'Accept-Ranges': 'bytes',
-            'Content-Length': chunksize,
-            'Content-Type': 'video/mp4',
-        };
-
-        res.writeHead(206, head);
-        file.pipe(res);
-    } else {
-        const head = {
-            'Content-Length': fileSize,
-            'Content-Type': 'video/mp4',
-        };
-        res.writeHead(200, head);
-        fs.createReadStream(filepath).pipe(res);
+            res.writeHead(206, head);
+            file.pipe(res);
+        } else {
+            const head = {
+                'Content-Length': fileSize,
+                'Content-Type': type,
+            };
+            res.writeHead(200, head);
+            fs.createReadStream(filepath).pipe(res);
+        }
+    } catch {
+        res.send();
     }
 };
 
 // MP4
 app.get('/mp4/:path/:name', (req, res) => {
     const filepath = `data/${req.params.path}/${req.params.name}.mp4`;
-    getMP4(req, res, filepath);
+    getMP4(req, res, filepath, 'video/mp4');
 });
 app.get('/mp4/:name', (req, res) => {
     const filepath = `data/${req.params.name}.mp4`;
-    getMP4(req, res, filepath);
+    getMP4(req, res, filepath, 'video/mp4');
+});
+
+// M4A
+app.get('/m4a/:path/:name', (req, res) => {
+    const filepath = `data/${req.params.path}/${req.params.name}.m4a`;
+    getMP4(req, res, filepath, 'audio/m4a');
+});
+app.get('/m4a/:name', (req, res) => {
+    const filepath = `data/${req.params.name}.m4a`;
+    getMP4(req, res, filepath, 'audio/m4a');
 });
 
 app.get('/vtt/:path/:name', (req, res) => {
