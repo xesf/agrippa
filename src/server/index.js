@@ -159,7 +159,20 @@ app.get('/hls/:path/:name', (req, res) => {
     fs.createReadStream(filepath).pipe(res);
 });
 
+// /dash/xv/19812/subtitles/en/19812.vtt
+app.get('/dash/:path/:name/:type/:lang/:file', (req, res) => {
+    const filepath = `data/${req.params.path}/dash/${req.params.name}/${req.params.type}/${req.params.lang}/${req.params.file}`;
+    const fileSize = fs.statSync(filepath).size;
+    const head = {
+        'Content-Length': fileSize,
+        'Content-Type': 'text/vtt',
+    };
+    res.writeHead(200, head);
+    fs.createReadStream(filepath).pipe(res);
+});
 
+
+// /dash/xv/audio/eng/mp4a/init.mp4
 app.get('/dash/:path/:name/:video/:folder/:segment/:file', (req, res) => {
     const filepath = `data/${req.params.path}/dash/${req.params.name}/${req.params.video}/${req.params.folder}/${req.params.segment}/${req.params.file}`;
     const fileSize = fs.statSync(filepath).size;
