@@ -44,7 +44,7 @@ const Decision = ({ defaultDecision, timeout, items, onClick, rwh, rhw, Video })
                         loop
                         width={80 / rwh}
                         height={60 / rhw}
-                        src={`http://localhost:8181/mp4/${d.path}`}
+                        src={`mp4/${d.path}`}
                     />
                     <p className="decision-item">{d.desc}</p>
                 </div>
