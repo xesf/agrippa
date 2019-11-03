@@ -1,0 +1,85 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:7.10
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      # run build
+      - run: npm run build:server
+
+      - run: |
+          mkdir /tmp/agrippa
+          mkdir /tmp/agrippa/metadata
+          mkdir /tmp/agrippa/metadata/scripts
+
+      # Copy files over
+      - run:
+          name: Build archive
+          command: |
+              cp ./dist/* /tmp/agrippa/
+              cp ./metadata/* /tmp/agrippa/metadata/
+              cp ./metadata/* /tmp/agrippa/metadata/scripts/
+          # command: npm pack && mv agrippa-`node -p "require('./package.json').version"`.tgz /tmp/agrippa/agrippa.tgz
+
+      # Store artifacts
+      # - store_artifacts:
+      #     path: /tmp/workspace/agrippa.tgz
+
+      - persist_to_workspace:
+          root: /tmp/
+          paths:
+            - agrippa
+
+  deploy:
+    machine: 
+      enabled: true
+    # working_directory: ~/repo
+    steps: 
+      - attach_workspace:
+          at: /tmp/agrippa/
+      - run:
+          name: Deploy Over SSH
+          command: | 
+              scp -r /tmp/agrippa/* "$DROPLET_USER@$DROPLET_IP:$DROPLET_PATH"
+              ssh "$DROPLET_USER@$DROPLET_IP" "./deploy_agrippa.sh"
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+        - build
+        - deploy:
+            requires:
+              - build
+            filters:
+              branches: 
+                only: master
