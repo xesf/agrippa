@@ -38,6 +38,7 @@ jobs:
 
       - run: |
           mkdir /tmp/agrippa
+          mkdir /tmp/agrippa/public
           mkdir /tmp/agrippa/metadata
           mkdir /tmp/agrippa/metadata/scripts
 
@@ -45,9 +46,9 @@ jobs:
       - run:
           name: Build archive
           command: |
-              cp ./dist/* /tmp/agrippa/
-              cp ./metadata/* /tmp/agrippa/metadata/
-              cp ./metadata/* /tmp/agrippa/metadata/scripts/
+              cp -R ./dist/* /tmp/agrippa/
+              cp -R ./public/* /tmp/agrippa/public/
+              cp -R ./metadata/* /tmp/agrippa/metadata/
           # command: npm pack && mv agrippa-`node -p "require('./package.json').version"`.tgz /tmp/agrippa/agrippa.tgz
 
       # Store artifacts
