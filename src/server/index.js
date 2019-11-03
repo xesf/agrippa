@@ -126,10 +126,10 @@ app.get('/script/:id', (req, res) => {
 });
 
 app.post('/metadata', (req, res) => {
-    const filepath = 'metadata/nodes.json';
-    const fileStream = fs.createWriteStream(filepath, { flags: 'w+' });
-    req.pipe(fileStream);
-    res.writeHead(200);
+    // const filepath = 'metadata/nodes.json';
+    // const fileStream = fs.createWriteStream(filepath, { flags: 'w+' });
+    // req.pipe(fileStream);
+    // res.writeHead(200);
     res.send();
 });
 

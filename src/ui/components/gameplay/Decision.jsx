@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 
+import './decision.css';
+
 const Decision = ({ defaultDecision, timeout, items, onClick, rwh, rhw, Video }) => {
     const handleOnClick = (d) => {
         if (onClick) {
@@ -13,24 +15,23 @@ const Decision = ({ defaultDecision, timeout, items, onClick, rwh, rhw, Video })
 
     const style = {
         position: 'absolute',
-        top: `${350 / rhw}`
+        bottom: `${15 / rhw}`,
+        maxHeight: `${80 / rhw}px`,
     };
 
     const columnSize = {
-        width: `${(6.25 / rwh)}%`,
+        width: `${(90 / rwh)}px`,
         paddingLeft: '2em',
         paddingRight: '2em',
     };
 
     return (
-        <div className="ui grid container equal width decision-container" style={style}>
-            <div className="column decision-item-container" style={columnSize} />
-            <div className="column decision-item-container" style={columnSize} />
+        <div className="decision-container" style={style}>
             {items && items.map(d => (
                 <div
                     id="decision-container"
                     key={`${d.id}${d.type}`}
-                    className="column decision-item-container"
+                    className="decision-item-container"
                     style={columnSize}
                     onClick={() => handleOnClick(d)}
                     onMouseOver={() => { document.getElementById(d.type).play(); }}
@@ -48,8 +49,6 @@ const Decision = ({ defaultDecision, timeout, items, onClick, rwh, rhw, Video })
                     <p className="decision-item">{d.desc}</p>
                 </div>
             ))}
-            <div className="column decision-item-container" style={columnSize} />
-            <div className="column decision-item-container" />
         </div>
     );
 };
