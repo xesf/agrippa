@@ -17,7 +17,7 @@ module.exports = () => (
             />
             <link
                 rel="stylesheet"
-                href="https://video-react.github.io/assets/video-react.css"
+                href="https://ajax.googleapis.com/ajax/libs/shaka-player/2.5.9/controls.css"
             />
         </head>
         <body>
@@ -25,7 +25,8 @@ module.exports = () => (
             <div id="root" className="ui canvas-container" />
             <script crossOrigin="true" src="https://unpkg.com/react@16/umd/react.development.js" />
             <script crossOrigin="true" src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" />
-            <script src="https://ajax.googleapis.com/ajax/libs/shaka-player/2.5.2/shaka-player.compiled.js" />
+            <script src="https://ajax.googleapis.com/ajax/libs/shaka-player/2.5.9/shaka-player.compiled.js" />
+            <script src="https://ajax.googleapis.com/ajax/libs/shaka-player/2.5.9/shaka-player.ui.js" />
             <script type="text/javascript" src="palanca-studio.js "/>
             <script type="text/javascript" src="bundle.js" />
         </body>

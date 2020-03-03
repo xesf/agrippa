@@ -2,7 +2,6 @@
   "name": "agrippa",
   "version": "0.1.0",
   "private": true,
-  "module": "dist/bundle.js",
   "main": "src/electron/index.js",
   "homepage": "./",
   "scripts": {
@@ -16,6 +15,7 @@
     "release": "yarn build:server && electron-builder --publish=always"
   },
   "dependencies": {
+    "palanca-studio": "0.1.0",
     "@monaco-editor/react": "^1.2.1",
     "axios": "^0.19.0",
     "classnames": "^2.2.6",
