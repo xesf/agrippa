@@ -3,8 +3,8 @@ import React from 'react';
 const Location = ({ locationDesc, rwh, rhw }) => {
     const style = {
         position: 'absolute',
-        left: `${30 / rwh}`,
-        top: `${260 / rhw}`,
+        left: `${20 / rwh}`,
+        bottom: `calc(50% - ${100 / rhw}px)`,
     };
     return (
         <div className="location-description location-typing" style={style}>
